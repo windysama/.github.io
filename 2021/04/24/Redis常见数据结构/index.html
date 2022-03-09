@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Redis常见数据结构 | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Redis常见数据结构1. string 介绍 ：string 数据结构是简单的 key-value 类型。虽然 Redis 是⽤ C 语⾔写的，但是 Redis 并没有使⽤ C 的字符串表示，⽽是⾃⼰构建了⼀种 简单动态字符串（simple dynamic string，SDS）。相⽐于 C 的原⽣字符串，Redis 的 SDS 不光可以保存⽂本数据还可以保存 ⼆进制数据，并且获取字符串⻓度复杂">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis常见数据结构">
+<meta property="og:url" content="http://example.com/2021/04/24/Redis%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="Redis常见数据结构1. string 介绍 ：string 数据结构是简单的 key-value 类型。虽然 Redis 是⽤ C 语⾔写的，但是 Redis 并没有使⽤ C 的字符串表示，⽽是⾃⼰构建了⼀种 简单动态字符串（simple dynamic string，SDS）。相⽐于 C 的原⽣字符串，Redis 的 SDS 不光可以保存⽂本数据还可以保存 ⼆进制数据，并且获取字符串⻓度复杂">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/1.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/Redis常见数据结构/1.png">
+<meta property="article:published_time" content="2021-04-24T12:16:20.000Z">
+<meta property="article:modified_time" content="2021-04-25T00:45:04.588Z">
+<meta property="article:author" content="Lee yunbo">
+<meta property="article:tag" content="Redis、面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Redis常见数据结构" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T12:16:20.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Redis常见数据结构
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis常见数据结构"><a href="#Redis常见数据结构" class="headerlink" title="Redis常见数据结构"></a>Redis常见数据结构</h1><h2 id="1-string"><a href="#1-string" class="headerlink" title="1. string"></a>1. string</h2><ol>
+<li>介绍 ：string 数据结构是简单的 key-value 类型。虽然 Redis 是⽤ C 语⾔写的，但是 Redis 并没有使⽤ C 的字符串表示，⽽是⾃⼰构建了⼀种 简单动态字符串（simple dynamic string，SDS）。相⽐于 C 的原⽣字符串，Redis 的 SDS 不光可以保存⽂本数据还可以保存 ⼆进制数据，并且获取字符串⻓度复杂度为 O(1)（C 字符串为 O(N)）,除此之外,Redis 的 SDS API 是安全的，不会造成缓冲区溢出。 </li>
+<li>常⽤命令: set,get,strlen,exists,dect,incr,setex 等等。 </li>
+<li>应⽤场景 ：⼀般常⽤在需要计数的场景，⽐如⽤户的访问次数、热点⽂章的点赞转发数量等 等。</li>
+<li><strong>一个字符串类型的值能存储最大容量是多少？</strong>512M</li>
+</ol>
+<p>普通字符串的基本操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set key value #设置 key-value 类型的值</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get key # 根据 key 获得对应的 value</span><br><span class="line">&quot;value&quot;</span><br><span class="line">127.0.0.1:6379&gt; exists key # 判断某个 key 是否存在</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; strlen key # 返回 key 所储存的字符串值的⻓度。</span><br><span class="line">(integer) 5</span><br><span class="line">127.0.0.1:6379&gt; del key # 删除某个 key 对应的值</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; get key</span><br><span class="line">(nil)</span><br></pre></td></tr></table></figure>
+
+<p>批量设置 :</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; mset key1 value1 key2 value2 # 批量设置 key-value 类型的值</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; mget key1 key2 # 批量获取多个 key 对应的 value</span><br><span class="line">1) &quot;value1&quot;</span><br><span class="line">2) &quot;value2</span><br></pre></td></tr></table></figure>
+
+<p>计数器（字符串的内容为整数的时候可以使⽤）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set number 1</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; incr number # 将 key 中储存的数字值增⼀</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; get number</span><br><span class="line">&quot;2&quot;</span><br><span class="line">127.0.0.1:6379&gt; decr number # 将 key 中储存的数字值减⼀</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; get number</span><br><span class="line">&quot;1&quot;</span><br></pre></td></tr></table></figure>
+
+<p>过期：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; expire key 60 # 数据在 60s 后过期</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; setex key 60 value # 数据在 60s 后过期 (setex:[set] + [ex]pire)</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; ttl key # 查看数据还有多久过期</span><br><span class="line">(integer) 56</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-list"><a href="#2-list" class="headerlink" title="2. list"></a>2. list</h2><ol>
+<li>介绍 ：list 即是 链表。链表是⼀种⾮常常⻅的数据结构，特点是易于数据元素的插⼊和删除 并且且可以灵活调整链表⻓度，但是链表的随机访问困难。许多⾼级编程语⾔都内置了链表 的实现⽐如 Java 中的 LinkedList，但是 C 语⾔并没有实现链表，所以 Redis 实现了⾃⼰ 的链表数据结构。Redis 的 list 的实现为⼀个 双向链表，即可以⽀持反向查找和遍历，更⽅ 便操作，不过带来了部分额外的内存开销。</li>
+<li>常⽤命令: rpush,lpop,lpush,rpop,lrangellen 等。</li>
+<li>应⽤场景: 发布与订阅或者说消息队列、慢查询</li>
+</ol>
+<p>通过 rpush&#x2F;lpop 实现队列：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; rpush myList value1 # 向 list 的头部（右边）添加元素</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; rpush myList value2 value3 # 向list的头部（最右边）添加多个元素</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; lpop myList # 将 list的尾部(最左边)元素取出</span><br><span class="line">&quot;value1&quot;</span><br><span class="line">127.0.0.1:6379&gt; lrange myList 0 1 # 查看对应下标的list列表， 0 为 start,1为 end</span><br><span class="line">1) &quot;value2&quot;</span><br><span class="line">2) &quot;value3&quot;</span><br><span class="line">127.0.0.1:6379&gt; lrange myList 0 -1 # 查看列表中的所有元素，-1表示倒数第⼀</span><br><span class="line">1) &quot;value2&quot;</span><br><span class="line">2) &quot;value3&quot;</span><br></pre></td></tr></table></figure>
+
+<p>通过 rpush&#x2F;rpop 实现栈：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; rpush myList2 value1 value2 value3</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; rpop myList2 # 将 list的头部(最右边)元素取出</span><br><span class="line">&quot;value3</span><br></pre></td></tr></table></figure>
+
+<p><img src="/1.png" alt="1"></p>
+<p><img src="E:\MyBolg\source_posts\Redis常见数据结构\1.png" alt="1"></p>
+<p>通过 lrange 查看对应下标范围的列表元素：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; rpush myList value1 value2 value3</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; lrange myList 0 1 # 查看对应下标的list列表， 0 为 start,1为 end</span><br><span class="line">1) &quot;value1&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">127.0.0.1:6379&gt; lrange myList 0 -1 # 查看列表中的所有元素，-1表示倒数第⼀</span><br><span class="line">1) &quot;value1&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">3) &quot;value3&quot;</span><br></pre></td></tr></table></figure>
+
+<p>通过 lrange 命令，你可以基于 list 实现分⻚查询，性能⾮常⾼！ </p>
+<p>通过 llen 查看链表⻓度:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; llen myList</span><br><span class="line">(integer) </span><br></pre></td></tr></table></figure>
+
+<h2 id="3-hash"><a href="#3-hash" class="headerlink" title="3 hash"></a>3 hash</h2><ol>
+<li>介绍 ：hash 类似于 JDK1.8 前的 HashMap，内部实现也差不多(数组 + 链表)。不过， Redis 的 hash 做了更多优化。另外，hash 是⼀个 string 类型的 field 和 value 的映射表， 特别适合⽤于存储对象，后续操作的时候，你可以直接仅仅修改这个对象中的某个字段的 值。 ⽐如我们可以 hash 数据结构来存储⽤户信息，商品信息等等。</li>
+<li>常⽤命令： hset,hmset,hexists,hget,hgetall,hkeys,hvals 等。</li>
+<li>应⽤场景: 系统中对象数据的存储。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hset userInfoKey name &quot;guide&quot; description &quot;dev&quot; age &quot;24&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; hexists userInfoKey name # 查看 key 对应的 value中指定的字段是否存</span><br><span class="line">在。</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; hget userInfoKey name # 获取存储在哈希表中指定字段的值。</span><br><span class="line">&quot;guide&quot;</span><br><span class="line">127.0.0.1:6379&gt; hget userInfoKey age</span><br><span class="line">&quot;24&quot;</span><br><span class="line">127.0.0.1:6379&gt; hgetall userInfoKey # 获取在哈希表中指定 key 的所有字段和值</span><br><span class="line">1) &quot;name&quot;</span><br><span class="line">2) &quot;guide&quot;</span><br><span class="line">3) &quot;description&quot;</span><br><span class="line">4) &quot;dev&quot;</span><br><span class="line">5) &quot;age&quot;</span><br><span class="line">6) &quot;24&quot;</span><br><span class="line">127.0.0.1:6379&gt; hkeys userInfoKey # 获取 key 列表</span><br><span class="line">1) &quot;name&quot;</span><br><span class="line">2) &quot;description&quot;</span><br><span class="line">3) &quot;age&quot;</span><br><span class="line">127.0.0.1:6379&gt; hvals userInfoKey # 获取 value 列表</span><br><span class="line">1) &quot;guide&quot;</span><br><span class="line">2) &quot;dev&quot;</span><br><span class="line">3) &quot;24&quot;</span><br><span class="line">127.0.0.1:6379&gt; hset userInfoKey name &quot;GuideGeGe&quot; # 修改某个字段对应的值</span><br><span class="line">127.0.0.1:6379&gt; hget userInfoKey name</span><br><span class="line">&quot;GuideGeGe</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-set"><a href="#4-set" class="headerlink" title="4. set"></a>4. set</h2><ol>
+<li>介绍 ： set 类似于 Java 中的 HashSet 。Redis 中的 set 类型是⼀种⽆序集合，集合中的元 素没有先后顺序。当你需要存储⼀个列表数据，⼜不希望出现重复数据时，set 是⼀个很好 的选择，并且 set 提供了判断某个成员是否在⼀个 set 集合内的重要接⼝，这个也是 list 所 不能提供的。可以基于 set 轻易实现交集、并集、差集的操作。⽐如：你可以将⼀个⽤户所 有的关注⼈存在⼀个集合中，将其所有粉丝存在⼀个集合。Redis 可以⾮常⽅便的实现如共 同关注、共同粉丝、共同喜好等功能。这个过程也就是求交集的过程。 </li>
+<li>常⽤命令： sadd,spop,smembers,sismember,scard,sinterstore,sunion 等。 </li>
+<li>应⽤场景: 需要存放的数据不能重复以及需要获取多个数据源交集和并集等场景</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sadd mySet value1 value2 # 添加元素进去</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; sadd mySet value1 # 不允许有重复元素</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; smembers mySet # 查看 set 中所有的元素</span><br><span class="line">1) &quot;value1&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">127.0.0.1:6379&gt; scard mySet # 查看 set 的⻓度</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; sismember mySet value1 # 检查某个元素是否存在set 中，只能接收单个元</span><br><span class="line">素</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd mySet2 value2 value3</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; sinterstore mySet3 mySet mySet2 # 获取 mySet 和 mySet2 的交集并</span><br><span class="line">存放在 mySet3 中</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; smembers mySet3</span><br><span class="line">1) &quot;value2&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="5-sorted-set"><a href="#5-sorted-set" class="headerlink" title="5. sorted set"></a>5. sorted set</h2><ol>
+<li>介绍： 和 set 相⽐，sorted set 增加了⼀个权重参数 score，使得集合中的元素能够按 score 进⾏有序排列，还可以通过 score 的范围来获取元素的列表。有点像是 Java 中 HashMap 和 TreeSet 的结合体。 </li>
+<li>常⽤命令：zadd,zcard,zscore,zrange,zrevrange,zrem 等。</li>
+<li>应⽤场景： 需要对数据根据某个权重进⾏排序的场景。⽐如在直播系统中，实时排⾏信息包 含直播间在线⽤户列表，各种礼物排⾏榜，弹幕消息（可以理解为按消息维度的消息排⾏ 榜）等信息。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zadd myZset 3.0 value1 # 添加元素到 sorted set 中 3.0 为权重</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd myZset 2.0 value2 1.0 value3 # ⼀次添加多个元素</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; zcard myZset # 查看 sorted set 中的元素数量</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; zscore myZset value1 # 查看某个 value 的权重</span><br><span class="line">&quot;3&quot;</span><br><span class="line">127.0.0.1:6379&gt; zrange myZset 0 -1 # 顺序输出某个范围区间的元素，0 -1 表示输出所有元</span><br><span class="line">素</span><br><span class="line">1) &quot;value3&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">3) &quot;value1&quot;</span><br><span class="line">127.0.0.1:6379&gt; zrange myZset 0 1 # 顺序输出某个范围区间的元素，0 为 start 1 为</span><br><span class="line">stop</span><br><span class="line">1) &quot;value3&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">127.0.0.1:6379&gt; zrevrange myZset 0 1 # 逆序输出某个范围区间的元素，0 为 start 1</span><br><span class="line">为 stop</span><br><span class="line">1) &quot;value1</span><br><span class="line">2) &quot;value2&quot;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" data-id="cl0j84jwp007h04vh7bf8glc5" data-title="Redis常见数据结构" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/04/24/Redis%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Redis单线程模型
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/24/Redis%20%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Redis 内存淘汰机制</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

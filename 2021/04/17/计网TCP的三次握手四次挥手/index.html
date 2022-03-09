@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>TCP的三次握手四次挥手 | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="TCP的三次握手四次挥手文章转载：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;137942749 TCP的三次握手、四次挥手 TCP协议是OSI参考模型中传输层的代表协议，因此TCP协议是为了保障通信可靠性的。 TCP协议是如何保障通信可靠性的呢？ TCP协议通过“三次握手”的建立连接的方式和“四次挥手的”断开连接的方式保障的。 1、三次握手物理层、数据链路层在物理层面上架设好了通信">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP的三次握手四次挥手">
+<meta property="og:url" content="http://example.com/2021/04/17/%E8%AE%A1%E7%BD%91TCP%E7%9A%84%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="TCP的三次握手四次挥手文章转载：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;137942749 TCP的三次握手、四次挥手 TCP协议是OSI参考模型中传输层的代表协议，因此TCP协议是为了保障通信可靠性的。 TCP协议是如何保障通信可靠性的呢？ TCP协议通过“三次握手”的建立连接的方式和“四次挥手的”断开连接的方式保障的。 1、三次握手物理层、数据链路层在物理层面上架设好了通信">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B.jpg">
+<meta property="og:image" content="e:/MyBolg/source_posts/TCP的三次握手四次挥手/tcp三次握手过程.jpg">
+<meta property="og:image" content="http://example.com/%5C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.jpg">
+<meta property="og:image" content="e:/MyBolg/source_posts/TCP的三次握手四次挥手/四次挥手.jpg">
+<meta property="article:published_time" content="2021-04-17T13:35:26.000Z">
+<meta property="article:modified_time" content="2021-04-28T02:36:25.156Z">
+<meta property="article:author" content="Lee yunbo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-计网TCP的三次握手四次挥手" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/17/%E8%AE%A1%E7%BD%91TCP%E7%9A%84%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" class="article-date">
+  <time class="dt-published" datetime="2021-04-17T13:35:26.000Z" itemprop="datePublished">2021-04-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      TCP的三次握手四次挥手
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="TCP的三次握手四次挥手"><a href="#TCP的三次握手四次挥手" class="headerlink" title="TCP的三次握手四次挥手"></a>TCP的三次握手四次挥手</h1><p>文章转载：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/137942749">https://zhuanlan.zhihu.com/p/137942749</a> TCP的三次握手、四次挥手</p>
+<p>TCP协议是OSI参考模型中传输层的代表协议，因此TCP协议是为了保障通信可靠性的。</p>
+<p>TCP协议是如何保障通信可靠性的呢？</p>
+<p>TCP协议通过“三次握手”的建立连接的方式和“四次挥手的”断开连接的方式保障的。</p>
+<h2 id="1、三次握手"><a href="#1、三次握手" class="headerlink" title="1、三次握手"></a>1、三次握手</h2><p>物理层、数据链路层在物理层面上架设好了通信链路，网络层确定了通信双方的地址，那下一步就是传输层建立逻辑层面上的通信连接，将从应用层获得的报文数据从源端发送给接受端。TCP的三次握手就是在发送数据前通过“三次握手”的方式建立起这个通信连接，<strong>建立这个连接的目的是让源端和目的端确认一下双方的发送报文能力和接收报文能力是正常的，实际上就是通过三次握手这个操作将下面的表填完整：</strong></p>
+<table>
+<thead>
+<tr>
+<th>确认事项</th>
+<th>确认结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>源端确认源端的发送能力</td>
+<td></td>
+</tr>
+<tr>
+<td>源端确认源端的接受能力</td>
+<td></td>
+</tr>
+<tr>
+<td>源端确认目的端的发送能力</td>
+<td></td>
+</tr>
+<tr>
+<td>源端确认目的端的接受能力</td>
+<td></td>
+</tr>
+<tr>
+<td>目的端确认源端的发送能力</td>
+<td></td>
+</tr>
+<tr>
+<td>目的端确认源端的接受能力</td>
+<td></td>
+</tr>
+<tr>
+<td>目的端确认目的端的发送能力</td>
+<td></td>
+</tr>
+<tr>
+<td>目的端确认目的端的接受能力</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>下面具体介绍三次握手的过程，并在每次握手时填充这个表格，当表格填满后，意味着源端和目的端已确认完毕双方的发送报文能力和接收报文能力是正常的，三次握手结束，通信双方的连接已成功建立。</p>
+<h3 id="1-1-TCP报文首部"><a href="#1-1-TCP报文首部" class="headerlink" title="1.1 TCP报文首部"></a>1.1 TCP报文首部</h3><p>在介绍三次握手前先介绍一下TCP报文的首部，报文首部可以理解为报文的元数据，里面存放着与这次报文相关的其他信息，图我就不摆了，介绍一下跟三次握手相关的报文首部字段。</p>
+<p>（1）序号seq</p>
+<p>对字节流的编号。例如第一个字节的序号为 301，如果携带的数据长度为 100 字节，那么下一个报文段的序号应为 401。注意第一份报文段的序号是随机生成的，后面的报文段序号是根据上一个报文段序号及报文长度生成的。</p>
+<p>（2）确认号ack</p>
+<p>期望收到的下一个报文段的序号。例如 B 正确收到 A 发送来的一个报文段，序号为 501，携带的数据长度为 200 字节，因此 B 期望下一个报文段的序号为 701，B 发送给 A 的确认报文段中确认号就为 701。</p>
+<p>（3）SYN</p>
+<p>控制位的一种，用于建立连接，该位设为 1，表示希望建立连接，并对第一份报文的序号进行随机初始化。</p>
+<p>（4）ACK</p>
+<p>控制位的一种，确认应答的字段有效，TCP规定除了最初建立连接时的 SYN 包以外该位必须设为 1。</p>
+<p>（5）FIN</p>
+<p>控制位的一种，当FIN&#x3D;1，表明此报文的发送方的数据已经发送完毕，要求关闭连接。</p>
+<h3 id="1-2-三次握手具体过程"><a href="#1-2-三次握手具体过程" class="headerlink" title="1.2 三次握手具体过程"></a>1.2 三次握手具体过程</h3><p>TCP三次握手的过程如图所示，</p>
+<p><img src="/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B.jpg" alt="tcp三次握手过程"></p>
+<p><img src="E:\MyBolg\source_posts\TCP的三次握手四次挥手\tcp三次握手过程.jpg" alt="tcp三次握手过程"></p>
+<p>（1）第一次握手</p>
+<p>Client端将SYN置为1，表示希望与Server端建立连接；序号seq初始化为J，并将该数据包发送给Server端，Client进入SYN_SENT状态，等待Server确认。</p>
+<p>（2）第二次握手</p>
+<p>Server端检查报文发现SYN为1，知道了Client端想建立连接；Server端将SYN置为1，表示Server端也希望与Clinet端建立连接；Server端将ACK置为1，表示收到了Client端建立连接的请求；Server端将seq初始化为K；Server端将ack置为J+1，这里ack&#x3D;seq + 1，还有疑问（如果控制位占1字节，为什么第三次握手时有ACK&#x3D;1、SYN&#x3D;1，ack为什么不是+2？如果+1只是告诉服务端收到了消息，那ACK控制位就已经达到目的了，为什么还要多次一举再加一个ack?）。第二次握手包括服务端确认客户端发来的报文和服务端向客户端发送报文两个过程。</p>
+<p>第二次握手时表格填充结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>确认事项</th>
+<th>确认结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>源端确认源端的发送能力</td>
+<td></td>
+</tr>
+<tr>
+<td>源端确认源端的接受能力</td>
+<td></td>
+</tr>
+<tr>
+<td>源端确认目的端的发送能力</td>
+<td></td>
+</tr>
+<tr>
+<td>源端确认目的端的接受能力</td>
+<td></td>
+</tr>
+<tr>
+<td>目的端确认源端的发送能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>目的端确认源端的接受能力</td>
+<td></td>
+</tr>
+<tr>
+<td>目的端确认目的端的发送能力</td>
+<td></td>
+</tr>
+<tr>
+<td>目的端确认目的端的接受能力</td>
+<td>确认</td>
+</tr>
+</tbody></table>
+<p>（3）第三次握手</p>
+<p>Client收到报文后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack&#x3D;K+1，并将该数据包发送给Server，Server检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。第三次握手包括客户端确认服务端发来的报文，客户端向服务端发送报文和服务端确认客户端发来的报文三个过程。</p>
+<p>第三次握手客户端确认信息后填充表格如下:</p>
+<table>
+<thead>
+<tr>
+<th>确认事项</th>
+<th>确认结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>源端确认源端的发送能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>源端确认源端的接受能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>源端确认目的端的发送能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>源端确认目的端的接受能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>目的端确认源端的发送能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>目的端确认源端的接受能力</td>
+<td></td>
+</tr>
+<tr>
+<td>目的端确认目的端的发送能力</td>
+<td></td>
+</tr>
+<tr>
+<td>目的端确认目的端的接受能力</td>
+<td>确认</td>
+</tr>
+</tbody></table>
+<p>第三次握手服务端确认信息后填充表格如下：</p>
+<table>
+<thead>
+<tr>
+<th>确认事项</th>
+<th>确认结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>源端确认源端的发送能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>源端确认源端的接受能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>源端确认目的端的发送能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>源端确认目的端的接受能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>目的端确认源端的发送能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>目的端确认源端的接受能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>目的端确认目的端的发送能力</td>
+<td>确认</td>
+</tr>
+<tr>
+<td>目的端确认目的端的接受能力</td>
+<td>确认</td>
+</tr>
+</tbody></table>
+<p>至此，表格填充完毕，三次握手也结束，连接成功建立。有些面试官会问为什么不是2次握手？因为2次握手表格填充不完，源端和目的端无法确认双方的收发能力；为什么不是4次握手？3次握手表格就填充完毕了，不需要再多一次握手了。</p>
+<h3 id="1-3-tcp为什么是三次握手，两次不行吗，为什么？"><a href="#1-3-tcp为什么是三次握手，两次不行吗，为什么？" class="headerlink" title="1.3 tcp为什么是三次握手，两次不行吗，为什么？"></a>1.3 tcp为什么是三次握手，两次不行吗，为什么？</h3><p>如果采用两次握手，那么只要服务器发出确认数据包就会建立连接，但由于客户端此时并未相应服务器段的请求，那么服务器就会一直等待客户端，这样服务端就白白浪费了一定的资源。<strong>若采用三次握手，服务端没有收到客户端的再次确认，就会知道客户端并没有要求建立请求，就不会浪费服务端的资源。</strong></p>
+<h2 id="2、四次挥手"><a href="#2、四次挥手" class="headerlink" title="2、四次挥手"></a>2、四次挥手</h2><p>三次握手是建立TCP连接，四次挥手是断开TCP连接，即客户端和服务端总共要收发4个包才能确定断开连接。</p>
+<h3 id="2-1-四次挥手的具体过程"><a href="#2-1-四次挥手的具体过程" class="headerlink" title="2.1 四次挥手的具体过程"></a>2.1 四次挥手的具体过程</h3><p>四次挥手的过程如图所示</p>
+<p><img src="/%5C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.jpg" alt="四次挥手"></p>
+<p><img src="E:\MyBolg\source_posts\TCP的三次握手四次挥手\四次挥手.jpg" alt="四次挥手"></p>
+<p>（1）第一次挥手</p>
+<p>假设客户端主动发起断开请求，客户端向服务端发送报文，报文首部包括FIN&#x3D;1，这个控制位代表客户端想要断开连接；序列号seq&#x3D;u，这时客户端进入FIN-WAIT-1（终止等待1）状态，停止发送数据，并等待服务端的确认。</p>
+<p>（2）第二次挥手</p>
+<p>服务端收到客户端的报文后发出确认报文，控制位ACK&#x3D;1；确认号ack&#x3D;u+1；序列号seq&#x3D;v；然后服务端就进入CLOSE-WAIT（关闭等待）状态。TCP服务端会告知上层的应用进程来自客户端的连接即将关闭，让应用程序做好相应的准备。此时客户端已经没有数据向服务端发送了，但服务端向客户端发送数据，客户端依然能接收。</p>
+<p>（3）第三次挥手</p>
+<p>客户端收到服务器确认报文后，进入FIN-WAIT-2状态。此时服务器再次发送报文，报文首部控制位FIN&#x3D;1，表示服务端向客户端发送断开连接请求；确认标志ACK&#x3D;1；确认序号ack&#x3D;u+1；序号seq&#x3D;w，然后服务器进入LAST-ACK（最后确认态），等待客户端确认。</p>
+<p>（4）第四次挥手</p>
+<p>客户端收到了服务端的断开连接的报文后，必须发出确认报文，标志位ACK&#x3D;1；确认号ack&#x3D;w+1;序号seq&#x3D;u+1；之后客户端就进入了TIME-WAIT（时间等待）状态。注意此时客户端的TCP连接还没有释放，<strong>必须经过2*MSL（最长报文段寿命）</strong>的时间后，客户端才进入CLOSED状态关闭连接。而服务端只要收到了客户端发送的确认报文后就会进入CLOSED状态关闭服务端连接。当客户端和服务端都进入了CLOSED状态后，客户端和服务端之间的连接才完全断开。</p>
+<h3 id="2-2-为什么会有TIME-WAIT状态？"><a href="#2-2-为什么会有TIME-WAIT状态？" class="headerlink" title="2.2 为什么会有TIME_WAIT状态？"></a>2.2 为什么会有TIME_WAIT状态？</h3><p>上面介绍第四次挥手的过程中，客户端在发送完给服务端的回执报文后没有立刻进入CLOSED状态，而是进入TIME-WAIT状态，然后等待2*MSL（最长报文段寿命）的时间后才进入CLOSED状态，这是为什么？原因有以下两点：</p>
+<ul>
+<li>客户端发送给服务端回执后，有可能这个回执报文在传输途中丢失等原因，服务端并没有收到，此时服务端会再次向客户端发送FIN&#x3D;1的断开请求报文，如果客户端没有等待2*MSL时间而直接进入了CLOSED状态，客户端就会收不到服务端再次发送的断开连接的请求报文，导致服务端无法进入CLOSED状态；</li>
+<li>等待一段时间是为了让本连接持续时间内所产生的所有报文都从网络中消失，使得下一个新的连接不会出现旧的连接请求报文。</li>
+</ul>
+<p>注：MSL是Maximum Segment Lifetime英文的缩写，中文可以译为“报文最大生存时间”，他是任何报文在网络上存在的最长时间，超过这个时间报文将被丢弃。</p>
+<h3 id="2-3-为什么是四次挥手而不是三次或者五次？"><a href="#2-3-为什么是四次挥手而不是三次或者五次？" class="headerlink" title="2.3 为什么是四次挥手而不是三次或者五次？"></a>2.3 为什么是四次挥手而不是三次或者五次？</h3><p>第二次挥手和第三次挥手都是服务端向客户端发送报文，第二次挥手是服务端收到了客户端的断开请求，通知客户端俺收到了，此时客户端没有数据向服务端发送了，但不代表服务端也没有数据向客户端发送，因为服务端要把剩余还没有发送的报文发送完毕再断开连接；第三次挥手是服务端数据全部发送完毕，向客户端发送断开请求报文（FIN&#x3D;1）。</p>
+<p>如果是三次挥手，即把服务端向客户端发送报文的第二次挥手和第三次挥手合为一次，会造成服务端发送了回执后立刻又发送断开请求，造成服务端有数据没有全部发送至客户端，因此必须将第二次挥手和第三次挥手分开；五次挥手则完全没必要，多此一举。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/17/%E8%AE%A1%E7%BD%91TCP%E7%9A%84%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" data-id="cl0j84jxr00bm04vhhd648ep1" data-title="TCP的三次握手四次挥手" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/04/17/%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9Amysql%E6%9C%89%E5%93%AA%E4%BA%9B%E9%94%81%EF%BC%9F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          面试题：mysql有哪些锁？
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/17/MySql%E7%B4%A2%E5%BC%95%E6%9C%AC%E8%B4%A8%E5%92%8CInnoDB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">索引本质和InnoDB</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

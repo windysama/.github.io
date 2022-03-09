@@ -71,33 +71,48 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-article-title" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <article id="post-update会锁表吗？" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2022/03/09/article-title/" class="article-date">
-  <time class="dt-published" datetime="2022-03-09T06:46:51.000Z" itemprop="datePublished">2022-03-09</time>
+    <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:58.229Z" itemprop="datePublished">2022-03-09</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/03/09/article-title/">article title</a>
-    </h1>
-  
-
-      </header>
-    
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <h2 id="两种情况："><a href="#两种情况：" class="headerlink" title="两种情况："></a>两种情况：</h2><p>1.带索引  2.不带索引</p>
+<h2 id="前提介绍："><a href="#前提介绍：" class="headerlink" title="前提介绍："></a>前提介绍：</h2><p>方式：采用命令行的方式来模拟</p>
+<p>1.mysq由于默认是开启自动提交事务，所以首先得查看自己当前的数据库是否开启了自动提交事务。</p>
+<p>命令：select @@autocommit;</p>
+<p>结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+--------------+</span><br><span class="line">| @@autocommit |</span><br><span class="line">+--------------+</span><br><span class="line">|            0 |</span><br><span class="line">+--------------+</span><br></pre></td></tr></table></figure>
+
+
+<p>如果是1，那么运行命令：set autocommit &#x3D; 0;设置为不开启自动提交</p>
+<p>2.当前的数据库表格式如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tb_user | CREATE TABLE `tb_user` (</span><br><span class="line">  `id` bigint(20) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(32) DEFAULT NULL,</span><br><span class="line">  `phone` varchar(11) DEFAULT NULL,</span><br><span class="line">  `operator` varchar(32) DEFAULT NULL,</span><br><span class="line">  `gmt_create` datetime DEFAULT NULL,</span><br><span class="line">  `gmt_modified` datetime DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8</span><br></pre></td></tr></table></figure>
+
+
+<p>显然除了主键，我没有加任何索引</p>
+<h2 id="实际例子："><a href="#实际例子：" class="headerlink" title="实际例子："></a>实际例子：</h2><p>1.没有索引</p>
+<p>运行命令：begin;开启事务，然后运行命令：update tb_user set phone&#x3D;11 where name&#x3D;”c1”;修改，先别commit事务。</p>
+<p>再开一个窗口，直接运行命令：update tb_user set phone&#x3D;22 where name&#x3D;”c2”;会发现命令卡住了，但是当前面一个事务通过commit提交了，命令就会正常运行结束，说明是被锁表了。</p>
+<p>2.给name字段加索引</p>
+<p>create index index_name on tb_user(name);</p>
+<p>然后继续如1里面的操作，也就是一个开启事务，运行update tb_user set phone&#x3D;11 where name&#x3D;”c1”；先不提交</p>
+<p>然后另一个运行update tb_user set phone&#x3D;22 where name&#x3D;”c2”;发现命令不会卡住，说明没有锁表</p>
+<p>但是如果另一个也是update tb_user set phone&#x3D;22 where name&#x3D;”c1”;更新同一行，说明是锁行了</p>
+<p>3.总结</p>
+<p>如果没有索引，所以update会锁表，如果加了索引，就会锁行</p>
+<p>源自：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wodebudong/articles/7976474.html">https://www.cnblogs.com/wodebudong/articles/7976474.html</a></p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/03/09/article-title/" data-id="cl0j81o860000esvh0z9o6iiz" data-title="article title" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/" data-id="cl0j84jx8009l04vh82i903ly" data-title="" class="article-share-link">Share</a>
       
       
       
@@ -109,46 +124,128 @@
 
 
   
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <article id="post-Redis_hot" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2022/03/09/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2022-03-09T06:17:43.239Z" itemprop="datePublished">2022-03-09</time>
+    <a href="/2022/03/09/Redis_hot/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:58.215Z" itemprop="datePublished">2022-03-09</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/03/09/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+        <h3 id="1）Redis为什么使用单进程单线程方式也这么快"><a href="#1）Redis为什么使用单进程单线程方式也这么快" class="headerlink" title="1）Redis为什么使用单进程单线程方式也这么快"></a>1）Redis为什么使用单进程单线程方式也这么快</h3><p>Redis采用的是基于内存的采用的是单进程单线程模型的KV数据库，由C语言编写。官方提供的数据是可以达到100000+的qps。这个数据不比采用单进程多线程的同样基于内存的KV数据库Memcached差。</p>
+<p>Redis快的主要原因是：</p>
+<ol>
+<li>完全基于内存</li>
+<li>数据结构简单，对数据操作也简单</li>
+<li>使用多路 I&#x2F;O 复用模型</li>
+</ol>
+<p>多路 I&#x2F;O 复用模型是利用select、poll、epoll可以同时监察多个流的 I&#x2F;O 事件的能力，在空闲的时候，会把当前线程阻塞掉，当有一个或多个流有I&#x2F;O事件时，就从阻塞态中唤醒，于是程序就会轮询一遍所有的流（epoll是只轮询那些真正发出了事件的流），并且只依次顺序的处理就绪的流，这种做法就避免了大量的无用操作。这里“多路”指的是多个网络连接，“复用”指的是复用同一个线程。采用多路 I&#x2F;O 复用技术可以让单个线程高效的处理多个连接请求（尽量减少网络IO的时间消耗），且Redis在内存中操作数据的速度非常快（内存内的操作不会成为这里的性能瓶颈），主要以上两点造就了Redis具有很高的吞吐量。</p>
+<p>和Memcached不同，Redis并没有直接使用Libevent，而是自己完成了一个非常轻量级的对select、epoll、evport、kqueue这些通用的接口的实现。在不同的系统调用选用适合的接口，linux下默认是epoll。因为Libevent比较重更通用代码量也就很庞大，拥有很多Redis用不上的功能，Redis为了追求“轻巧”并且去除依赖，就选择自己去封装了一套。</p>
+<h4 id="单进程单线程好处"><a href="#单进程单线程好处" class="headerlink" title="单进程单线程好处"></a>单进程单线程好处</h4><ul>
+<li>代码更清晰，处理逻辑更简单</li>
+<li>不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗</li>
+<li>不存在多进程或者多线程导致的切换而消耗CPU</li>
+</ul>
+<h4 id="单进程单线程弊端"><a href="#单进程单线程弊端" class="headerlink" title="单进程单线程弊端"></a>单进程单线程弊端</h4><p>无法发挥多核CPU性能，不过可以通过在单机开多个Redis实例来完善；</p>
+<h4 id="其他一些优秀的开源软件采用的模型"><a href="#其他一些优秀的开源软件采用的模型" class="headerlink" title="其他一些优秀的开源软件采用的模型"></a>其他一些优秀的开源软件采用的模型</h4><ul>
+<li>多进程单线程模型：Nginx</li>
+<li>单进程多线程模型：Memcached</li>
+</ul>
+<h3 id="2）五种类型数据类型"><a href="#2）五种类型数据类型" class="headerlink" title="2）五种类型数据类型"></a>2）五种类型数据类型</h3><p>字符串、列表、散列表，集合、有序集合</p>
+<h3 id="3）内存中数据持久化"><a href="#3）内存中数据持久化" class="headerlink" title="3）内存中数据持久化"></a>3）内存中数据持久化</h3><p>使用复制来扩展读性能：复制到多台服务器、提高读性能和可用性</p>
+<p>使用分区来扩展写性能【hash一致性算法】：当数据量大的时候,把数据分散存入多个数据库中,减少单节点的连接压力</p>
+<p>特点</p>
+<ul>
+<li>完全基于内存</li>
+<li>数据结构简单，对数据操作也简单</li>
+<li>使用多路 I&#x2F;O 复用模型</li>
+</ul>
+<h3 id="4）Redis-适用场景"><a href="#4）Redis-适用场景" class="headerlink" title="4）Redis 适用场景"></a>4）Redis 适用场景</h3><ol>
+<li>缓存 将热点数据放到内存中</li>
+<li>消息队列 List 类型是双向链表，很适合用于消息队列</li>
+<li>计数器 快速、频繁读写操作；string的单线性自增减 ++ –</li>
+<li>共同好友关系 set 交集运算，很容易就可以知道用户的共同好友</li>
+<li>排名 zset有序集合</li>
+</ol>
+<h3 id="5）持久化"><a href="#5）持久化" class="headerlink" title="5）持久化"></a>5）持久化</h3><p>快照持久化</p>
+<p>将某个时间点的所有数据都存放到硬盘上</p>
+<p>可以将快照复制到其它服务器从而创建具有相同数据的服务器副本</p>
+<p>缺点：故障可能丢失最后一次创建快照之后的数据；如果数据量很大，保存快照的时间也会很长。</p>
+<p>AOF 持久化 将写命令添加到 AOF 文件（Append Only File）的末尾</p>
+<ul>
+<li>always： 每个写命令都同步，严重减低服务器的性能；</li>
+<li>everysec ：每秒同步一次，比较合适，保证系统奔溃时只会丢失一秒左右的数据，并且 Redis 每秒执行一次同步对服务器性能几乎没有任何影响；</li>
+<li>no ：让操作系统来决定何时同步，不能给性能带来提升，且会增加奔溃时数据丢失量</li>
+</ul>
+<p> </p>
+<p>随着服务器写请求的增多，AOF 文件会越来越大；Redis 提供了一种将 AOF 重写的特性，能够去除 AOF 文件中的冗余写命令。</p>
+<p>对硬盘的文件进行写入时，写入的内容首先会被存储到缓冲区，操作系统决定何时写</p>
+<p>用户可以调用 file.flush() 方法请求尽快将缓冲区存储的数据同步到硬盘</p>
+<p>redis主从复制 分布式数据同步方式</p>
+<p>slaveof host port 命令来让一个服务器成为另一个服务器的从服务器。</p>
+<p>一个从服务器只能有一个主服务器</p>
+<p>从服务器连接主服务器的过程</p>
+<ul>
+<li>主服务器创建快照文件，发送给从服务器。同时记录其间执行的写命令，发送完毕后，开始向从服务器发送写命令；</li>
+<li>从服务器丢弃所有旧数据，载入主服务器的快照文件，然后开始接受主服务器发来的写命令；</li>
+<li>主服务器每执行一次写命令，就向从服务器发送相同的写命令</li>
+</ul>
+<p>主从链 创建一个中间层来分担主服务器的复制工作</p>
+<ul>
+<li>随着负载不断上升，主服务器可能无法很快地更新所有从服务器</li>
+<li>重新连接和重新同步从服务器将导致系统超载</li>
+<li>中间层的服务器是最上层服务器的从服务器，又是最下层服务器的主服务器</li>
+</ul>
+<h3 id="6）redis-主服务器-故障-处理"><a href="#6）redis-主服务器-故障-处理" class="headerlink" title="6）redis 主服务器 故障 处理"></a>6）redis 主服务器 故障 处理</h3><p>当主服务器出现故障时，Redis 常用的做法是新开一台服务器作为主服务器，具体步骤如下：假设 A 为主服务器，B 为从服务器，当 A 出现故障时，让 B 生成一个快照文件，将快照文件发送给 C，并让 C 恢复快照文件的数据。最后，让 B 成为 C 的从服务器。</p>
+<h3 id="7）分片-集群-读并发"><a href="#7）分片-集群-读并发" class="headerlink" title="7）分片 集群 读并发"></a>7）分片 集群 读并发</h3><p>数据划分为多个部分，可以将数据存储到多台机器里，作用：负载均衡、线性级别的性能提升</p>
+<h3 id="8）分片方式："><a href="#8）分片方式：" class="headerlink" title="8）分片方式："></a>8）分片方式：</h3><p>客户端代码分片</p>
+<ul>
+<li>Redis Sharding，对Redis数据的key进行hash，相同的key到相同的节点上</li>
+<li>一致性哈希算法</li>
+<li>代理服务器分片 轮询round-bin</li>
+</ul>
+<h3 id="9）redis与数据库的同步-数据一致"><a href="#9）redis与数据库的同步-数据一致" class="headerlink" title="9）redis与数据库的同步 数据一致"></a>9）redis与数据库的同步 数据一致</h3><ul>
+<li><p>一致性要求高场景，实时同步方案，即查询redis，若查询不到再从DB查询，保存到redis；</p>
+</li>
+<li><p>更新redis时，先更新数据库，再将redis内容设置为过期(建议不要去更新缓存内容，直接设置缓存过期)，再用ZINCRBY增量修正redis数据</p>
+</li>
+<li><p>并发程度高的，采用异步队列的方式，采用kafka等消息中间件处理消息生产和消费</p>
+</li>
+<li><p>阿里的同步工具canal，实现方式是模拟mysql slave和master的同步机制，监控DB bitlog的日志更新来触发redis的更新，解放程序员双手，减少工作量</p>
+</li>
+<li><p>利用mysql触发器的API进行编程,c&#x2F;c++语言实现，学习成本高。</p>
+</li>
+</ul>
+<h3 id="10）热数据与Mysql的同步编码实现-数据库上锁"><a href="#10）热数据与Mysql的同步编码实现-数据库上锁" class="headerlink" title="10）热数据与Mysql的同步编码实现 数据库上锁"></a>10）热数据与Mysql的同步编码实现 数据库上锁</h3><p>热点数据（经常会被查询，但是不经常被修改或者删除的数据），首选是使用redis缓存</p>
+<p>用spring的AOP来构建redis缓存的自动生产和清除，过程如下：</p>
+<ul>
+<li>Select 数据库前查询redis，有的话使用redis数据，放弃select 数据库，没有的话，select 数据库，然后将数据插入redis</li>
+<li>update或者delete 数据库数据<ul>
+<li>高并发的情况下：先对数据库加锁，再删除redis</li>
+<li>查询redis是否存在该数据，若存在则先对数据库加行锁，再删除redis，再update或者delete数据库中数据</li>
+</ul>
+</li>
+<li>update或者delete redis，先更新数据库，再将redis内容设置为过期(建议不要去更新缓存内容，直接设置缓存过期)</li>
+</ul>
+<p> </p>
+<p>出错场景：update先删掉了redis中的该数据，这时另一个线程执行查询，发现redis中没有，瞬间执行了查询SQL，并且插入到redis</p>
+<h3 id="11）缓存穿透，缓存击穿，缓存雪崩解决方案分析"><a href="#11）缓存穿透，缓存击穿，缓存雪崩解决方案分析" class="headerlink" title="11）缓存穿透，缓存击穿，缓存雪崩解决方案分析"></a>11）缓存穿透，缓存击穿，缓存雪崩解决方案分析</h3><h4 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h4><p>缓存穿透是指查询一个一定不存在的数据，由于缓存是不命中时被动写的，并且出于容错考虑，如果从存储层查不到数据则不写入缓存，这将导致这个不存在的数据每次请求都要到存储层去查询，失去了缓存的意义。在流量大时，可能DB就挂掉了，要是有人利用不存在的key频繁攻击我们的应用，这就是漏洞。</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>有很多种方法可以有效地解决缓存穿透问题，最常见的则是采用布隆过滤器，将所有可能存在的数据哈希到一个足够大的bitmap中，一个一定不存在的数据会被 这个bitmap拦截掉，从而避免了对底层存储系统的查询压力。另外也有一个更为简单粗暴的方法（我们采用的就是这种），如果一个查询返回的数据为空（不管是数 据不存在，还是系统故障），我们仍然把这个空结果进行缓存，但它的过期时间会很短，最长不超过五分钟。</p>
+<h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><p>缓存雪崩是指在我们设置缓存时采用了相同的过期时间，导致缓存在某一时刻同时失效，请求全部转发到DB，DB瞬时压力过重雪崩。</p>
+<h4 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h4><p>缓存失效时的雪崩效应对底层系统的冲击非常可怕。大多数系统设计者考虑用加锁或者队列的方式保证缓存的单线 程（进程）写，从而避免失效时大量的并发请求落到底层存储系统上。这里分享一个简单方案就时讲缓存失效时间分散开，比如我们可以在原有的失效时间基础上增加一个随机值，比如1-5分钟随机，这样每一个缓存的过期时间的重复率就会降低，就很难引发集体失效的事件。</p>
+<h4 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h4><p>对于一些设置了过期时间的key，如果这些key可能会在某些时间点被超高并发地访问，是一种非常“热点”的数据。这个时候，需要考虑一个问题：缓存被“击穿”的问题，这个和缓存雪崩的区别在于这里针对某一key缓存，前者则是很多key。</p>
+<p>缓存在某个时间点过期的时候，恰好在这个时间点对这个Key有大量的并发请求过来，这些请求发现缓存过期一般都会从后端DB加载数据并回设到缓存，这个时候大并发的请求可能会瞬间把后端DB压垮。</p>
+<h4 id="解决方案-2"><a href="#解决方案-2" class="headerlink" title="解决方案"></a>解决方案</h4><p>我们的目标是：尽量少的线程构建缓存(甚至是一个) + 数据一致性 + 较少的潜在危险</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/raichen/p/7750165.html">https://www.cnblogs.com/raichen/p/7750165.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/03/09/hello-world/" data-id="cl0j81o8g0001esvh6fodadgn" data-title="Hello World" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/03/09/Redis_hot/" data-id="cl0j84jwk006w04vhhbha45a3" data-title="" class="article-share-link">Share</a>
       
       
       
@@ -160,25 +257,521 @@
 
 
   
+    <article id="post-JVM类加载器" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.576Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
 
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><p>虚拟机设计团队把加载动作放到JVM外部实现，以便让应用程序决定如何获取所需的类，JVM提供了3种类加载器︰</p>
+<p><strong>启动类加载器(Bootstrap ClassLoader)</strong></p>
+<p>负责加载JAVA_HOME\lib目录中的，或通过-Xbootclasspath参数指定路释中的，且被虚拟机认可(按文件名识别，如rt.jar )的类。</p>
+<p><strong>扩展类加载器(Extension ClassLoader)</strong></p>
+<p>负责加载JAVA_HOME\lib\ext目录中的，或通过java.ext.dirs 系统变量指定路径中的类库。</p>
+<p>**应用程序类加载器(Application ClassLoader) **</p>
+<p>负责加载用户路径( classpath )上的类库。JVM通过双亲委派模型进行类的加载，当然我们也可以通过继承java.lang.ClassLoader实现自定义的类加载器。</p>
+<p>​                                启动类加载器(Bootstrap ClassLoader)</p>
+<p>​                                                                    ↑</p>
+<p>​                                扩展类加载器(Extension ClassLoader)</p>
+<p>​                                                                    ↑</p>
+<p>​                                应用程序类加载器(Application ClassLoader) </p>
+<p>​                                     ↑                                                                  ↑</p>
+<p>自定义加载器(User ClassLoader)                               自定义加载器(User ClassLoader)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" data-id="cl0j84jvg003504vh4tjc5e0o" data-title="类加载器" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-JVM类加载机制" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.558Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="JVM类加载机制"><a href="#JVM类加载机制" class="headerlink" title="JVM类加载机制"></a>JVM类加载机制</h1><p>JVM类加载机制分为5个部分：加载，验证，准备，解析，初始化</p>
+<p><strong>加载</strong></p>
+<p>加载是类加载过程中的一个阶段，这个阶段会在内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的入口。注意这里不一定非得要从一个Class文件获取，这里既可以从ZIP包中读取（比如从jar包和war包中读取)，也可以在运行时计算生成(动态代理），也可以由其它文件生成(比如将JSP文件转换成对应的Class类)。</p>
+<p><strong>验证</strong></p>
+<p>这一阶段的主要目的是为了确保Class 文件的字节流中包含的信息是否符合当前虚拟机的要求，并且不会危害虚拟机自身的安全。</p>
+<p><strong>准备</strong></p>
+<p>准备阶段是正式为类变量分配内存并设置类变量的初始值阶段，即在方法区中分配这些变量所使用的内存空间。注意这里所说的初始值概念，比如一个类变量定义为︰实际上变量v在准备阶段过后的初始值为0而不是8080，将v赋值为8080的put static指令是程序被编译后，存放于类构造器方法之中。<br>但是注意如果声明为︰<br>public static final int v &#x3D; 8080;<br>在编译阶段会为v生成ConstantValue属性，在准备阶段虚拟机会根据ConstantValue属性将v赋值为8080。</p>
+<p><strong>解析</strong></p>
+<p>解析阶段是指虚拟机将常量池中的符号引用替换为直接引用的过程。符号引用就是 class 文件中的：</p>
+<ol>
+<li><p>CONSTANT_Class_info </p>
+</li>
+<li><p>CONSTANT_Field_info </p>
+</li>
+<li><p>CONSTANT_Method_info</p>
+<p>等类型的常量。</p>
+</li>
+</ol>
+<p><strong>符号引用</strong><br>符号引用与虚拟机实现的布局无关，引用的目标并不一定要已经加载到内存中。各种虚拟机实现的内存布局可以各不相同，但是它们能接受的符号引用必须是一致的，因为符号引用的字面量形式明确定义在Java 虚拟机规范的Class文件格式中。</p>
+<p><strong>直接引用</strong><br>直接引用可以是指向目标的指针，相对偏移量或是一个能间接定位到目标的句柄。如果有了直接引用，那引用的目标必定已经在内存中存在。</p>
+<p><strong>初始化</strong><br>初始化阶段是类加载最后一个阶段，前面的类加载阶段之后，除了在加载阶段可以自定义类加载器以外，其它操作都由JVM主导。到了初始阶段，才开始真正执行类中定义的Java程序代码。</p>
+<p><strong>类构造器</strong><br>初始化阶段是执行类构造器方法的过程。方法是由编译器自动收集类中的类变量的赋值操作和静态语句块中的语句合并而成的。虚拟机会保证子方法执行之前，父类的方法已经执行完毕，如果一个类中没有对静态变量赋值也没有静态语句块，那么编译器可以不为这个类生成()方法。注意以下几种情况不会执行类初始化:</p>
+<p>1.通过子类引用父类的静态字段，只会触发父类的初始化，而不会触发子类的初始化。</p>
+<p>2.定义对象数组，不会触发该类的初始化。</p>
+<p>3.常量在编译期间会存入调用类的常量池中，本质上并没有直接引用定义常量的类，不会触发定义常量所在的类。</p>
+<p>4.通过类名获取Class对象，不会触发类的初始化。</p>
+<p>5.通过Class.forName加载指定类时，如果指定参数initialize为false时，也不会触发类初始化，其实这个参数是告诉虚拟机，是否要对类进行初始化。</p>
+<p>6.通过ClassLoader 默认的loadClass方法，也不会触发初始化动作。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" data-id="cl0j84jvg003204vh0nk36exx" data-title="JVM类加载机制" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-JVM类加载" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.546Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h2><p>当JVM第一次使用一个类的时候，通过classPath(类路径)找到对应的 .class 文件，从 .class文件中读取该类的信息</p>
+<p>（包、类名、父类、属性、成员方法、构造方法等），读取之后将信息存储在JVM内存中，一个类只进行一次类加载。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNRH9DsksGC2iaSs3DRz8SP2ws4jDzwcWmxzIcrESiczn8eY0AEzeFTLsQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<h2 id="类的生命周期："><a href="#类的生命周期：" class="headerlink" title="类的生命周期："></a>类的生命周期：</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNkzsCznLcXtCNFWKran6njOmWwuBJMoVAFC3v8ibrOBtpjblVSmgRdvA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<h2 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNTX6kHnRo12duI7J8Wa5hLcSiaMcxH6iaAMjibsVlX6p4L3lDibg2oVjNAw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p>加载到初始化都是在程序的运行期间完成的。验证，准备，解析也叫连接过程，Java的特性是依赖在运行期动态加载和动态连接。</p>
+<p>**类加载并不是顺序执行，“并发” 执行</p>
+<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><p>”加载“是”类加机制”的第一个过程，在加载阶段，虚拟机主要完成三件事：</p>
+<p>（1）通过一个类的全限定名来获取其定义的二进制字节流</p>
+<p>（2）将这个字节流所代表的的静态存储结构转化为方法区的运行时数据结构</p>
+<p>（3）在堆中生成一个代表这个类的java.lang.Class对象，作为方法区中这些数据的访问入口。</p>
+<h3 id="连接-验证"><a href="#连接-验证" class="headerlink" title="连接-验证"></a>连接-验证</h3><p>目的在于确保class文件的字节流中包含信息符合当前虚拟机要求，不会危害虚拟机自身的安全，</p>
+<p>根据2011年发布的&lt;java虚拟机规范&gt;的要求，验证阶段大致需要一下四个阶段来验证</p>
+<p>主要包括四种验证：文件格式的验证，元数据的验证，字节码验证，符号引用验证。</p>
+<ul>
+<li>文件格式验证，该阶段主要在字节流转化为方法区中的运行时数据时，负责检查字节流是否符合Class文件的规范，保证其可以正确的被解析并存储于方法区中。</li>
+<li>元数据验证，确保Class的语义描述符合Java的Class规范。如：该Class是否有父类、是否错误继承了final类、是否一个合法的抽象类等。</li>
+<li>字节码验证，通过分析数据流和控制流，确保程序语义符合逻辑。如：验证类型转换是合法的。</li>
+<li>符号引用验证，发生于符号引用转换为直接引用的时候（转换发生在解析阶段）。如：验证引用的类、成员变量、方法的是否可以被访问，当前类是否存在相应的方法、成员等。</li>
+</ul>
+<h3 id="连接-准备"><a href="#连接-准备" class="headerlink" title="连接-准备"></a>连接-准备</h3><p>在准备阶段，虚拟机会在方法区中为Class分配内存，并设置static成员变量的初始值为默认值。注意这里仅仅会为static变量分配内存（static变量在方法区中），并且初始化static变量的值为其所属类型的默认值。如：int类型初始化为0，引用类型初始化为null。即使声明了这样一个static变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static int a = 123;</span><br></pre></td></tr></table></figure>
+
+<p>在准备阶段后，a在内存中的值仍然是0, 赋值123这个操作会在中初始化阶段执行，因此在初始化阶段产生了对应的Class对象之后a的值才是123 。为类变量（static修饰的字段变量）分配内存并且设置该类变量的初始值，（如static int i &#x3D; 5 这里只是将 i 赋值为0，在初始化的阶段再把 i 赋值为5)，这里不包含final修饰的static ，因为final在编译的时候就已经分配了。这里不会为实例变量分配初始化，类变量会分配在方法区中，实例变量会随着对象分配到Java堆中。</p>
+<h3 id="连接-解析"><a href="#连接-解析" class="headerlink" title="连接-解析"></a>连接-解析</h3><p>常量（用<strong>final修饰</strong>的成员变量表示常量，值一旦给定就无法改变！）</p>
+<p>解析阶段，虚拟机会将常量池中的符号引用替换为直接引用，解析主要针对的是类、接口、方法、成员变量等符号引用。在转换成直接引用后，会触发校验阶段的符号引用验证，验证转换之后的直接引用是否能找到对应的类、方法、成员变量等。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化阶段，才真正开始执行类中定义的java程序代码</p>
+<p>这里是类加载的最后阶段，如果该类具有父类就进行对父类进行初始化，执行其静态初始化器（静态代码块）和静态初始化成员变量。（前面已经对static 初始化了默认值，这里我们对它进行赋值，成员变量也将被初始化）</p>
+<h2 id="类加载时机："><a href="#类加载时机：" class="headerlink" title="类加载时机："></a>类加载时机：</h2><p>①第一次创建该类对象：先进行类加载，在完成对象的创建</p>
+<p>②第一次使用该类的静态成员（静态属性和静态方法）</p>
+<p>③子类的类加载会导致其父类先进行类加载</p>
+<p>④使用java.lang.reflect包的方法对类进行反射调用的时候</p>
+<p>⑤当虚拟机启动时，用户指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类。</p>
+<h2 id="双亲委派机制："><a href="#双亲委派机制：" class="headerlink" title="双亲委派机制："></a>双亲委派机制：</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNichb13jzW13XicVZ2CO9xKTduXDrCvIia115oc9znWOnzNF8VW1zZtmLA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p>首先需要知道的是，java类加载遵循一个机制——<code>Parents Delegation Model</code>（双亲委派模型） 双亲委派机制：就是某个特定的类加载器在接收到加载类的请求时，除非显示的要求使用某一个类加载器，都会将加载任务委托给父类加载器，父类加载器又将加载任务继续向上委托，直到最终父类加载器，如果最终父类加载器可以完成此类的加载任务，就由其完成加载，如果不行就依次向下传递任务，由其子类加载器进行加载。</p>
+<h2 id="双亲委派机制有什么好处？"><a href="#双亲委派机制有什么好处？" class="headerlink" title="双亲委派机制有什么好处？"></a>双亲委派机制有什么好处？</h2><p>1、 出于安全考虑，这么做保证了java核心库的安全性，确保基础类永远都是由java提供的类加载器来加载。2、  可以避免重复加载，当父加载器已经加载了该类后，子类就没有必要再加载一次。从以上两点出发，如果有人恶意篡改了基础类的代码（例如：java.lang.string）那他自己定义的java.lang.string将永远不会被加载进来，因为原始的String类已经在启动的时候就被加载进来了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" data-id="cl0j84jvf002y04vhbvpnfxjj" data-title="类加载" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-JVM加载class文件的原理" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/JVM%E5%8A%A0%E8%BD%BDclass%E6%96%87%E4%BB%B6%E7%9A%84%E5%8E%9F%E7%90%86/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.535Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/03/09/JVM%E5%8A%A0%E8%BD%BDclass%E6%96%87%E4%BB%B6%E7%9A%84%E5%8E%9F%E7%90%86/">描述一下JVM加载class文件的原理机制?</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="描述一下JVM加载class文件的原理机制"><a href="#描述一下JVM加载class文件的原理机制" class="headerlink" title="描述一下JVM加载class文件的原理机制?"></a>描述一下JVM加载class文件的原理机制?</h1><p>JVM中类的装载是由类加载器(ClassLoader )和它的子类来实现的，Java中的类加载器是一个重要的Java运行时系统组件，它负责在运行时查找和装入类文件中的类。</p>
+<p>由于Java的跨平台性，经过编译的Java源程序并不是一个可执行程序，而是一个或多个类文件。当Java程序需要使用某个类时，JVM会确保这个类已经被加载、连接(验证、准备和解析）和初始化。</p>
+<p>类的加载是指把类的.class文件中的数据读入到内存中，通常是创建一个字节数组读入.class文件，然后产生与所加载类对应的Class对象。加载完成后，Class对象还不完整，所以此时的类还不可用。</p>
+<p>当类被加载后就进入连接阶段，这一阶段包括验证、准备（为静态变量分配内存并设置默认的初始值)和解析（将符号引用替换为直接引用)三个步骤。最后JVM对类进行初始化，</p>
+<p>包括:<br>1）如果类存在直接的父类并且这个类还没有被初始化，那么就先初始化父类;</p>
+<p>2）如果类中存在初始化语句，就依次执行这些初始化语句。类的加载是由类加载器完成的，类加载器包括︰根加载器（BootStrap ) 、扩展加载器（Extension )、系统加载器（System )和用户自定义类加载器( java.lang.ClassLoader的子类)。</p>
+<p>从Java 2 (JDK 1.2 )开始，类加载过程采取了父亲委托机制(PDM )。PDM更好的保证了Java平台的安全性，在该机制中，JVM自带的Bootstrap是根加载器，其他的加载器都有且仅有一个父类加载器。类的加载首先请求父类加载器加载，父类加载器无能为力时才由其子类加载器自行加载。JVM不会向Java程序提供对Bootstrap的引用。下面是关于几个类加载器的说明</p>
+<p>Bootstrap :一般用本地代码实现，负责加载JVM基础核心类库( rt.jar ) ;</p>
+<p>Extension : 从java.ext.dirs系统属性所指定的目录中加载类库，它的父加载器是Bootstrap ;</p>
+<p>System :又叫应用类加载器，其父类是Extension。它是应用最广泛的类加载器。它从环境变量classpath或者系统属性java.class.path所指定的目录中记载类，是用户自定义加载器的默认父加载器。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/JVM%E5%8A%A0%E8%BD%BDclass%E6%96%87%E4%BB%B6%E7%9A%84%E5%8E%9F%E7%90%86/" data-id="cl0j84jvb002g04vh627d08zv" data-title="描述一下JVM加载class文件的原理机制?" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Java中wait-sleep-yield-interrupt等线程终止" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/Java%E4%B8%ADwait-sleep-yield-interrupt%E7%AD%89%E7%BA%BF%E7%A8%8B%E7%BB%88%E6%AD%A2/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.520Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/03/09/Java%E4%B8%ADwait-sleep-yield-interrupt%E7%AD%89%E7%BA%BF%E7%A8%8B%E7%BB%88%E6%AD%A2/">wait,sleep,yield,interrupt等线程终止</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="线程等待（wait）"><a href="#线程等待（wait）" class="headerlink" title="线程等待（wait）"></a>线程等待（<strong>wait</strong>）</h1><p>调用该方法的线程进入 WAITING 状态，只有等待另外线程的通知或被中断才会返回，需要注意的是调用 wait()方法后， 会释放对象的锁。因此， wait 方法一般用在同步方法或同步代码块中。 </p>
+<h1 id="线程睡眠（sleep）"><a href="#线程睡眠（sleep）" class="headerlink" title="线程睡眠（sleep）"></a>线程睡眠（sleep）</h1><p>sleep导致当前线程休眠，与 wait 方法不同的是 sleep 不会释放当前占有的锁,sleep(long)会导致线程进入 TIMED-WATING 状态，而 wait()方法会导致当前线程进入 WATING 状态 </p>
+<h1 id="线程让步（yield）"><a href="#线程让步（yield）" class="headerlink" title="线程让步（yield）"></a>线程让步（yield）</h1><p>yield 会使当前线程让出 CPU 执行时间片，与其他线程一起重新竞争 CPU 时间片。一般情况下，优先级高的线程有更大的可能性成功竞争得到 CPU 时间片， 但这又不是绝对的，有的操作系统对线程优先级并不敏感。 </p>
+<h1 id="线程中断（interrupt）"><a href="#线程中断（interrupt）" class="headerlink" title="线程中断（interrupt）"></a>线程中断（interrupt）</h1><p>中断一个线程，其本意是给这个线程一个通知信号，会影响这个线程内部的一个中断标识位。 这个线程本身并不会因此而改变状态(如阻塞，终止等)。 </p>
+<ol>
+<li><p>调用 interrupt()方法并不会中断一个正在运行的线程。也就是说处于 Running 状态的线程并不会因为被中断而被终止，仅仅改变了内部维护的中断标识位而已。</p>
+</li>
+<li><p>若调用 sleep()而使线程处于 TIMED-WATING 状态，这时调用 interrupt()方法，会抛出InterruptedException,从而使线程提前结束 TIMED-WATING 状态。</p>
+</li>
+<li><p>许多声明抛出 InterruptedException 的方法(如 Thread.sleep(long mills 方法))，抛出异常前，都会清除中断标识位，所以抛出异常后，调用 isInterrupted()方法将会返回 false。 </p>
+</li>
+<li><p>中断状态是线程固有的一个标识位，可以通过此标识位安全的终止线程。比如,你想终止一个线程 thread 的时候，可以调用 thread.interrupt()方法，在线程的 run 方法内部可以根据 thread.isInterrupted()的值来优雅的终止线程。</p>
+</li>
+</ol>
+<h1 id="join-等待其他线程终止"><a href="#join-等待其他线程终止" class="headerlink" title="join 等待其他线程终止"></a>join <strong>等待其他线程终止</strong></h1><p>join() 方法，等待其他线程终止，在当前线程中调用一个线程的 join() 方法，则当前线程转为阻塞状态，当另一个线程结束，当前线程再由阻塞状态变为就绪状态，等待 cpu 的宠幸。 </p>
+<h1 id="为什么要用join-方法"><a href="#为什么要用join-方法" class="headerlink" title="为什么要用join()方法"></a>为什么要用join()方法</h1><p>很多情况下，主线程生成并启动了子线程，需要用到子线程返回的结果，也就需要主线程需要在子线程结束后结束，这时候就要用到join()方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Thread.currentThread().getName() + <span class="string">&quot;线程运行开始!&quot;</span>); </span><br><span class="line"></span><br><span class="line"><span class="type">Thread6</span> <span class="variable">thread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread6</span>(); </span><br><span class="line"></span><br><span class="line">thread1.setName(<span class="string">&quot;线程 B&quot;</span>); </span><br><span class="line"></span><br><span class="line">thread1.join(); </span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;这时 thread1 执行完毕之后才能执行主线程&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/Java%E4%B8%ADwait-sleep-yield-interrupt%E7%AD%89%E7%BA%BF%E7%A8%8B%E7%BB%88%E6%AD%A2/" data-id="cl0j84jvl003o04vh17501uvp" data-title="wait,sleep,yield,interrupt等线程终止" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-JVM什么时候会出发FULLGC" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/JVM%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E5%87%BA%E5%8F%91FULLGC/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.517Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/03/09/JVM%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E5%87%BA%E5%8F%91FULLGC/">什么时候会触发FullGc</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="什么时候会触发FullGc"><a href="#什么时候会触发FullGc" class="headerlink" title="什么时候会触发FullGc"></a>什么时候会触发FullGc</h1><p>除直接调用System.gc外，触发Full GC执行的情况有如下四种。</p>
+<h2 id="1-旧生-老年-代空间不足"><a href="#1-旧生-老年-代空间不足" class="headerlink" title="1.旧生(老年)代空间不足"></a>1.旧生(老年)代空间不足</h2><p>旧生代空间只有在新生代对象转入及创建为大对象、大数组时才会出现不足的现象，当执行FulGC后空间仍然不足，则抛出如下错误∶<br>java.lang.OutOfMemoryError: Java heap space<br>为避免以上两种状况引起的FullGC，调优时应尽量做到让对象在Minor GC阶段被回收、让对象在新生代多存活一段时间及不要创建过大的对象及数组.</p>
+<h2 id="2-Permanet-Generation空间满"><a href="#2-Permanet-Generation空间满" class="headerlink" title="2.Permanet Generation空间满"></a>2.Permanet Generation空间满</h2><p>PermanetGeneration中存放的为一些class的信息等，当系统中要加载的类、反射的类和调用的方法较多时，Permanet Generation可能会被占满，在未配置为采用CMS GC的情况下会执行FullGC。如果经过Full GC仍然回收不了，那么JVM会抛出如下错误信息:<br>java.lang.OutOfMemoryError: PermGen space<br>为避免Perm Gen占满造成Full GC现象，可采用的方法为增大Perm Gen空间或转为使用CMSGC。</p>
+<h2 id="3-CMS-GC时出现promotion-failed和concurrent-mode-failure"><a href="#3-CMS-GC时出现promotion-failed和concurrent-mode-failure" class="headerlink" title="3.CMS GC时出现promotion failed和concurrent mode failure"></a>3.CMS GC时出现promotion failed和concurrent mode failure</h2><p>对于采用CMS进行旧生代GC的程序而言，尤其要注意GC日志中是否有promotion failed和concurrent mode failure两种状况，当这两种状况出现时可能会触发Full GC。<br>promotionfailed是在进行Minor GC时，survivor space放不下、对象只能放入旧生代，而此时旧生代也放不下造成的; concurrent mode failure是在执行CMS GC的过程中同时有对象要放入旧生代，而此时旧生代空间不足造成的。<br>应对措施为︰增大survivorspace、旧生代空间或调低触发并发GC的比率，但在JDK 5.0+、6.0+的版本中有可能会由于JDK的bug29导致CMS在remark完毕后很久才触发sweeping动作。对于这种状况，可通过设置-XX:CMSMaxAbortablePrecleanTime&#x3D;5(单位为ms )来避免。</p>
+<h2 id="4-统计得到的Minor-GC晋升到旧生代的平均大小大于旧生代的剩余空间"><a href="#4-统计得到的Minor-GC晋升到旧生代的平均大小大于旧生代的剩余空间" class="headerlink" title="4.统计得到的Minor GC晋升到旧生代的平均大小大于旧生代的剩余空间"></a>4.统计得到的Minor GC晋升到旧生代的平均大小大于旧生代的剩余空间</h2><p>这是一个较为复杂的触发情况，Hotspot为了避免由于新生代对象晋升到旧生代导致旧生代空间不足的现象，在进行Minor GC时，做了一个判断，如果之前统计所得到的Minor GC晋升到旧生代的平均大小大于旧生代的剩余空间，那么就直接触发Full GC.<br>例如程序第一次触发MinorGC后，有6MB的对象晋升到旧生代，那么当下一次Minor GC发生时，首先检查旧生代的剩余空间是否大于6MB，如果小于6MB，则执行Full GC。<br>当新生代采用PSGC时，方式稍有不同，PS GC是在Minor GC后也会检查，例如上面的例子中第一次Minor GC后，PS GC会检查此时旧生代的剩余空间是否大于6MB，如小于，则触发对旧生代的回收。除了以上4种状况外，对于使用RMI来进行RPC或管理的Sun JDK应用而言，默认情况下会小时执行一次Full GC。可通过在启动时通过-java-Dsun.rmi.dgc.client.gcInterval&#x3D;3600000来设置FullGC执行的间隔时间或通过-XX:+ DisableExplicitGC来禁止RMI调用System.gc</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/JVM%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E5%87%BA%E5%8F%91FULLGC/" data-id="cl0j84jva002e04vh74hq7wfy" data-title="什么时候会触发FullGc" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-JVM双亲委派机制" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/JVM%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.507Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/03/09/JVM%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/">JVM双亲委派机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="JVM双亲委派机制"><a href="#JVM双亲委派机制" class="headerlink" title="JVM双亲委派机制"></a>JVM双亲委派机制</h1><p>当一个类收到了类加载请求，他首先不会尝试自己去加载这个类，而是把这个请求委派给父类去完成，每一个层次类加载器都是如此，因此所有的加载请求都应该传送到启动类加载其中，只有当父类加载器反馈自己无法完成这个请求的时候（在它的加载路径下没有找到所需加载的Class )，子类加载器才会尝试自己去加载。<br>采用双亲委派的一个好处是比如加载位于rt.jar包中的类java.lang.Object，不管是哪个加载器加载这个类，最终都是委托给顶层的启动类加载器进行加载，这样就保证了使用不同的类加载器最终得到的都是同样一个Object对象</p>
+<p><img src="/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE.png" alt="双亲委派"></p>
+<p><img src="E:\MyBolg\source_posts\JVM双亲委派机制\双亲委派.png" alt="双亲委派"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/JVM%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/" data-id="cl0j84jvb002i04vhaw2o3ljc" data-title="JVM双亲委派机制" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-JVMJava引用" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/JVMJava%E5%BC%95%E7%94%A8/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.500Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/03/09/JVMJava%E5%BC%95%E7%94%A8/">Java引用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Java引用"><a href="#Java引用" class="headerlink" title="Java引用"></a>Java引用</h1><h2 id="JAVA强引用"><a href="#JAVA强引用" class="headerlink" title="JAVA强引用"></a>JAVA强引用</h2><p>在Java中最常见的就是强引用，<strong>把一个对象赋给一个引用变量</strong>，这个引用变量就是一个强引用。当一个对象被强引用变量引用时，它处于可达状态，它是不可能被垃圾回收机制回收的，即使该对象以后永远都不会被用到JVM也不会回收。<strong>因此强引用是造成Java 内存泄漏的主要原因之一</strong>。</p>
+<h2 id="JAVA软引用"><a href="#JAVA软引用" class="headerlink" title="JAVA软引用"></a>JAVA软引用</h2><p><strong>软引用需要用SoftReference类来实现，对于只有软引用的对象来说，当系统内存足够时它不会被回收，当系统内存空间不足时它会被回收。软引用通常用在对内存敏感的程序中。</strong></p>
+<h2 id="JAVA弱引用"><a href="#JAVA弱引用" class="headerlink" title="JAVA弱引用"></a>JAVA弱引用</h2><p><strong>弱引用需要用WeakReference类来实现，它比软引用的生存期更短，对于只有弱引用的对象来说，只要垃圾回收机制一运行，不管JVM的内存空间是否足够，总会回收该对象占用的内存。</strong></p>
+<h2 id="JAVA虚引用"><a href="#JAVA虚引用" class="headerlink" title="JAVA虚引用"></a>JAVA虚引用</h2><p><strong>虚引用需要PhantomReference类来实现，它不能单独使用，必须和引用队列联合使用。虚引用的主要作用是跟踪对象被垃圾回收的状态。</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/JVMJava%E5%BC%95%E7%94%A8/" data-id="cl0j84jv7002c04vh45rrg52q" data-title="Java引用" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
           <aside id="sidebar">
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
     </div>
   </div>
 
@@ -191,11 +784,23 @@
       <ul>
         
           <li>
-            <a href="/2022/03/09/article-title/">article title</a>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2022/03/09/hello-world/">Hello World</a>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
           </li>
         
       </ul>

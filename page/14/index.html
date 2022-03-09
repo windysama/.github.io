@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="MyHomePage">
+<meta property="og:url" content="http://example.com/page/14/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Lee yunbo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-面试必考题行级锁加载哪个位置" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E8%A1%8C%E7%BA%A7%E9%94%81%E5%8A%A0%E8%BD%BD%E5%93%AA%E4%B8%AA%E4%BD%8D%E7%BD%AE/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E8%A1%8C%E7%BA%A7%E9%94%81%E5%8A%A0%E8%BD%BD%E5%93%AA%E4%B8%AA%E4%BD%8D%E7%BD%AE/">行级锁应该加在什么位置？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="行级锁应该加在什么位置？"><a href="#行级锁应该加在什么位置？" class="headerlink" title="行级锁应该加在什么位置？"></a>行级锁应该加在什么位置？</h1><p>行级锁</p>
+<p>行级锁是mysql中粒度最细的一种锁机制，表示只对当前所操作的行进行加锁，行级锁发生冲突的概率很低，其粒度最小，但是加锁的代价最大。行级锁分为共享锁和排他锁。</p>
+<p>特点：</p>
+<p>开销大，加锁慢，会出现死锁；锁定粒度最小，发生锁冲突的概率最大，并发性也高；</p>
+<p>实现原理：</p>
+<p>InnoDB行锁是通过给索引项加锁来实现的，这一点mysql和oracle不同，后者是通过在数据库中对相应的数据行加锁来实现的，InnoDB这种行级锁决定，<strong>只有通过索引条件来检索数据，才能使用行级锁，否则，直接使用表级锁</strong>。</p>
+<p>特别注意:<strong>使用行级锁一定要使用索引</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E8%A1%8C%E7%BA%A7%E9%94%81%E5%8A%A0%E8%BD%BD%E5%93%AA%E4%B8%AA%E4%BD%8D%E7%BD%AE/" data-id="cl0j84jy600d804vhh97o45ar" data-title="行级锁应该加在什么位置？" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题解决hash冲突的办法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E8%A7%A3%E5%86%B3hash%E5%86%B2%E7%AA%81%E7%9A%84%E5%8A%9E%E6%B3%95/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E8%A7%A3%E5%86%B3hash%E5%86%B2%E7%AA%81%E7%9A%84%E5%8A%9E%E6%B3%95/">解决哈希冲突的三种方法（拉链法、开放地址法、再散列法、建立公共溢出栈）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="解决哈希冲突的三种方法（拉链法、开放地址法、再散列法、）"><a href="#解决哈希冲突的三种方法（拉链法、开放地址法、再散列法、）" class="headerlink" title="解决哈希冲突的三种方法（拉链法、开放地址法、再散列法、）"></a>解决哈希冲突的三种方法（拉链法、开放地址法、再散列法、）</h1><h2 id="一、开发地址法"><a href="#一、开发地址法" class="headerlink" title="一、开发地址法"></a>一、开发地址法</h2><p>所谓的开放定址法就是一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入 公式为：<br>$$<br>fi(key) &#x3D; (f(key)+di) MOD m (di&#x3D;1,2,3,……,m-1)<br>$$<br>※ 用开放定址法解决冲突的做法是：当冲突发生时，使用某种探测技术在散列表中形成一个探测序列。沿此序列逐个单元地查找，直到找到给定的关键字，或者<br>碰到一个开放的地址（即该地址单元为空）为止（若要插入，在探查到开放的地址，则可将待插入的新结点存人该地址单元）。查找时探测到开放的地址则表明表<br>中无待查的关键字，即查找失败。</p>
+<p>开放地址法有个非常关键的特征，就是所有输入的元素全部存放在哈希表里，也就是说，位桶的实现是不需要任何的链表来实现的，换句话说，也就是这个哈希表的装载因子不会超过1。它的实现是在插入一个元素的时候，先通过哈希函数进行判断，若是发生哈希冲突，就以当前地址为基准，根据再寻址的方法（探查序列），去寻找下一个地址，若发生冲突再去寻找，直至找到一个为空的地址为止。所以这种方法又称为再散列法。</p>
+<p>有几种常用的探查序列的方法：</p>
+<p>①线性探查</p>
+<p>dii&#x3D;1，2，3，…，m-1；这种方法的特点是：冲突发生时，顺序查看表中下一单元，直到找出一个空单元或查遍全表。</p>
+<p>（使用例子：ThreadLocal里面的ThreadLocalMap）</p>
+<p>②二次探查</p>
+<p>di&#x3D;12，-12，22，-22，…，k2，-k2   ( k&lt;&#x3D;m&#x2F;2 )；这种方法的特点是：冲突发生时，在表的左右进行跳跃式探测，比较灵活。</p>
+<p>③ 伪随机探测</p>
+<p>di&#x3D;伪随机数序列；具体实现时，应建立一个伪随机数发生器，（如i&#x3D;(i+p) % m），生成一个位随机序列，并给定一个随机数做起点，每次去加上这个伪随机数++就可以了。</p>
+<h2 id="二、拉链法"><a href="#二、拉链法" class="headerlink" title="二、拉链法"></a>二、拉链法</h2><p>HashMap，HashSet其实都是采用的拉链法来解决哈希冲突的，就是在每个位桶实现的时候，我们采用链表（jdk1.8之后采用链表+红黑树）的数据结构来去存取发生哈希冲突的输入域的关键字（也就是被哈希函数映射到同一个位桶上的关键字）。首先来看使用拉链法解决哈希冲突的几个操作：</p>
+<p>①插入操作：在发生哈希冲突的时候，我们输入域的关键字去映射到位桶（实际上是实现位桶的这个数据结构，链表或者红黑树）中去的时候，我们先检查带插入元素x是否出现在表中，很明显，这个查找所用的次数不会超过装载因子（n&#x2F;m:n为输入域的关键字个数，m为位桶的数目），它是个常数，所以插入操作的最坏时间复杂度为O(1)的。</p>
+<p>②查询操作：和①一样，在发生哈希冲突的时候，我们去检索的时间复杂度不会超过装载因子，也就是检索数据的时间复杂度也是O(1)的</p>
+<p>③删除操作：如果在拉链法中我们想要使用链表这种数据结构来实现位桶，那么这个链表一定是双向链表，因为在删除一个元素x的时候，需要更改x的前驱元素的next指针的属性，把x从链表中删除。这个操作的时间复杂度也是O(1)的。</p>
+<p>拉链法的优点</p>
+<p>与开放定址法相比，拉链法有如下几个优点：</p>
+<p>①拉链法处理冲突简单，且无堆积现象，即非同义词决不会发生冲突，因此平均查找长度较短；</p>
+<p>②由于拉链法中各链表上的结点空间是动态申请的，故它更适合于造表前无法确定表长的情况；</p>
+<p>③开放定址法为减少冲突，要求装填因子α较小，故当结点规模较大时会浪费很多空间。而拉链法中可取α≥1，且结点较大时，拉链法中增加的指针域可忽略不计，因此节省空间；</p>
+<p>④在用拉链法构造的散列表中，删除结点的操作易于实现。只要简单地删去链表上相应的结点即可。</p>
+<p>拉链法的缺点</p>
+<p>指针需要额外的空间，故当结点规模较小时，开放定址法较为节省空间，而若将节省的指针空间用来扩大散列表的规模，可使装填因子变小，这又减少了开放定址法中的冲突，从而提高平均查找速度。</p>
+<h2 id="三、再散列法rehash"><a href="#三、再散列法rehash" class="headerlink" title="三、再散列法rehash"></a>三、再散列法rehash</h2><p>再散列法其实很简单，就是再使用哈希函数去散列一个输入的时候，输出是同一个位置就再次散列，直至不发生冲突位置</p>
+<p>缺点：每次冲突都要重新散列，计算时间增加。</p>
+<h2 id="四、-建立公共溢出区："><a href="#四、-建立公共溢出区：" class="headerlink" title="四、 建立公共溢出区："></a>四、 建立公共溢出区：</h2><p>这种方法的基本思想是：将哈希表分为基本表和溢出表两部分，凡是和基本表发生冲突的元素，一律填入溢出表</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E8%A7%A3%E5%86%B3hash%E5%86%B2%E7%AA%81%E7%9A%84%E5%8A%9E%E6%B3%95/" data-id="cl0j84jyb00df04vhgcpt0wsc" data-title="解决哈希冲突的三种方法（拉链法、开放地址法、再散列法、建立公共溢出栈）" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-数据结构分治算法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/" class="article-date">
+  <time class="dt-published" datetime="2021-04-19T16:00:00.000Z" itemprop="datePublished">2021-04-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/">分治算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="分治法"><a href="#分治法" class="headerlink" title="分治法"></a>分治法</h1><p>文章摘自：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/72734354">https://zhuanlan.zhihu.com/p/72734354</a></p>
+<p>分治法，字面意思是“分而治之”，就是把一个复杂的1问题分成两个或多个相同或相似的子问题，再把子问题分成更小的子问题直到最后子问题可以简单地直接求解，原问题的解即子问题的解的合并，这个思想是很多高效算法的基础，例如排序算法(快速排序，归并排序)，傅里叶变换(快速傅里叶变换)等。</p>
+<p>分治法的基本思想：将一个难以直接解决的大问题，分割成一些规模较小的相同问题，以便各个击破，分而治之。</p>
+<p>分治策略：对于一个规模为n的问题，若该问题可以容易的解决(比如规模n较小)则直接解决，否则将其分解为k个规模较小的子问题，这些子问题互相独立且与原问题形式相同，递归地解决这些子问题，然后将各个子问题的解合并得到原问题的解。</p>
+<p>如果原问题可以分割成k个子问题，1&lt;k&lt;&#x3D;n，且这些子问题均可解并且利用这些子问题的解求出原问题的解，那么分治方法就是可行的。由分治法产生的子问题往往是原问题的较小模式，这就为使用递归技术提供了方便。反复应用分治手段，可以使子问题与原问题类型一致而其规模却不断缩小，最终使子问题缩小到很容易直接求出其解。这自然导致递归过程的产生。分治与递归经常同时应用在算法设计之中。</p>
+<h2 id="分治法使用场景"><a href="#分治法使用场景" class="headerlink" title="分治法使用场景"></a>分治法使用场景</h2><ol>
+<li>该问题的规模缩小到一定的程度就可以容易的解决。</li>
+<li>该问题可以分解为若干个规模较小的相同问题，即该问题具有最优子结构性质。</li>
+<li>利用该问题分解出的子问题的解可以合并为该问题的解。</li>
+<li>该问题所分解出的各个子问题是相互独立的，即子问题之间不包含公共的子问题。</li>
+</ol>
+<p>第一条特征是绝大多数问题可以满足的，问题的复杂性一般是随着问题规模的增加而增加；第二条特征是应用分治法的前提。它是大多数问题可以满足的，此特征反映了递归思想的应用。第三条特征是关键，能否利用分治法完全取决于问题是否具有第三条特征，如果具备了第一条和第二条，而不具备第三条特征，则可以考虑使用贪心法或者动态规划法。第四条关系到分治法的效率，如果各个子问题是不独立的则分治法要做寻多不必要的工作，重复的解决公共的子问题，此时虽然可用分治法，但一般使用动态规划法较好。</p>
+<h2 id="分治法的基本步骤"><a href="#分治法的基本步骤" class="headerlink" title="分治法的基本步骤"></a>分治法的基本步骤</h2><ul>
+<li>分解：将原问题分解为若干个规模较小，相互独立，与原问题形式相同的子问题</li>
+<li>解决：若子问题规模较小而容易被解决则直接解，否则递归地解各个子问题</li>
+<li>合并：将各个子问题的解合并为原问题的解</li>
+</ul>
+<h2 id="分治法的复杂性分析"><a href="#分治法的复杂性分析" class="headerlink" title="分治法的复杂性分析"></a>分治法的复杂性分析</h2><p>一个分治法将规模为n的问题分成k个规模为n&#x2F;m的子问题去解。设分解阈值 <img src="https://www.zhihu.com/equation?tex=n_0=1" alt="[公式]"> ，且最小子解规模为1的问题消耗一个单位时间。设将原问题分解为k个子问题以及用merge将K个子问题的解合并为原问题的解需用f(n)个单位时间，用T(n)表示该分治法解规模为|P|&#x3D;n的问题所需的计算时间：<br>$$<br>T(n)&#x3D;kT(n&#x2F;m)+f(n)<br>$$</p>
+<h2 id="可以使用分治法求解的一些经典问题"><a href="#可以使用分治法求解的一些经典问题" class="headerlink" title="可以使用分治法求解的一些经典问题"></a>可以使用分治法求解的一些经典问题</h2><ol>
+<li>二分搜索</li>
+<li>大整数乘法</li>
+<li>Strassen矩阵乘法</li>
+<li>棋盘覆盖</li>
+<li><a href="https://link.zhihu.com/?target=http://www.cnblogs.com/xsyfl/p/6905974.html">合并排序</a></li>
+<li><a href="https://link.zhihu.com/?target=http://www.cnblogs.com/xsyfl/p/6901315.html">快速排序</a></li>
+<li>线性时间选择</li>
+<li>最接近点对问题</li>
+<li>循环赛日程表</li>
+<li><strong>汉诺塔</strong></li>
+</ol>
+<p><strong>二分搜索法</strong></p>
+<p>又叫做二分查找，折半查找，它是一种效率较高的查找方法。</p>
+<p>线性表为有序表，先确定待查找记录所在的范围，然后逐步缩小范围直至找到或找不到该记录的位置。</p>
+<ul>
+<li>先确定中间位置： <img src="https://www.zhihu.com/equation?tex=middle=(left+right)/2" alt="[公式]"> ;</li>
+<li>将待查找的key值与data[middle].key的值比较，相等则查找成功并返回该位置，否则须确定新得查找区间，继续二分查找，</li>
+<li>如果data[middle].key大于key，由于data为有序线性表，可知data[middle…right].key均大于key，因此若表中存在关键字等于key的节点，则一定在位置middle左边的子表中。</li>
+<li>反之，data[middle].key小于key，若表中存在关键字等于key的节点，则一定在位置middle右边的子表中，下一次查找对新的区域进行查找。</li>
+</ul>
+<p>和动态规划一样，作为一种解决问题的算法思想，仅仅知道其概念是远远不够的，需要出培养这种思维方式，所以必须要有针对性的勤刷题，培养出一种解决问题的思维方式，这样以后遇到类似的问题才能迎刃而解。</p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h4 id="面试题-08-06-汉诺塔问题"><a href="#面试题-08-06-汉诺塔问题" class="headerlink" title="面试题 08.06. 汉诺塔问题"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/hanota-lcci/">面试题 08.06. 汉诺塔问题</a></h4><p>汉诺塔问题是一个经典的数学难题，由 3 个柱子和多个半径不等的圆盘构成，如下图所示：</p>
+<p><img src="/%E6%B1%89%E8%AF%BA%E5%A1%94.gif" alt="汉诺塔"></p>
+<p>​                                                                    图 1 汉诺塔问题</p>
+<p>汉诺塔问题指的是：将一个柱子中的所有圆盘移动到另一个柱子，移动过程需遵守以下规则：</p>
+<ul>
+<li>每次只能移动一个圆盘，而且只能移动某个柱子上最顶部的圆盘；</li>
+<li>移动过程中，必须保证每个柱子上的大圆盘都位于小圆盘的下面。</li>
+</ul>
+<p>如图 1 所示，第一个柱子上共有 3 个圆盘，上面的动画演示了汉诺塔问题的一种解决方案。</p>
+<p>可以看到，3 个圆盘需要移动 7 步，才能成功移动到另一个柱子上。</p>
+<blockquote>
+<p>汉诺塔问题中，n 个圆盘至少需要 2n-1 次移动操作。</p>
+</blockquote>
+<h2 id="汉诺塔问题的解决思路"><a href="#汉诺塔问题的解决思路" class="headerlink" title="汉诺塔问题的解决思路"></a>汉诺塔问题的解决思路</h2><p>我们可以很轻易的想到移动 1~3 个圆盘的解决方案，圆盘个数越多，解决起来就越棘手。这种情况下，我们可以借助<a target="_blank" rel="noopener" href="https://www.biancheng.net/algorithm/divide_and_conquer.html">分治</a>思想，将移动多个圆盘的大问题分割成多个移动少量圆盘的小问题。</p>
+<p>为了便于讲清楚问题的解决过程，我们将 3 个柱子依次命名为起始柱、辅助柱及目标柱。起始柱指的是初始状态下所有圆盘所在的柱子，目标柱指的是最终放置所有圆盘的柱子，剩下的一个称为辅助柱。</p>
+<p>首先，如果初始状态下的起始柱上仅有 1 个圆盘，我们可以很轻松地将圆盘从起始柱直接移到目标柱。如果初始状态下起始柱上有 2 个圆盘，则整个移动操作需执行如下几步：</p>
+<ol>
+<li>将起始柱顶部较小的圆盘移动到辅助柱；</li>
+<li>将起始柱上较大的圆盘移动到目标柱；</li>
+<li>最后，将辅助柱上较小的圆盘移动到目标柱。</li>
+</ol>
+<p>图 2 演示了以上 3 步操作的过程：</p>
+<p><img src="/%E6%B1%89%E8%AF%BA%E5%A1%94.gif" alt="汉诺塔"></p>
+<p>实际上，移动 2 个圆盘的过程也同样适用于移动更多的圆盘。对于初始状态下起始柱包含 2 个以上圆盘的情况（假设圆盘个数为 n），移动过程可以遵循以下步骤：</p>
+<ol>
+<li>将起始柱上的 n-1 个圆盘移动到辅助柱；</li>
+<li>将起始柱上最大的圆盘移动到目标柱；</li>
+<li>将辅助柱中的 n-1个圆盘移动到目标柱。</li>
+</ol>
+<p>对于移动 n-1 个圆盘的情况，仍可以遵循以上的移动过程。如此，我们就将移动 n 个圆盘的问题划分为移动 n-1 个圆盘的问题，此问题还可以进行更细致的划分。</p>
+<h2 id="汉诺塔问题的具体实现"><a href="#汉诺塔问题的具体实现" class="headerlink" title="汉诺塔问题的具体实现"></a>汉诺塔问题的具体实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line">    <span class="comment">// 统计移动次数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">hanoi</span><span class="params">(<span class="type">int</span> num, <span class="type">char</span> source, <span class="type">char</span> target, <span class="type">char</span> auxiliary)</span> &#123;</span><br><span class="line">        <span class="comment">// 如果圆盘数量仅有 1 个，则直接从起始柱移动到目标柱</span></span><br><span class="line">        <span class="keyword">if</span> (num == <span class="number">1</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;第&quot;</span> + i + <span class="string">&quot;次:从&quot;</span> + source + <span class="string">&quot;移动到&quot;</span> + target);</span><br><span class="line">            i++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 递归调用 hanoi() 函数，将 num-1 个圆盘从起始柱移动到辅助柱上</span></span><br><span class="line">            hanoi(num - <span class="number">1</span>, source, auxiliary, target);</span><br><span class="line">            <span class="comment">// 将起始柱上剩余的最后一个大圆盘移动到目标柱上</span></span><br><span class="line">            System.out.println(<span class="string">&quot;第&quot;</span> + i + <span class="string">&quot;次:从&quot;</span> + source + <span class="string">&quot;移动到&quot;</span> + target);</span><br><span class="line">            i++;</span><br><span class="line">            <span class="comment">// 递归调用 hanoi() 函数，将辅助柱上的 num-1 圆盘移动到目标柱上</span></span><br><span class="line">            hanoi(num - <span class="number">1</span>, auxiliary, target, source);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 以移动 3 个圆盘为例，起始柱、目标柱、辅助柱分别用 A、B、C 表示</span></span><br><span class="line">        hanoi(<span class="number">3</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">hanota</span><span class="params">(List&lt;Integer&gt; A, List&lt;Integer&gt; B, List&lt;Integer&gt; C)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> A.length;</span><br><span class="line">        Stack&lt;Integer&gt; a = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++) a.push(A[i]);</span><br><span class="line">        Stack&lt;Integer&gt; b = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        Stack&lt;Integer&gt; c = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        hanoi(n,a,b,c);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">hanoi</span><span class="params">(<span class="type">int</span> n;Stack&lt;Integer&gt; a;Stack&lt;Integer&gt; b;Stack&lt;Integer&gt; c)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>) &#123;</span><br><span class="line">            c.push(a.pop());</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line">        hanoi(n-<span class="number">1</span>,a,c,b);</span><br><span class="line">        c.push(a.pop());</span><br><span class="line">        hanoi(n-<span class="number">1</span>,b,a,c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/" data-id="cl0j84jxl00b204vhas9jbx6v" data-title="分治算法" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql锁" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql%E9%94%81/" class="article-date">
+  <time class="dt-published" datetime="2021-04-19T07:39:11.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql%E9%94%81/">MySql锁</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="什么是锁"><a href="#什么是锁" class="headerlink" title="什么是锁?"></a>什么是锁?</h1><p>答∶数据库是一个多用户使用的共享资源。当多个用户并发地存取数据时，在数据库中就会产生多个事务同时存取同一数据的情况。若对并发操作不加控制就可能会读取和存储不正确的数据，破坏数据库的一致性。</p>
+<p>加锁是实现数据库并发控制的一个非常重要的技术。当事务在对某个数据对象进行操作前，先向系统发出请求，对其加锁。加锁后事务就对该数据对象有了一定的控制，在该事务释放锁之前，其他的事务不能对此数据对象进行更新操作。</p>
+<p>基本锁类型:锁包括行级锁和表级锁</p>
+<h1 id="MySQL-中有哪几种锁？"><a href="#MySQL-中有哪几种锁？" class="headerlink" title="MySQL 中有哪几种锁？"></a><strong>MySQL</strong> <strong>中有哪几种锁？</strong></h1><p>1、表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高，并发度最低。</p>
+<p>2、行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度也最高。</p>
+<p>3、页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般</p>
+<h1 id="锁的优化策略"><a href="#锁的优化策略" class="headerlink" title="锁的优化策略"></a>锁的优化策略</h1><p>1、读写分离</p>
+<p>2、分段加锁</p>
+<p>3、减少锁持有的时间</p>
+<p>4.多个线程尽量以相同的顺序去获取资源不能将锁的粒度过于细化，不然可能会出现线程的加锁和释放次数过多，反而效率不如一次加一把大锁。</p>
+<h1 id="什么是乐观锁"><a href="#什么是乐观锁" class="headerlink" title="什么是乐观锁"></a>什么是乐观锁</h1><p>乐观锁认为一个用户读数据的时候，别人不会去写自己所读的数据﹔悲观锁就刚好相反，觉得自己读数据库的时候，别人可能刚好在写自己刚读的数据，其实就是持一种比较保守的态度;时间戳就是不加锁，通过时间戳来控制并发出现的问题。</p>
+<h1 id="什么是悲观锁"><a href="#什么是悲观锁" class="headerlink" title="什么是悲观锁"></a>什么是悲观锁</h1><p>悲观锁就是在读取数据的时候，为了不让别人修改自己读取的数据，就会先对自己读取的数据加锁，只有自己把数据读完了，才允许别人修改那部分数据，或者反过来说，就是自己修改某条数据的时候，不允许别人读取该数据，只有等自己的整个事务提交了，才释放自己加上的锁，才允许其他用户访问那部分数据。</p>
+<h1 id="什么是时间戳"><a href="#什么是时间戳" class="headerlink" title="什么是时间戳"></a>什么是时间戳</h1><p>时间戳就是在数据库表中单独加一列时间戳，比如“TimeStamp”，每次读出来的时候，把该字段也读出来，当写回去的时候，把该字段加1，提交之前，跟数据库的该字段比较一次，如果比数据库的值大的话，就允许保存，否则不允许保存，这种处理方法虽然不使用数据库系统提供的锁机制，但是这种方法可以大大提高数据库处理的并发量，以上悲观锁所说的加”锁”，其实分为几种锁，分别是∶排它锁(写锁）和共享锁(读锁）。</p>
+<h1 id="什么是行级锁"><a href="#什么是行级锁" class="headerlink" title="什么是行级锁"></a>什么是行级锁</h1><p>行级锁是一种排他锁，防止其他事务修改此行﹔在使用以下语句时，Oracle 会自动应用行级锁:</p>
+<p>1.INSERT、UPDATE、DELETE、SELECT …FOR UPDATE [OF columns] [ WAIT n | NOWAIT ]; </p>
+<p>2.SELECT … FOR UPDATE语句允许用户一次锁定多条记录进行更新</p>
+<p>3.使用COMMIT或 ROLLBACK语句释放锁。</p>
+<h1 id="什么是表级锁"><a href="#什么是表级锁" class="headerlink" title="什么是表级锁"></a>什么是表级锁</h1><p>表示对当前操作的整张表加锁，它实现简单，资源消耗较少，被大部分 MySQL引擎支持。最常使用的MYISAM与 INNODB都支持表级锁定。表级锁定分为表共享读锁(共享锁)与表独占写锁（排他锁)。</p>
+<h1 id="什么是页级锁"><a href="#什么是页级锁" class="headerlink" title="什么是页级锁"></a>什么是页级锁</h1><p>页级锁是MySQL中锁定粒度介于行级锁和表级锁中间的一种锁。表级锁速度快，但冲突多，行级冲突少，但速度慢。所以取了折衷的页级，一次锁定相邻的一组记录。BDB支持页级锁</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql%E9%94%81/" data-id="cl0j84jwd006b04vh5fg3ak87" data-title="MySql锁" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql数据库优化方法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" class="article-date">
+  <time class="dt-published" datetime="2021-04-19T07:17:24.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/">SQL数据库优化方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="SQL-优化"><a href="#SQL-优化" class="headerlink" title="SQL 优化"></a>SQL 优化</h1><p>1、查询语句中不要使用select *</p>
+<p>2、尽量减少子查询，使用关联查询( left join,right join,inner join)替代</p>
+<p>3、减少使用IN或者NOT IN ,使用exists , not exists或者关联查询语句替代</p>
+<p>4、or的查询尽量用union或者union all代替(在确认没有重复数据或者不用剔除重复数据时，unionall会更好)</p>
+<p>5、应尽量避免在where子句中使用!&#x3D;或◇操作符，否则将引擎放弃使用索引而进行全表扫描。</p>
+<p>6、应尽量避免在where子句中对字段进行null值判断，否则将导致引擎放弃使用索引而进行全表扫描，如: select id from t where num is null可以在num上设置默认值О，确保表中num列没有null值，然后这样查询: select id from t where num&#x3D;0</p>
+<h1 id="52、MySQL数据库作发布系统的存储，一天五万条以上的增量，预计运维三年-怎么优化"><a href="#52、MySQL数据库作发布系统的存储，一天五万条以上的增量，预计运维三年-怎么优化" class="headerlink" title="52、MySQL数据库作发布系统的存储，一天五万条以上的增量，预计运维三年,怎么优化?"></a>52、MySQL数据库作发布系统的存储，一天五万条以上的增量，预计运维三年,怎么优化?</h1><p>1、设计良好的数据库结构，允许部分数据冗余，尽量避兔join查询，提高效率。</p>
+<p>2、选择合适的表字段数据类型和存储引擎，适当的添加索引。</p>
+<p>3、MySQL库主从读写分离。</p>
+<p>4、找规律分表，减少单表中的数据量提高查询速度。</p>
+<p>5、添加缓存机制，比如 memcached , apc等。</p>
+<p>6、不经常改动的页面，生成静态页面。</p>
+<p>7、书写高效率的SQL。比如SELECT* FROM TABEL改为SELECT field_1,field_2, field_3 FROMTABLE.</p>
+<h1 id="优化数据库的方法"><a href="#优化数据库的方法" class="headerlink" title="优化数据库的方法"></a>优化数据库的方法</h1><p>1、选取最适用的字段属性，尽可能减少定义字段宽度，尽量把字段设置NOTNULL，例如’省份’、性别’最好适用ENUM</p>
+<p>2、使用连接(JOIN)来代替子查询</p>
+<p>3、适用联合(UNION)来代替手动创建的临时表4、事务处理</p>
+<p>5、锁定表、优化事务处理</p>
+<p>6、适用外键，优化锁定表</p>
+<p>7、建立索引</p>
+<p>8、优化查询语句</p>
+<h1 id="说说对SQL语句优化有哪些方法-（选择几条"><a href="#说说对SQL语句优化有哪些方法-（选择几条" class="headerlink" title="说说对SQL语句优化有哪些方法?（选择几条)"></a>说说对SQL语句优化有哪些方法?（选择几条)</h1><p>1、Where子句中: where表之间的连接必须写在其他Where条件之前，那些可以过滤掉最大数量记录的条件必须写在 Where子句的未尾.HAVING最后。</p>
+<p>2、用 EXISTS替代IN、用NOT EXISTS替代NOT IN。</p>
+<p>3、避免在索引列上使用计算</p>
+<p>4、避免在索引列上使用IS NULL和IS NOT NULL</p>
+<p>5、对查询进行优化，应尽量避免全表扫描，首先应考虑在where 及order by涉及的列上建立索引。</p>
+<p>6、应尽量避免在where子句中对字段进行null值判断，否则将导致引擎放弃使用索引而进行全表扫描</p>
+<p>7、应尽量避免在where子句中对字段进行表达式操作，这将导致引擎放弃使用索引而进行全表扫描</p>
+<h1 id="简单说一说drop-delete与truncate的区别"><a href="#简单说一说drop-delete与truncate的区别" class="headerlink" title="简单说一说drop.delete与truncate的区别"></a>简单说一说drop.delete与truncate的区别</h1><p>SQL中的drop、delete、truncate都表示删除，但是三者有一些差别delete和truncate只删除表的数据不删除表的结构</p>
+<p>速度,一般来说: drop&gt; truncate &gt;delete</p>
+<p>delete语句是dml,这个操作会放到rollback segement中,事务提交之后才生效;</p>
+<p>如果有相应的trigger,执行的时候将被触发. truncate,drop是ddl,操作立即生效,原数据不放到rollbacksegment中,不能回滚.操作不触发trigger</p>
+<h1 id="什么是视图"><a href="#什么是视图" class="headerlink" title="什么是视图"></a>什么是视图</h1><p>视图是一种虚拟的表，具有和物理表相同的功能。可以对视图进行增，改，查，操作，试图通常是有一个表或者多个表的行或列的子集。对视图的修改不影响基本表。它使得我们获取数据更容易，相比多表查询</p>
+<h1 id="什么是内联接、左外联接、右外联接"><a href="#什么是内联接、左外联接、右外联接" class="headerlink" title="什么是内联接、左外联接、右外联接?"></a>什么是内联接、左外联接、右外联接?</h1><p>内联接(Inner Join ):匹配2张表中相关联的记录。</p>
+<p>左外联接(Left OuterJoin ):除了匹配2张表中相关联的记录外，还会匹配左表中剩余的记录，右表中未匹配到的字段用NULL表示。</p>
+<p>右外联接(Right Outer Join ):除了匹配2张表中相关联的记录外，还会匹配右表中剩余的记录，左表中未匹配到的字段用NULL表示。</p>
+<p>在判定左表和右表时，要根据表名出现在Outer Join的左右位置关系</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" data-id="cl0j84jw9005q04vhbq3gfv9w" data-title="SQL数据库优化方法" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql数据库事务" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/" class="article-date">
+  <time class="dt-published" datetime="2021-04-19T07:15:03.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/">数据库事务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="数据库是事务"><a href="#数据库是事务" class="headerlink" title="数据库是事务"></a>数据库是事务</h1><p>事务(TRANSACTION)是作为单个逻辑工作单元执行的一系列操作，这些操作作为一个整体一起向系统提交，要么都执行、要么都不执行。事务是一个不可分割的工作逻辑单元事务必须具备以下四个属性，简称 ACID属性:</p>
+<p>原子性( Atomicity ):</p>
+<ol>
+<li>事务是一个完整的操作。事务的各步操作是不可分的（原子的);要么都执行，要么都不执行。</li>
+</ol>
+<p>一致性(Consistency )</p>
+<ol start="2">
+<li>当事务完成时，数据必须处于一致状态。</li>
+</ol>
+<p>隔离性( lsolation )</p>
+<ol start="3">
+<li>对数据进行修改的所有并发事务是彼此隔离的，这表明事务必须是独立的，它不应以任何方式依赖于或影响其他事务。</li>
+</ol>
+<p>永久性(Durability )</p>
+<ol start="4">
+<li>事务完成后，它对数据库的修改被永久保持，事务日志能够保持事务的永久性</li>
+</ol>
+<h1 id="并发事务带来哪些问题"><a href="#并发事务带来哪些问题" class="headerlink" title="并发事务带来哪些问题?"></a>并发事务带来哪些问题?</h1><p>在典型的应用程序中，多个事务并发运行，经常会操作相同的数据来完成各自的任务（多个用户对同一数据进行操作）。并发虽然是必须的，但可能会导致以下的问题。</p>
+<p><strong>脏读（Dirty read）:</strong> 当一个事务正在访问数据并且对数据进行了修改，而这种修改还没有提交到数据库中，这时另外一个事务也访问了这个数据，然后使用了这个数据。因为这个数据是还没有提交的数据，那么另外一个事务读到的这个数据是“脏数据”，依据“脏数据”所做的操作可能是不正确的。</p>
+<p><strong>丢失修改（Lost to modify）:</strong> 指在一个事务读取一个数据时，另外一个事务也访问了该数据，那么在第一个事务中修改了这个数据后，第二个事务也修改了这个数据。这样第一个事务内的修改结果就被丢失，因此称为丢失修。 例如：事务1读取某表中的数据A&#x3D;20，事务2也读取A&#x3D;20，事务1修改A&#x3D;A-1，事务2也修改A&#x3D;A-1，最终结果A&#x3D;19，事务1的修改被丢失。</p>
+<p><strong>不可重复读（Unrepeatableread）:</strong> 指在一个事务内多次读同一数据。在这个事务还没有结束时，另一个事务也访问该数据。那么，在第一个事务中的两次读数据之间，由于第二个事务的修改导致第一个事务两次读取的数据可能不太一样。这就发生了在一个事务内两次读到的数据是不一样的情况，因此称为不可重复读。</p>
+<p><strong>幻读（Phantom read）:</strong> 幻读与不可重复读类似。它发生在一个事务（T1）读取了几行数据，接着另一个并发事务（T2）插入了一些数据时。在随后的查询中，第一个事务（T1）就会发现多了一些原本不存在的记录，就好像发生了幻觉一样，所以称为幻读。</p>
+<p><strong>不可重复读和幻读区别：</strong></p>
+<p>不可重复读的重点是修改比如多次读取一条记录发现其中某些列的值被修改，幻读的重点在于新增或者删除比如多次读取一条记录发现记录增多或减少了</p>
+<h1 id="事务隔离级别有哪些-MySQL的默认隔离级别是"><a href="#事务隔离级别有哪些-MySQL的默认隔离级别是" class="headerlink" title="事务隔离级别有哪些?MySQL的默认隔离级别是?"></a>事务隔离级别有哪些?MySQL的默认隔离级别是?</h1><p>SQL标准定义了四个隔离级别:</p>
+<p>READ-UNCOMMITTED(读取未提交): 最低的隔离级别，允许读取尚未提交的数据变更，可能会导致脏读、幻读或不可重复读。</p>
+<p>READ-COMMITTED(读取已提交): 允许读取并发事务已经提交的数据，可以阻止脏读，但是幻读或不可重复读仍有可能发生。</p>
+<p>REPEATABLE-READ(可重复读): 对同一字段的多次读取结果都是一致的，除非数据是被本身事务自己所修改，可以阻止脏读和不可重复读，但幻读仍有可能发生</p>
+<p>SERIALIZABLE(可串行化): 最高的隔离级别，完全服从ACID的隔离级别。所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读</p>
+<p>MySQL InnoDB 存储引擎的默认支持的隔离级别是 REPEATABLE-READ（可重读）。我们可以通过SELECT @@tx_isolation; 命令来查看 </p>
+<p>这里需要注意的是：与 SQL 标准不同的地方在于 InnoDB 存储引擎在 REPEATABLE-READ（可重读）事务隔离级别下使用的是Next-Key Lock 锁算法，因此可以避免幻读的产生，这与其他数据库系统(如SQLServer) 是不同的。所以说InnoDB 存储引擎的默认支持的隔离级别是 REPEATABLE-READ（可重读）已经可以完全保证事务的隔离性要求，即达到了 SQL标准的 SERIALIZABLE(可串行化) 隔离级别。因为隔离级别越低，事务请求的锁越少，所以大部分数据库系统的隔离级别都是 READCOMMITTED(读取提交内容) ，但是你要知道的是InnoDB 存储引擎默认使用 REPEAaTABLEREAD（可重读） 并不会有任何性能损失 InnoDB 存储引擎在 分布式事务 的情况下一般会用到 SERIALIZABLE(可串行化) 隔离级别。</p>
+<h1 id="大表如何优化"><a href="#大表如何优化" class="headerlink" title="大表如何优化?"></a>大表如何优化?</h1><p>当MySQL单表记录数过大时，数据库的CRUD性能会明显下降，一些常见的优化措施如下︰</p>
+<p><strong>限定数据的范围</strong></p>
+<p>务必禁止不带任何限制数据范围条件的查询语句。比如∶我们当用户在查询订单历史的时候，我们可以控制在一个月的范围内;</p>
+<p><strong>读&#x2F;写分离</strong></p>
+<p>经典的数据库拆分方案，主库负责写，从库负责读;</p>
+<p><strong>垂直分区</strong></p>
+<p>根据数据库里面数据表的相关性进行拆分。例如，用户表中既有用户的登录信息又有用户的基本信息，可以将用户表拆分成两个单独的表，甚至放到单独的库做分库。</p>
+<p>简单来说垂直拆分是指数据表列的拆分，把一张列比较多的表拆分为多张表。如下图所示，这样来说大家应该就更容易理解了</p>
+<blockquote>
+<p><strong>垂直拆分的优点：</strong> 可以使得列数据变小，在查询时减少读取的Block数，减少I&#x2F;O次数。此外，垂直分区可以简化表的结构，易于维护。 </p>
+<p><strong>垂直拆分的缺点：</strong> 主键会出现冗余，需要管理冗余列，并会引起Join操作，可以通过在应用层进行Join来解决。此外，垂直分区会让事务变得更加复杂； </p>
+</blockquote>
+<p><strong>水平分区</strong></p>
+<p>保持数据表结构不变，通过某种策略存储数据分片。这样每一片数据分散到不同的表或者库中，达到了分布式的目的。 水平拆分可以支撑非常大的数据量。</p>
+<p>水平拆分是指数据表行的拆分，表的行数超过200万行时，就会变慢，这时可以把一张的表的数据拆成多张表来存放。举个例子：我们可以将用户信息表拆分成多个用户信息表，这样就可以避免单一表数据量过大对性能造成影响。</p>
+<p>水平拆分可以支持非常大的数据量。需要注意的一点是∶分表仅仅是解决了单一表数据过大的问题，但由于表的数据还是在同一台机器上，其实对于提升MySQL并发能力没有什么意义，所以水平拆分最好分库。</p>
+<p>水平拆分能够支持非常大的数据量存储，应用端改造也少，但分片事务难以解决，跨节点Join性能较差，逻辑复杂。《java工程师修炼之道》的作者推荐尽量不要对数据进行分片，因为拆分会带来逻辑、部署、运维的各种复杂度，一般的数据表在优化得当的情况下支撑千万以下的数据量是没有太大问题的。如果实在要分片，尽量选择客户端分片架构，这样可以减少一次和中间件的网络I&#x2F;O。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/" data-id="cl0j84jw7005k04vh80d4g1cv" data-title="数据库事务" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql存储引擎" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" class="article-date">
+  <time class="dt-published" datetime="2021-04-19T06:45:14.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/">MySql存储引擎</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="数据库存储引擎"><a href="#数据库存储引擎" class="headerlink" title="数据库存储引擎"></a>数据库存储引擎</h1><p>数据库存储引擎是数据库底层软件组织，数据库管理系统DBMS使用数据引擎进行创建、查询、更新和删除数据。不同的存储引擎提供不同的存储机制、索引技巧、锁定水平、等功能，使用不同的存储引擎还可以获得特点的功能，存储引擎主要有：</p>
+<p>1.MyIsam、2. InnoDB 、 3. Memory、4. Archive 、5. Federated</p>
+<h1 id="InnoDB-B-树"><a href="#InnoDB-B-树" class="headerlink" title="InnoDB(B+树)"></a>InnoDB(B+树)</h1><p>InnoDB底层存储结构为B+树，B树的每个节点对用innoDB的一个page，page大小是固定的，一般都是16k，其中非叶子节点只有键值，叶子节点包含完整的数据</p>
+<p>适用场景：</p>
+<p>1 经常更新的表，适合处理多重并发的更新请求</p>
+<p>2 支持事务</p>
+<p>3 可以从灾难中恢复</p>
+<p>4 外键约束，只有它支持外键</p>
+<p>5 支持自动增加列属性auto_increment</p>
+<h1 id="MyIASM"><a href="#MyIASM" class="headerlink" title="MyIASM"></a>MyIASM</h1><p>MyIASM是MySql默认引擎，但是他没有提供对数据库事务的支持，也不支持行级锁和外键，因此当insert插入或者update更新数据时即写操作时需要锁定这个表，效率变会更低一些</p>
+<p>isam执行读取操作的速度很快，而不占用大量的内存和存储资源。在设计之初就想好数据组织有固定长度的记录，按长度记录，按顺序存储。—isam是一种静态索引结构，不支持事务处理</p>
+<h1 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h1><p>Memory也叫heap堆内存：使用存在内存中的内容来创建表。每个memory表实际对应一个硬盘文件。memory类型的表访问非常快，因为它的数据是放在内存中的，并且默认使用hash索引。但一旦关闭服务，表中的数据也会立即消失。memory同时支持散列索引和b树索引，B树索引可以使用部分查询和统配查询，也可以使用&lt;&gt;和&gt;&#x3D;等操作方便数据挖掘，散列索引相等的比较快但是对于范围比较慢很多。不适用于精确查找</p>
+<h1 id="InnoDB与MyIASM的区别"><a href="#InnoDB与MyIASM的区别" class="headerlink" title="InnoDB与MyIASM的区别"></a>InnoDB与MyIASM的区别</h1><p>1.InnoDB支持事务，MylSAM不支持，对于InnoDB每一条SQL语言都默认封装成事务，自动提交，这样会影响速度，所以最好把多条SQL语言放在begin和commit之间，组成一个事务;</p>
+<p>2.InnoDB支持外键，而MylSAM不支持。对一个包含外键的InnoDB表转为MYISAM会失败;</p>
+<p>3.InnoDB是聚集(聚簇)索引，数据文件是和索引绑在一起的，必须要有主键，通过主键索引效率很高。但是辅助索引需要两次查询，先查询到主键，然后再通过主键查询到数据。因此，主键不应该过大，因为主键太大，其他索引也都会很大。而MylSAM是非聚集索引，数据文件是分离的，索引保存的是数据文件的指针。主键索引和辅助索引是独立的。</p>
+<p>4.InnoDB不保存表的具体行数，执行select count(*) from table时需要全表扫描。而MyISAM用一个变量保存了整个表的行数，执行上述语句时只需要读出该变量即可，速度很快;</p>
+<p>5.Innodb不支持全文索引，而MylSAM支持全文索引，查询效率上MylSAM要高</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p>索引 ( lndex)是帮助MySQL高效获取数据的数据结构。常见的查询算法,顺序查找,二分查找,二叉排序树查找,哈希散列法,分块查找,平衡多路搜索树B树( B-tree)，索引是对数据库表中一个或多个列的值进行排序的结构，建立索引有助于快速获取信息。</p>
+<p>你也可以这样理解︰索引就是加快检索表中数据的方法。数据库的索引类似于书籍的索引。在书籍中，索引允许用户不必翻阅完整个书就能迅速地找到所需要的信息。在数据库中，索引也允许数据库程序迅速地找到表中的数据，而不必扫描整个数据库</p>
+<p>mysql有4种不同的索引:</p>
+<p><strong>主键索引(PRIMARY )</strong></p>
+<p><strong>唯一索引(UNIQUE)</strong></p>
+<p><strong>普通索引 ( INDEX)</strong></p>
+<p><strong>全文索引(FULLTEXT )</strong></p>
+<p>索引并非是越多越好，创建索引也需要耗费资源，一是增加了数据库的存储空间，二是在插入和删除时要花费较多的时间维护索引</p>
+<p>索引加快数据库的检索速度</p>
+<p>索引降低了插入、删除、修改等维护任务的速度唯一索引可以确保每一行数据的唯一性</p>
+<p>通过使用索引，可以在查询的过程中使用优化隐藏器，提高系统的性能索引需要占物理和数据空间</p>
+<h1 id="常见索引原则有"><a href="#常见索引原则有" class="headerlink" title="常见索引原则有"></a>常见索引原则有</h1><p>1.选择唯一性索引，唯一性索引的值是唯一的，可以更快速的通过该索引来确定某条记录。</p>
+<p>2.为经常需要排序、分组和联合操作的字段建立索引。</p>
+<p>3.为常用作为查询条件的字段建立索引。</p>
+<p>4.限制索引的数目∶越多的索引，会使更新表变得很浪费时间。尽量使用数据量少的索引</p>
+<p>5.如果索引的值很长，那么查询的速度会受到影响。尽量使用前缀来索引</p>
+<p>6.如果索引字段的值很长，最好使用值的前缀来索引。</p>
+<p>7.删除不再使用或者很少使用的索引</p>
+<p>8.最左前缀匹配原则，非常重要的原则。</p>
+<p>9.尽量选择区分度高的列作为索引区分度的公式是表示字段不重复的比例</p>
+<p>10.索引列不能参与计算，保持列“干净”:带函数的查询不参与索引。</p>
+<p>11.尽量的扩展索引，不要新建索引</p>
+<h1 id="数据库的三范式是什么"><a href="#数据库的三范式是什么" class="headerlink" title="数据库的三范式是什么"></a>数据库的三范式是什么</h1><p>第一范式: 列不可再分</p>
+<p>第二范式: 行可以唯一区分，主键约束</p>
+<p>第三范式: 表的非主属性不能依赖与其他表的非主属性外键约束</p>
+<p>且三大范式是一级一级依赖的，第二范式建立在第一范式上，第三范式建立第一第二范式上。</p>
+<h1 id="如何通俗地理解三个范式"><a href="#如何通俗地理解三个范式" class="headerlink" title="如何通俗地理解三个范式?"></a>如何通俗地理解三个范式?</h1><p>第一范式:1NF 是对属性的原子性约束，要求属性具有原子性，不可再分解;</p>
+<p>第二范式:2NF是对记录的唯一性约束，要求记录有唯一标识，即实体的唯一性;</p>
+<p>第三范式:3NF是对字段冗余性的约束，即任何字段不能由其他字段派生出来，它要求字段没有冗余。</p>
+<p>范式化设计优缺点:</p>
+<p>优点:<br>可以尽量得减少数据冗余，使得更新快，体积小</p>
+<p>缺点:</p>
+<p>对于查询需要多个表进行关联，减少写得效率增加读得效率，更难进行索引优化</p>
+<p>反范式化:</p>
+<p>优点:可以减少表得关联，可以更好得进行索引优化</p>
+<p>缺点:数据冗余以及数据异常，数据得修改需要更多的成本</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" data-id="cl0j84jw6005h04vhdn6043vi" data-title="MySql存储引擎" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-4月18号笔试题整理" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/4%E6%9C%8818%E5%8F%B7%E7%AC%94%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86/" class="article-date">
+  <time class="dt-published" datetime="2021-04-19T01:07:34.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/4%E6%9C%8818%E5%8F%B7%E7%AC%94%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86/">4月18号笔试题整理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="腾讯"><a href="#腾讯" class="headerlink" title="腾讯"></a>腾讯</h1><p><strong>1题目描述</strong>：</p>
+<p>牛牛一个无环的单链表，牛牛可以不停的旋转这个链表，</p>
+<p>比如链表：1 -&gt; 2 -&gt; 3 -&gt; 4</p>
+<p>经过旋转后可以变成以下4中链表</p>
+<p>4 - &gt; 1 -&gt; 2 -&gt; 3</p>
+<p>3 -&gt; 4 - &gt; 1 -&gt; 2</p>
+<p>2 -&gt; 3 -&gt; 4 - &gt; 1</p>
+<p>1 -&gt; 2 -&gt; 3 -&gt; 4</p>
+<p>牛牛那个找到一个旋转的链表，它表示序列的字典序最小。</p>
+<p>我们定义序列{a}的字典序小于序列{b}；存在一个位置j，满足对于所有的i&lt;j，ai&#x3D;bi 且aj&lt;bj </p>
+<p>这个例子代表的字典序最小的就是1 -&gt; 2 -&gt; 3 -&gt; 4</p>
+<p><strong>实例1</strong></p>
+<p>输入</p>
+<p>{2,2,5,2,2}</p>
+<p>输出</p>
+<p>{2,2,2,2,5}</p>
+<p>说明</p>
+<p>序列{2,2,2,2,5}的字典序是最小的</p>
+<p>比如：</p>
+<p>序列{a}: 2,2,2,2,5</p>
+<p>序列{b}: 2,2,2,5,2</p>
+<p><strong>实例2</strong></p>
+<p>输入</p>
+<p>{5,4,23}</p>
+<p>输出</p>
+<p>{4,23,5}</p>
+<p><strong>2题目描述</strong></p>
+<p>牛牛是一家广告公司的员工，一天的工作很固定，就是将k条新的广告，按照注册用户所设定的时间顺序发放到用户的邮箱。</p>
+<p>由于牛牛近期自学了编程的相关知识，他知道，如此重复性的工作，可以交给程序来自动完成。但是,牛牛只学习了相关语法，并不会如此高级的操作，于是，牛牛将用户信息交给了你，希望你能帮帮他。牛牛会告诉你，每一个用户所设定的时间，如果某用户设定的时间为t，那么，这位用户接收第一封广告的时刻为t，接收第二封广告的时刻为2*t，接收第三封广告的时刻为3 “t……以此类推。</p>
+<p>本题为ACM模式，请通过代码实现题目，过程中的输入输出请白行处理，处理方式请参考题目输入输出描述或左侧例题。</p>
+<p>输入描述;</p>
+<p>第一行输入两个正整数 n,k ( 1&lt;&#x3D; n &lt;&#x3D; k &#x3D; 106)，依次代表用户数量，以及今天需要发放的广告数量。</p>
+<p>第2到第n+1行,每行一个正整数t(1&#x3D; t&lt;&#x3D;1000)入的正整数,代表编号为工的用户，所设定的时间t，其中,第i+1行输入的正整数,代表编号为i的用户,所设定的时间t</p>
+<p>输出描述:</p>
+<p>输出一共k行，按照发放广告的时间顺序，依次输出用户的编号，特殊的，如果某一个时间，有多个用户可以接收广告,则优先给用户编号小的发放。</p>
+<p>实例1</p>
+<p>输入</p>
+<p>3 3</p>
+<p>3</p>
+<p>6</p>
+<p>9</p>
+<p>输出</p>
+<p>1</p>
+<p>1</p>
+<p>2</p>
+<p>第一位用户的第一封广告邮件接收时刻为 3，第二位用户的第一封广告邮件接收时刻为 6，第三位用户的第一封广告邮件接收时刻为9</p>
+<p>第一位用户的第二封广告邮件接收时刻为6，第二位用户的第一封广告邮件接收时刻为 12，第三位用户的第一封广告邮件接收时刻为18</p>
+<p>第一位用户的第三封广告邮件接收时刻为9，第二位用户的第一封广告邮件接收时刻为 18，第三位用户的第一封广告邮件接收时刻为27</p>
+<p>当k&#x3D;3时，按照时间顺序，第一封广告邮件在时刻3应该发给编号为1的用户，第二封广告邮件在时刻6本来应该同时发放给编号为1和2的用户，但是如果某一个时间，有多个用户可以接收广告，则优先给用户编号小的发放。所以第二封发给1，第三封才发给2</p>
+<p>所以发放顺序为1，1，2</p>
+<p>3<strong>题目描述</strong>：</p>
+<p>游戏俱乐部，正如其名，是一个由数个小游戏构成的俱乐部，当玩家进入俱乐部时，会得到一张游戏清单，列举了俱乐部内今日开放的n个小游戏，其中第i个小游戏必须在t时刻内完成(假设玩家进入俱乐部时为0时刻，开始游玩某一游戏时只需要一个单位时间即可完成，不计阅读游戏清单以及俱乐部内路上行走时问),否则,就会扣除Wi点荣耀积分。</p>
+<p>每天，俱乐部都会向最优顺序选择者授予纪念勋章，所谓的最优顺序，即为:最终扣除的荣耀积分最少的玩家。</p>
+<p>牛牛十分想要一枚纪念勋章，但是自己又不擅长毫无目的地安排，所以，希望你能给出理论上最少会被扣除多少点荣耀积分,给牛牛—个目标。</p>
+<p>输入描述:</p>
+<p>本题为多组测试数据，第一行输入一个正整数T ( 1&lt;&#x3D; T &lt;&#x3D; 1000)，代表测试数据的组数</p>
+<p>对于每组测试数据，第一行输入一个正整数n(1&lt;&#x3D;n &lt;&#x3D; 1000)，代表今日开放的游戏数量。</p>
+<p>第二行输入 n个正整数 t1, t2 ,…， tn(1&lt;&#x3D; ti &lt;&#x3D; n) ，依次代表各个游戏的规定完成时间。</p>
+<p>第三行输入,n个正整数w1, w2, …, wn (1 &#x3D; wi&lt;&#x3D; 100)，依次代表各个游戏未在规定时间内完成时,需要扣除的荣耀积分点数。</p>
+<p>输出描述;</p>
+<p>对于每组测试数据，一行输出一个整数代表理论上可以达到的最小的被扣除的荣耀积分点数。</p>
+<p>实例1</p>
+<p>输入</p>
+<p>1</p>
+<p>3</p>
+<p>3 1 1</p>
+<p>3 6 9</p>
+<p>输出</p>
+<p>6</p>
+<p>说明</p>
+<p>首先完成游戏3，此时，游戏2未在规定时间内完成,扣除6点荣耀积分;接着，只需要在时刻3之前完成游戏1即可。</p>
+<p>这种安排方案,只需要被扣除6点荣耀积分。</p>
+<p>** 4 题目描述**</p>
+<p>牛牛有独特的判断两个字符串是否相等的方法，他看到了两个长度为n由小写字母构成的字符串a和b，如果两个字符串的长度为奇数的话，就一个字符一个字符比对看是不是相等，若是偶数，可以字符串a等分为a1, a2,字符串b等分为b1, b2，他认为两个字符串是相等的只要 a&#x3D;&#x3D; b1 &amp;&amp; a2–b2或者a&#x3D;&#x3D;b2 8&amp; a2&#x3D;&#x3D;b1满足其中一个即可，注意这里判断等号是递归定义的,参见样例-。现在牛牛想你告诉他这两个字符串是不是相等的,若是输出YES，反之输出NO.</p>
+<p>输入描述:</p>
+<p>第一行为一个t,表示有t组数据。</p>
+<p>接下来有2*t行,每两行为长度相等的字符串a, b</p>
+<p>1 &lt;&#x3D;t &lt;&#x3D;10,1 &lt;&#x3D;|a|,|b| &lt;&#x3D;10^5</p>
+<p>输出描述:</p>
+<p>输出为t行,每行表示一个答案。</p>
+<p>实例1</p>
+<p>输入</p>
+<p>4</p>
+<p>aaba</p>
+<p>abaa</p>
+<p>aabb</p>
+<p>abab</p>
+<p>aaabbb</p>
+<p>bbbaaa</p>
+<p>cba</p>
+<p>abc</p>
+<p>输出</p>
+<p>YES</p>
+<p>NO</p>
+<p>YES</p>
+<p>NO</p>
+<p>说明</p>
+<p>第一组样例，长度为偶数，所以可以判断aa&#x3D;aa与ba&#x3D;ab，且ba和ab又都是偶数，</p>
+<p>又可以比较，b&#x3D;&#x3D;b，a&#x3D;&#x3D;a，所以他们在定义下是相等的,输出YEs</p>
+<p>第二组祥例，长度为偶数，但是aa ! &#x3D;ab，输出NO</p>
+<p>第三组祥例，长度为偶数，但是划分之后为奇数也相同，aaa&#x3D;aaa，bbb&#x3D;mbbb，所以输出YES</p>
+<p>第四组样例，长度为奇数，只能逐个比较，不相同,输出NO</p>
+<p>5 题目描述</p>
+<p>有一个n*m个格子的矩阵mp 时不时会冒出一些地鼠。mp[i] [j]表示每过 mp[i] [j]的时间第i行第j列的格子会冒出一只地鼠。<br>初始时，时间为0，你在第1行第1列格子处，每秒你必须向上下左右四个方向移动一格，不能走出短阵外。<br>作为一个合格的打地鼠玩家，如果这一秒你从格子a走到格子b，下一秒你不能从格子b走到格子a,如果你走到—个格子的时候,这里刚好冒出一只地鼠，你就可以打一下地鼠。<br>你的终点是第n行第m列的格子,给你1秒时间，问你最多打几下地鼠。最后你必须到达终点,如果第t秒时你不在终点，算作打了0次地鼠。</p>
+<p>输入描述:</p>
+<p>第一行三个整数n,m,t</p>
+<p>接下来n行，每行m个整数表示矩阵mp[i] [j]。2&lt;&#x3D;n,m &lt;&#x3D;10,1&lt;&#x3D; t, mp[i] [j]&lt;&#x3D;1000</p>
+<p>输出描述</p>
+<p>输出一行一个整数表示答案</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/4%E6%9C%8818%E5%8F%B7%E7%AC%94%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86/" data-id="cl0j84jv3001v04vh2wo43j5m" data-title="4月18号笔试题整理" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySQL" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySQL/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T16:00:00.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySQL/">MySQL</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>不要听信你看到的关于优化的“绝对真理”，包括本文所讨论的内容，而应该是在实际的业务场景下通过测试来验证你关于执行计划以及响应时间的假设。</p>
+<ul>
+<li><p>单条查询最后添加 LIMIT 1，停止全表扫描。</p>
+</li>
+<li><p>对于char(4) 或者vachar(4)，无论是中文还是英文都是存储四个字符，注意是字符而不是字节。 </p>
+</li>
+<li><p>如果一个字段未int类型，此类型只有0、1两个状态，需要为此建立索引吗？过度索引，影响更新速度，必须在唯一性较高的字段上建立非聚集索引。 </p>
+</li>
+<li><p>在创建表的时候如果在业务中能保证非null的字段，建议明确标示not null 因为mysql中对null需要特殊的标示。使用not null 字段更节省空间。对接下来的索引构建也有好处。</p>
+</li>
+<li><p>count(<em>) 和count(name) name 代表某个字段，可以为NULL。在mysql中count(</em>)会把null统计进去、而count(name) 不会。如果统计的字段中含有null，这个两个统计的结果是不同的。</p>
+</li>
+<li><p>在sql语句等号左边用函数，会使该查询在该字段无法使用索引。如LENGTH(str) 函数。</p>
+</li>
+<li><p>索引也是需要存储到物理空间的，经常增删的表不适合建太多的索引，因为索引的维护会很耗时间。一张表最多建立15个索引。索引的长度越小越好，索引是有序的。如果查询Max（）之类用索引的话，连表都不用查询了，快得飞起。</p>
+</li>
+<li><p>mysql中null不参与比较运算，name &lt;&gt;’小米’ 得出的结果中不包含 name&#x3D;null的情况。在业务不能保证某字段是否为null的情况，写代码的时候需要注意null的坑。保证取得的数据是对而全，然后再考虑查询速率问题。</p>
+</li>
+<li><p>MySQL InnoDB默认行级锁。行级锁都是基于索引的，如果一条SQL语句用不到索引是不会使用行级锁的，会使用表级锁把整张表锁住，这点需要注意。</p>
+</li>
+<li><p>对整数类型指定宽度，比如INT(11)，没有任何卵用。INT使用32位（4个字节）存储空间，那么它的表示范围已经确定，所以INT(1)和INT(20)对于存储和计算是相同的。</p>
+</li>
+<li><p>UNSIGNED表示不允许负值，大致可以使正数的上限提高一倍。比如TINYINT存储范围是-128 ~ 127，而UNSIGNED TINYINT存储的范围却是0 - 255。</p>
+</li>
+<li><p>通常来讲，没有太大的必要使用DECIMAL数据类型。即使是在需要存储财务数据时，仍然可以使用BIGINT。比如需要精确到万分之一，那么可以将数据乘以一百万然后使用BIGINT存储。这样可以避免浮点数计算不准确和DECIMAL精确计算代价高的问题。</p>
+</li>
+<li><p>TIMESTAMP使用4个字节存储空间，DATETIME使用8个字节存储空间。因而，TIMESTAMP只能表示1970 - 2038年，比DATETIME表示的范围小得多，而且TIMESTAMP的值因时区不同而不同。</p>
+</li>
+<li><p>schema的列不要太多。原因是存储引擎的API工作时需要在服务器层和存储引擎层之间通过行缓冲格式拷贝数据，然后在服务器层将缓冲内容解码成各个列，这个转换过程的代价是非常高的。如果列太多而实际使用的列又很少的话，有可能会导致CPU占用过高。</p>
+</li>
+<li><p>大表ALTER TABLE非常耗时，MySQL执行大部分修改表结果操作的方法是用新的结构创建一个张空表，从旧表中查出所有的数据插入新表，然后再删除旧表。尤其当内存不足而表又很大，而且还有很大索引的情况下，耗时更久。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySQL/" data-id="cl0j84jvu004j04vh19qnhckp" data-title="MySQL" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql_distributed" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql_distributed/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T16:00:00.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql_distributed/">mysql面试题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="某个表有近千万数据，CRUD比较慢，如何优化？分库分表了是怎么做的？分表分库了有什么问题？有用到中间件么-他们的原理知道么？"><a href="#某个表有近千万数据，CRUD比较慢，如何优化？分库分表了是怎么做的？分表分库了有什么问题？有用到中间件么-他们的原理知道么？" class="headerlink" title="某个表有近千万数据，CRUD比较慢，如何优化？分库分表了是怎么做的？分表分库了有什么问题？有用到中间件么?他们的原理知道么？"></a>某个表有近千万数据，CRUD比较慢，如何优化？分库分表了是怎么做的？分表分库了有什么问题？有用到中间件么?他们的原理知道么？</h3><p>数据千万级别之多，占用的存储空间也比较大，可想而知它不会存储在一块连续的物理空间上，而是链式存储在多个碎片的物理空间上。可能对于长字符串的比较，就用更多的时间查找与比较，这就导致用更多的时间。</p>
+<ul>
+<li>可以做表拆分，减少单表字段数量，优化表结构。</li>
+<li>在保证主键有效的情况下，检查主键索引的字段顺序，使得查询语句中条件的字段顺序和主键索引的字段顺序保持一致。</li>
+</ul>
+<p>主要两种拆分 垂直拆分，水平拆分。</p>
+<p><img src="https://images.gitee.com/uploads/images/2018/0930/134844_319e5b02_87650.png" alt="输入图片说明" title="屏幕截图.png"></p>
+<h4 id="垂直分表"><a href="#垂直分表" class="headerlink" title="垂直分表"></a>垂直分表</h4><p>也就是“大表拆小表”，基于列字段进行的。一般是表中的字段较多，将不常用的， 数据较大，长度较长（比如text类型字段）的拆分到“扩展表“。 一般是针对那种几百列的大表，也避免查询时，数据量太大造成的“跨页”问题。</p>
+<p>垂直分库针对的是一个系统中的不同业务进行拆分，比如用户User一个库，商品Producet一个库，订单Order一个库。 切分后，要放在多个服务器上，而不是一个服务器上。为什么？ 我们想象一下，一个购物网站对外提供服务，会有用户，商品，订单等的CRUD。没拆分之前， 全部都是落到单一的库上的，这会让数据库的单库处理能力成为瓶颈。按垂直分库后，如果还是放在一个数据库服务器上， 随着用户量增大，这会让单个数据库的处理能力成为瓶颈，还有单个服务器的磁盘空间，内存，tps等非常吃紧。 所以我们要拆分到多个服务器上，这样上面的问题都解决了，以后也不会面对单机资源问题。</p>
+<p>数据库业务层面的拆分，和服务的“治理”，“降级”机制类似，也能对不同业务的数据分别的进行管理，维护，监控，扩展等。 数据库往往最容易成为应用系统的瓶颈，而数据库本身属于“有状态”的，相对于Web和应用服务器来讲，是比较难实现“横向扩展”的。 数据库的连接资源比较宝贵且单机处理能力也有限，在高并发场景下，垂直分库一定程度上能够突破IO、连接数及单机硬件资源的瓶颈。</p>
+<h4 id="水平分表"><a href="#水平分表" class="headerlink" title="水平分表"></a>水平分表</h4><p>针对数据量巨大的单张表（比如订单表），按照某种规则（RANGE,HASH取模等），切分到多张表里面去。 但是这些表还是在同一个库中，所以库级别的数据库操作还是有IO瓶颈。不建议采用。</p>
+<p>水平分库分表</p>
+<p>将单张表的数据切分到多个服务器上去，每个服务器具有相应的库与表，只是表中数据集合不同。 水平分库分表能够有效的缓解单机和单库的性能瓶颈和压力，突破IO、连接数、硬件资源等的瓶颈。</p>
+<p>水平分库分表切分规则</p>
+<ol>
+<li>RANGE从<br>0到10000一个表，10001到20000一个表；</li>
+<li>HASH取模<br>一个商场系统，一般都是将用户，订单作为主表，然后将和它们相关的作为附表，这样不会造成跨库事务之类的问题。 取用户id，然后hash取模，分配到不同的数据库上。</li>
+<li>地理区域<br>比如按照华东，华南，华北这样来区分业务，七牛云应该就是如此。</li>
+<li>时间<br>按照时间切分，就是将6个月前，甚至一年前的数据切出去放到另外的一张表，因为随着时间流逝，这些表的数据 被查询的概率变小，所以没必要和“热数据”放在一起，这个也是“冷热数据分离”。</li>
+</ol>
+<h3 id="分库分表后面临的问题"><a href="#分库分表后面临的问题" class="headerlink" title="分库分表后面临的问题"></a>分库分表后面临的问题</h3><ul>
+<li><p>事务支持<br>分库分表后，就成了分布式事务了。如果依赖数据库本身的分布式事务管理功能去执行事务，将付出高昂的性能代价； 如果由应用程序去协助控制，形成程序逻辑上的事务，又会造成编程方面的负担。</p>
+</li>
+<li><p>跨库join</p>
+</li>
+</ul>
+<p>只要是进行切分，跨节点Join的问题是不可避免的。但是良好的设计和切分却可以减少此类情况的发生。解决这一问题的普遍做法是分两次查询实现。在第一次查询的结果集中找出关联数据的id,根据这些id发起第二次请求得到关联数据。<br>分库分表方案产品</p>
+<ul>
+<li><p>跨节点的count,order by,group by以及聚合函数问题<br>这些是一类问题，因为它们都需要基于全部数据集合进行计算。多数的代理都不会自动处理合并工作。解决方案：与解决跨节点join问题的类似，分别在各个节点上得到结果后在应用程序端进行合并。和join不同的是每个结点的查询可以并行执行，因此很多时候它的速度要比单一大表快很多。但如果结果集很大，对应用程序内存的消耗是一个问题。</p>
+</li>
+<li><p>数据迁移，容量规划，扩容等问题<br>来自淘宝综合业务平台团队，它利用对2的倍数取余具有向前兼容的特性（如对4取余得1的数对2取余也是1）来分配数据，避免了行级别的数据迁移，但是依然需要进行表级别的迁移，同时对扩容规模和分表数量都有限制。总得来说，这些方案都不是十分的理想，多多少少都存在一些缺点，这也从一个侧面反映出了Sharding扩容的难度。</p>
+</li>
+<li><p>ID问题<br>一旦数据库被切分到多个物理结点上，我们将不能再依赖数据库自身的主键生成机制。一方面，某个分区数据库自生成的ID无法保证在全局上是唯一的；另一方面，应用程序在插入数据之前需要先获得ID,以便进行SQL路由.<br>一些常见的主键生成策略</p>
+</li>
+</ul>
+<h3 id="UUID"><a href="#UUID" class="headerlink" title="UUID"></a>UUID</h3><p>使用UUID作主键是最简单的方案，但是缺点也是非常明显的。由于UUID非常的长，除占用大量存储空间外，最主要的问题是在索引上，在建立索引和基于索引进行查询时都存在性能问题。</p>
+<h3 id="Twitter的分布式自增ID算法Snowflake"><a href="#Twitter的分布式自增ID算法Snowflake" class="headerlink" title="Twitter的分布式自增ID算法Snowflake"></a>Twitter的分布式自增ID算法Snowflake</h3><p>在分布式系统中，需要生成全局UID的场合还是比较多的，twitter的snowflake解决了这种需求，实现也还是很简单的，除去配置信息，核心代码就是毫秒级时间41位 机器ID 10位 毫秒内序列12位。</p>
+<h3 id="跨分片的排序分页"><a href="#跨分片的排序分页" class="headerlink" title="跨分片的排序分页"></a>跨分片的排序分页</h3><p>般来讲，分页时需要按照指定字段进行排序。当排序字段就是分片字段的时候，我们通过分片规则可以比较容易定位到指定的分片，而当排序字段非分片字段的时候，情况就会变得比较复杂了。为了最终结果的准确性，我们需要在不同的分片节点中将数据进行排序并返回，并将不同分片返回的结果集进行汇总和再次排序，最后再返回给用户。如下图所示：</p>
+<p><img src="https://images.gitee.com/uploads/images/2018/0930/135139_d02670d4_87650.png" alt="输入图片说明" title="屏幕截图.png"></p>
+<h3 id="中间件推荐"><a href="#中间件推荐" class="headerlink" title="中间件推荐"></a>中间件推荐</h3><p><img src="https://images.gitee.com/uploads/images/2018/0930/135202_51f99d84_87650.png" alt="中间件推荐" title="屏幕截图.png"></p>
+<p>源自：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/fishlynn/p/9674793.html">https://www.cnblogs.com/fishlynn/p/9674793.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql_distributed/" data-id="cl0j84jvv004o04vh4dwv4k8w" data-title="mysql面试题" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/13/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/15/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

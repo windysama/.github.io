@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="MyHomePage">
+<meta property="og:url" content="http://example.com/page/13/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Lee yunbo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-面试必考题LRU和LFU_network" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98LRU%E5%92%8CLFU_network/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98LRU%E5%92%8CLFU_network/">面试必考题LRU和LFU</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="缓存淘汰机制实现-LRU-LFU"><a href="#缓存淘汰机制实现-LRU-LFU" class="headerlink" title="缓存淘汰机制实现-LRU-LFU"></a>缓存淘汰机制实现-LRU-LFU</h1><h2 id="（1）缓存是什么"><a href="#（1）缓存是什么" class="headerlink" title="（1）缓存是什么"></a>（1）缓存是什么</h2><p>缓存是一种提高数据读取性能的技术，在硬件设计、软件开发中都有着非广泛的应用，比如常见的CPU缓存、数据库缓存、浏览器缓存等等。</p>
+<h2 id="（2）为什么需要缓存"><a href="#（2）为什么需要缓存" class="headerlink" title="（2）为什么需要缓存"></a>（2）为什么需要缓存</h2><p>CPU在从内存读取数据的时候，会先把读取到的数据加载到CPU的缓存中。而CPU每次从内存读取数据并不是只读取那个特定要访问的地址，而是读取一个数据块(cacheline)并保存到CPU缓存中，然后下次访问内存数据的时候就会先从CPU缓存开始查找，如果找到就不需要再从内存中取。这样就实现了比内存访问速度更快的机制，也就是CPU缓存存在的意义:为了弥补内存访问速度过慢与CPU执行速度快之间的差异而引入。</p>
+<p>对于数组来说，存储空间是连续的，所以在加载某个下标的时候可以把以后的几个下标元素也加载到CPU缓存这样执行速度会快于存储空间不连续的链表存储。</p>
+<p>Cache Line 是 Cache 与 DRAM 同步的最小单位. 典型的虚拟内存页面大小为 4KB,而典型的 Cache line 通常的大小为 32 或 64 字节</p>
+<h2 id="（3）缓存淘汰策略分类"><a href="#（3）缓存淘汰策略分类" class="headerlink" title="（3）缓存淘汰策略分类"></a>（3）缓存淘汰策略分类</h2><p>缓存的大小是有限的，当缓存被用满时，性需要进行数据清理。哪些数据应该被清理出去，哪些数据应该被保留？就需要用到缓存淘汰策略。</p>
+<h4 id="3-1）先进先出策略FIFO（First-In，First-Out）"><a href="#3-1）先进先出策略FIFO（First-In，First-Out）" class="headerlink" title="3.1）先进先出策略FIFO（First In，First Out）"></a>3.1）先进先出策略FIFO（First In，First Out）</h4><p>思路：如果一个护具最先进入缓存中，则应该最早淘汰掉。<br>实现思路：</p>
+<h4 id="3-2）最近最少频率使用策略（最不经常使用）LFU（Least-Frenquently-Used）"><a href="#3-2）最近最少频率使用策略（最不经常使用）LFU（Least-Frenquently-Used）" class="headerlink" title="3.2）最近最少频率使用策略（最不经常使用）LFU（Least Frenquently Used）"></a>3.2）最近最少频率使用策略（最不经常使用）LFU（Least Frenquently Used）</h4><p><strong>思想：最不经常使用策略,在一段时间内,数据被使用频次最少的,优先被淘汰。最少使用（LFU）是一种用于管理计算机内存的缓存算法。主要是记录和追踪内存块的使用次数,当缓存已满并且需要更多空间时，系统将以最低内存块使用频率清除内存.采用LFU算法的最简单方法是为每个加载到缓存的块分配一个计数器。每次引用该块时，计数器将增加一。当缓存达到容量并有一个新的内存块等待插入时，系统将搜索计数器最低的块并将其从缓存中删除；</strong></p>
+<p><img src="https://img2020.cnblogs.com/blog/1827657/202109/1827657-20210926103437970-980155.png" alt="LRU"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题LRU和LFU\https://img2020.cnblogs.com/blog/1827657/202109/1827657-20210926103437970-980155.png" alt="LRU"></p>
+<h4 id="3-3）最近最久未使用策略LRU（Least-Recently-Used）"><a href="#3-3）最近最久未使用策略LRU（Least-Recently-Used）" class="headerlink" title="3.3）最近最久未使用策略LRU（Least Recently Used）"></a>3.3）最近最久未使用策略LRU（Least Recently Used）</h4><p>LRU（The Least Recently Used，最近最久未使用算法）是一种常见的缓存算法，在很多分布式缓存系统（如Redis, Memcached）中都有广泛使用。</p>
+<p>思想：LRU是最近最少使用策略的缩写，是根据数据的历史访问记录来进行淘汰数据，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”。同样，如果一个数据在最近一段时间没有被访问到，那么可以认为在将来它被访问的可能性也很小。因此，当空间满时，最久没有访问的数据最先被置换（淘汰）。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98LRU%E5%92%8CLFU_network/" data-id="cl0j84jxz00cg04vhcy1kf01a" data-title="面试必考题LRU和LFU" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题Spring中jdk和gblib的区别" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98Spring%E4%B8%ADjdk%E5%92%8Cgblib%E7%9A%84%E5%8C%BA%E5%88%AB/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98Spring%E4%B8%ADjdk%E5%92%8Cgblib%E7%9A%84%E5%8C%BA%E5%88%AB/">Spring中jdk和gblib的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Spring动态代理中jdk和cglib的区别"><a href="#Spring动态代理中jdk和cglib的区别" class="headerlink" title="Spring动态代理中jdk和cglib的区别"></a>Spring动态代理中jdk和cglib的区别</h1><h2 id="一、JDK与CGLIB区别："><a href="#一、JDK与CGLIB区别：" class="headerlink" title="一、JDK与CGLIB区别："></a>一、JDK与CGLIB区别：</h2><p> 1.JDK动态代理是利用<strong>反射机制</strong>生成一个实现代理接口的匿名类，在调用具体方法前调用InvokeHandler来处理。</p>
+<p> 2.CGLIB动态代理是利用<strong>asm开源包</strong>，对代理对象类的class文件加载进来，通过修改其字节码生成子类来处理。</p>
+<h2 id="二、使用场景："><a href="#二、使用场景：" class="headerlink" title="二、使用场景："></a>二、使用场景：</h2><p> 1.如果目标对象实现了接口，默认情况下会采用JDK的动态代理实现AOP </p>
+<p> 2.如果目标对象实现了接口，可以强制使用CGLIB实现AOP </p>
+<p> 3.如果目标对象没有实现了接口，必须采用CGLIB库，spring会自动在JDK动态代理和CGLIB之间转换</p>
+<p>如何强制使用CGLIB实现AOP？<br>  1.添加CGLIB库，SPRING_HOME&#x2F;cglib&#x2F;*.jar<br>  2.在spring配置文件中加入&lt;aop:aspectj-autoproxy proxy-target-class&#x3D;”true”&#x2F;&gt;</p>
+<h2 id="三、区别："><a href="#三、区别：" class="headerlink" title="三、区别："></a>三、区别：</h2><p>JDK动态代理和CGLIB字节码生成的区别？</p>
+<p>  1.JDK动态代理只能对实现了接口的类生成代理，而不能针对类</p>
+<p>  2.CGLIB是针对类实现代理，主要是对指定的类生成一个子类，覆盖其中的方法,</p>
+<p>因为是继承，所以该类或方法最好不要声明成final</p>
+<p> 判断是JDK动态代理还是CGLIB代理主要是看是否继承了接口，如果有接口则是JDK动态代理，没有接口则是CGLIB代理.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Class&lt;Demo&gt; demoClass = Demo.class;</span><br><span class="line">        Class&lt;?&gt;[] interfaces = demoClass .getInterfaces();</span><br><span class="line">        <span class="keyword">if</span> (interfaces.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">//cglib代理</span></span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//jdk代理</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98Spring%E4%B8%ADjdk%E5%92%8Cgblib%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cl0j84jy000ci04vh4vnb3p9k" data-title="Spring中jdk和gblib的区别" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题MVCC" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98MVCC/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98MVCC/">MVCC</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h1><h2 id="1、什么是MVCC"><a href="#1、什么是MVCC" class="headerlink" title="1、什么是MVCC"></a>1、什么是MVCC</h2><p>全称Multi-Version Concurrency Control，即多版本并发控制，主要是为了提高数据库的并发性能。以下文章都是围绕InnoDB引擎来讲，因为myIsam不支持事务。</p>
+<p>同一行数据平时发生读写请求时，会上锁阻塞住。但mvcc用更好的方式去处理读—写请求，做到在发生读—写请求冲突时不用加锁。</p>
+<p>这个读是指的快照读，而不是当前读，当前读是一种加锁操作，是悲观锁。</p>
+<h2 id="2、什么是MySQL-InnoDB下的当前读和快照读？"><a href="#2、什么是MySQL-InnoDB下的当前读和快照读？" class="headerlink" title="2、什么是MySQL InnoDB下的当前读和快照读？"></a>2、什么是MySQL InnoDB下的当前读和快照读？</h2><h3 id="当前读"><a href="#当前读" class="headerlink" title="当前读"></a>当前读</h3><p>它读取的数据库记录，都是当前最新的版本，会对当前读取的数据进行加锁，防止其他事务修改数据。是悲观锁的一种操作。</p>
+<p>如下操作都是当前读：</p>
+<p>select lock in share mode (共享锁)</p>
+<p>select for update (排他锁)</p>
+<p>update (排他锁)</p>
+<p>insert (排他锁)</p>
+<p>delete (排他锁)</p>
+<p>串行化事务隔离级别</p>
+<h3 id="快照读"><a href="#快照读" class="headerlink" title="快照读"></a>快照读</h3><p>快照读的实现是基于多版本并发控制，即MVCC，既然是多版本，那么快照读读到的数据不一定是当前最新的数据，有可能是之前历史版本的数据。</p>
+<p>如下操作是快照读：</p>
+<p>不加锁的select操作（注：事务级别不是串行化）<br>快照读与mvcc的关系<br>MVCCC是“维持一个数据的多个版本，使读写操作没有冲突”的一个抽象概念。</p>
+<p>这个概念需要具体功能去实现，这个具体实现就是快照读。（具体实现下面讲）</p>
+<h3 id="数据库并发场景"><a href="#数据库并发场景" class="headerlink" title="数据库并发场景"></a>数据库并发场景</h3><p>读-读：不存在任何问题，也不需要并发控制</p>
+<p>读-写：有线程安全问题，可能会造成事务隔离性问题，可能遇到脏读，幻读，不可重复读</p>
+<p>写-写：有线程安全问题，可能会存在更新丢失问题，比如第一类更新丢失，第二类更新丢失</p>
+<h3 id="MVCC解决并发哪些问题？"><a href="#MVCC解决并发哪些问题？" class="headerlink" title="MVCC解决并发哪些问题？"></a>MVCC解决并发哪些问题？</h3><p>mvcc用来解决读—写冲突的无锁并发控制，就是为事务分配单向增长的时间戳。为每个数据修改保存一个版本，版本与事务时间戳相关联。</p>
+<p>读操作只读取该事务开始前的数据库快照。</p>
+<p>解决问题如下：</p>
+<p>并发读-写时：可以做到读操作不阻塞写操作，同时写操作也不会阻塞读操作。</p>
+<p>解决脏读、幻读、不可重复读等事务隔离问题，但不能解决上面的写-写 更新丢失问题。</p>
+<p>因此有了下面提高并发性能的组合拳：</p>
+<p>MVCC + 悲观锁：MVCC解决读写冲突，悲观锁解决写写冲突</p>
+<p>MVCC + 乐观锁：MVCC解决读写冲突，乐观锁解决写写冲突</p>
+<h3 id="MVCC的实现原理"><a href="#MVCC的实现原理" class="headerlink" title="MVCC的实现原理"></a>MVCC的实现原理</h3><p>它的实现原理主要是版本链，undo日志 ，Read View 来实现的</p>
+<h4 id="版本链"><a href="#版本链" class="headerlink" title="版本链"></a>版本链</h4><p>我们数据库中的每行数据，除了我们肉眼看见的数据，还有几个隐藏字段，得开天眼才能看到。分别是db_trx_id、db_roll_pointer、db_row_id。</p>
+<p><strong>db_trx_id: 6byte</strong>，最近修改(修改&#x2F;插入)事务ID：记录创建这条记录&#x2F;最后一次修改该记录的事务ID。</p>
+<p><strong>db_roll_pointer（版本链关键）</strong>: 7byte，回滚指针，指向这条记录的上一个版本（存储于rollback segment里）</p>
+<p><strong>db_row_id</strong>: 6byte，隐含的自增ID（隐藏主键），如果数据表没有主键，InnoDB会自动以db_row_id产生一个聚簇索引。</p>
+<p>实际还有一个删除flag隐藏字段, 记录被更新或删除并不代表真的删除，而是删除flag变了</p>
+<p><img src="/%E7%89%88%E6%9C%AC%E9%93%BE.png" alt="版本链"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题MVCC\版本链.png" alt="版本链"></p>
+<p>如上图，<strong>db_row_id</strong>是数据库默认为该行记录生成的<strong>唯一隐式主键</strong>，<strong>db_trx_id</strong>是当前操作该记录的<strong>事务ID</strong>，而<strong>db_roll_pointer是一个回滚指针</strong>，用于配合undo日志，指向上一个旧版本。</p>
+<p>每次对数据库记录进行改动，都会记录一条undo日志，每条undo日志也都有一个roll_pointer属性（INSERT操作对应的undo日志没有该属性，因为该记录并没有更早的版本），可以将这些undo日志都连起来，串成一个链表，所以现在的情况就像下图一样：</p>
+<p><img src="/undo%E6%97%A5%E5%BF%97.png" alt="undo日志"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题MVCC\undo日志.png" alt="undo日志"></p>
+<p>对该记录每次更新后，都会将旧值放到一条undo日志中，就算是该记录的一个旧版本，随着更新次数的增多，所有的版本都会被roll_pointer属性连接成一个链表，我们把这个链表称之为版本链，版本链的头节点就是当前记录最新的值。另外，每个版本中还包含生成该版本时对应的事务id，这个信息很重要，在根据ReadView判断版本可见性的时候会用到。</p>
+<h4 id="undo日志"><a href="#undo日志" class="headerlink" title="undo日志"></a>undo日志</h4><p>Undo log 主要用于记录数据被修改之前的日志，在表信息修改之前先会把数据拷贝到undo log里。</p>
+<p>当事务进行回滚时可以通过undo log 里的日志进行数据还原。</p>
+<p><strong>Undo log 的用途</strong></p>
+<ul>
+<li><p>保证事务进行rollback时的原子性和一致性，当事务进行回滚的时候可以用undo log的数据进行恢复。</p>
+</li>
+<li><p>用于MVCC快照读的数据，在MVCC多版本控制中，通过读取undo log的历史版本数据可以实现不同事务版本号都拥有自己独立的快照数据版本。</p>
+</li>
+</ul>
+<p><strong>undo log主要分为两种</strong> ：</p>
+<ul>
+<li><p>insert undo log</p>
+<p>代表事务在insert新记录时产生的undo log , 只在事务回滚时需要，并且在事务提交后可以被立即丢弃</p>
+</li>
+<li><p>update undo log（主要）</p>
+<p>事务在进行update或delete时产生的undo log ; 不仅在事务回滚时需要，在快照读时也需要；</p>
+<p>所以不能随便删除，只有在快速读或事务回滚不涉及该日志时，对应的日志才会被purge线程统一清除</p>
+</li>
+</ul>
+<h4 id="Read-View-读视图"><a href="#Read-View-读视图" class="headerlink" title="Read View(读视图)"></a>Read View(读视图)</h4><p>事务进行<code>快照读</code>操作的时候生产的<code>读视图</code>(Read View)，在该事务执行的快照读的那一刻，会生成数据库系统当前的一个<code>快照</code>。</p>
+<p>记录并维护系统当前<code>活跃事务的ID</code>(没有commit，当每个事务开启时，都会被分配一个ID, 这个ID是递增的，所以越新的事务，ID值越大)，是系统中当前不应该被<code>本事务</code>看到的<code>其他事务id列表</code>。</p>
+<p>Read View主要是用来做<code>可见性</code>判断的, 即当我们<code>某个事务</code>执行快照读的时候，对该记录创建一个Read View读视图，把它比作条件用来判断当前事务能够看到哪个版本的数据，既可能是当前最新的数据，也有可能是该行记录的undo log里面的某个版本的数据。</p>
+<p>Read View几个属性</p>
+<ul>
+<li><p>trx_ids: 当前系统活跃(未提交)事务版本号集合。</p>
+</li>
+<li><p>low_limit_id: 创建当前read view 时“当前系统最大事务版本号+1”。</p>
+</li>
+<li><p>up_limit_id: 创建当前read view 时“系统正处于活跃事务最小版本号”</p>
+</li>
+<li><p>creator_trx_id: 创建当前read view的事务版本号；</p>
+</li>
+</ul>
+<p>Read View可见性判断条件</p>
+<ul>
+<li><p>db_trx_id &lt; up_limit_id || db_trx_id &#x3D;&#x3D; creator_trx_id（显示）</p>
+<p>如果数据事务ID小于read view中的最小活跃事务ID，则可以肯定该数据是在当前事务启之前就已经存在了的,所以可以显示。</p>
+<p>或者数据的事务ID等于creator_trx_id ，那么说明这个数据就是当前事务自己生成的，自己生成的数据自己当然能看见，所以这种情况下此数据也是可以显示的。</p>
+</li>
+<li><p>db_trx_id &gt;&#x3D; low_limit_id（不显示）</p>
+<p>如果数据事务ID大于read view 中的当前系统的最大事务ID，则说明该数据是在当前read view 创建之后才产生的，所以数据不显示。如果小于则进入下一个判断</p>
+</li>
+<li><p>db_trx_id是否在活跃事务（trx_ids）中</p>
+<ol>
+<li>不存在：则说明read view产生的时候事务已经commit了，这种情况数据则可以显示。</li>
+<li>已存在：则代表我Read View生成时刻，你这个事务还在活跃，还没有Commit，你修改的数据，我当前事务也是看不见的。</li>
+</ol>
+</li>
+</ul>
+<h3 id="MVCC和事务隔离级别"><a href="#MVCC和事务隔离级别" class="headerlink" title="MVCC和事务隔离级别"></a>MVCC和事务隔离级别</h3><p>上面所讲的<code>Read View</code>用于支持<code>RC</code>（Read Committed，读提交）和<code>RR</code>（Repeatable Read，可重复读）<code>隔离级别</code>的<code>实现</code>。</p>
+<p>RR、RC生成时机</p>
+<ul>
+<li><p>RC隔离级别下，是每个快照读都会生成并获取最新的Read View；</p>
+</li>
+<li><p>而在RR隔离级别下，则是同一个事务中的第一个快照读才会创建Read View, 之后的快照读获取的都是同一个Read View，之后的查询就不会重复生成了，所以一个事务的查询结果每次都是一样的。</p>
+</li>
+</ul>
+<p>解决幻读问题</p>
+<ul>
+<li><p>快照读：通过MVCC来进行控制的，不用加锁。按照MVCC中规定的“语法”进行增删改查等操作，以避免幻读。</p>
+</li>
+<li><p>当前读：通过next-key锁（行锁+gap锁）来解决问题的。</p>
+</li>
+</ul>
+<p>RC、RR级别下的InnoDB快照读区别</p>
+<ul>
+<li><p>在RR级别下的某个事务的对某条记录的第一次快照读会创建一个快照及Read View， 将当前系统活跃的其他事务记录起来，此后在调用快照读的时候，还是使用的是同一个Read View，所以只要当前事务在其他事务提交更新之前使用过快照读，那么之后的快照读使用的都是同一个Read View，所以对之后的修改不可见；</p>
+</li>
+<li><p>即RR级别下，快照读生成Read View时，Read View会记录此时所有其他活动事务的快照，这些事务的修改对于当前事务都是不可见的。而早于Read View创建的事务所做的修改均是可见</p>
+</li>
+<li><p>而在RC级别下的，事务中，每次快照读都会新生成一个快照和Read View, 这就是我们在RC级别下的事务中可以看到别的事务提交的更新的原因</p>
+</li>
+</ul>
+<p>总结<br>从以上的描述中我们可以看出来，所谓的MVCC指的就是在使用READ COMMITTD、REPEATABLE READ这两种隔离级别的事务在执行普通的SEELCT操作时访问记录的版本链的过程，这样子可以使不同事务的读-写、写-读操作并发执行，从而提升系统性能。</p>
+<p>摘自：<a target="_blank" rel="noopener" href="https://www.php.cn/mysql-tutorials-460111.html">https://www.php.cn/mysql-tutorials-460111.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98MVCC/" data-id="cl0j84jy000ck04vhh7o3cqkg" data-title="MVCC" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题Spring的三级缓存和二级缓存" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98Spring%E7%9A%84%E4%B8%89%E7%BA%A7%E7%BC%93%E5%AD%98%E5%92%8C%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98Spring%E7%9A%84%E4%B8%89%E7%BA%A7%E7%BC%93%E5%AD%98%E5%92%8C%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98/">Spring三级缓存</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Spring三级缓存"><a href="#Spring三级缓存" class="headerlink" title="Spring三级缓存"></a>Spring三级缓存</h1><h2 id="缓存作用分析"><a href="#缓存作用分析" class="headerlink" title="缓存作用分析"></a>缓存作用分析</h2><p>Spring中的一级缓存名为singletonObjects，二级缓存名为earlySingletonObjects，三级缓存名为singletonFactories，除了一级缓存是ConcurrentHashMap之外，二级缓存和三级缓存都是HashMap。它们的定义是在DefaultSingletonBeanRegistry类中。</p>
+<p>一级缓存：singletonObjects是用来存放就绪状态的Bean。保存在该缓存中的Bean所实现Aware子接口的方法已经回调完毕，自定义初始化方法已经执行完毕，也经过BeanPostProcessor实现类的postProcessorBeforeInitialization、postProcessorAfterInitialization方法处理；</p>
+<p>二级缓存：earlySingletonObjects是用来存放早期曝光的Bean，一般只有处于循环引用状态的Bean才会被保存在该缓存中。保存在该缓存中的Bean所实现Aware子接口的方法还未回调，自定义初始化方法未执行，也未经过BeanPostProcessor实现类的postProcessorBeforeInitialization、postProcessorAfterInitialization方法处理。如果启用了Spring AOP，并且处于切点表达式处理范围之内，那么会被增强，即创建其代理对象。</p>
+<p>这里额外提一点，普通Bean被增强(JDK动态代理或CGLIB)的时机是在AbstractAutoProxyCreator实现的BeanPostProcessor的postProcessorAfterInitialization方法中，而处于循环引用状态的Bean被增强的时机是在AbstractAutoProxyCreator实现的SmartInstantiationAwareBeanPostProcessor的getEarlyBeanReference方法中。</p>
+<p>三级缓存：singletonFactories是用来存放创建用于获取Bean的工厂类-ObjectFactory实例。在IoC容器中，所有刚被创建出来的Bean，默认都会保存到该缓存中。</p>
+<h2 id="Bean在这三个缓存之间的流转顺序为（存在循环引用）："><a href="#Bean在这三个缓存之间的流转顺序为（存在循环引用）：" class="headerlink" title="Bean在这三个缓存之间的流转顺序为（存在循环引用）："></a>Bean在这三个缓存之间的流转顺序为（存在循环引用）：</h2><p>通过反射创建Bean实例。是单例Bean，并且IoC容器允许Bean之间循环引用，保存到三级缓存中。<br>当发生了循环引用时，从三级缓存中取出Bean对应的ObjectFactory实例，调用其getObject方法，来获取早期曝光Bean，从三级缓存中移除，保存到二级缓存中。<br>Bean初始化完成，生命周期的相关方法执行完毕，保存到一级缓存中，从二级缓存以及三级缓存中移除。</p>
+<h2 id="Bean在这三个缓存之间的流转顺序为（没有循环引用）："><a href="#Bean在这三个缓存之间的流转顺序为（没有循环引用）：" class="headerlink" title="Bean在这三个缓存之间的流转顺序为（没有循环引用）："></a>Bean在这三个缓存之间的流转顺序为（没有循环引用）：</h2><p>通过反射创建Bean实例。是单例Bean，并且IoC容器允许Bean之间循环引用，保存到三级缓存中。<br>Bean初始化完成，生命周期的相关方法执行完毕，保存到一级缓存中，从二级缓存以及三级缓存中移除。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上分析，我们可以得知Bean在一级缓存、二级缓存、三级缓存中的流转顺序为：三级缓存-&gt;二级缓存-&gt;一级缓存。但是并不是所有Bean都会经历这个过程，例如对于原型Bean(Prototype)，IoC容器不会将其保存到任何一个缓存中的，另外即便是单例Bean(Singleton)，如果没有循环引用关系，也不会被保存到二级缓存中的。</p>
+<p>————————————————<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_43448868/article/details/113578628">https://blog.csdn.net/m0_43448868/article/details/113578628</a></p>
+<p>Spring bean循环依赖即循环引用。是指2个或以上bean 互相持有对方，最终形成闭环。比如A依赖于B，B依赖A。产生循环依赖的方式有两种，一种是通过构造器注入形成的循环依赖，第二种是通过field属性注入形成的循环依赖。Spring通过特殊的bean生成机制解决了第二种方式产生的循环依赖问题，使得循环链的所有bean对象都能正确创建，而构造器注入方式阐释的循环依赖则会抛出异常。两者之间的差异能在bean创建机制中得到解释。</p>
+<p>注意此处讨论的bean皆为单例，prototype的bean循环依赖皆会抛出异常，若是单例与prototype混合的情况，若是先创建单例则能成功，反之则会抛出异常。</p>
+<p>总的来说，Spring解决循环依赖问题是通过结合bean实例化和bean属性填装分离，singletonObjects、earlySingletonObjects 、singletonFactories 三级缓存机制和引用提前暴露机制实现的。下面将详细介绍单例bean创建与获取过程。</p>
+<p>Spring bean三级缓存解决循环依赖<br>Spring能解决bean循环依赖的核心机制即三级缓存，其源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 一级缓存，保存singletonBean实例: bean name --&gt; bean instance */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Object&gt; singletonObjects = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;String, Object&gt;(<span class="number">256</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 二级缓存，保存早期未完全创建的Singleton实例: bean name --&gt; bean instance */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Object&gt; earlySingletonObjects = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, Object&gt;(<span class="number">16</span>); </span><br><span class="line"></span><br><span class="line"><span class="comment">/** 三级缓存，保存singletonBean生产工厂: bean name --&gt; ObjectFactory */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, ObjectFactory&lt;?&gt;&gt; singletonFactories = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, ObjectFactory&lt;?&gt;&gt;(<span class="number">16</span>);</span><br></pre></td></tr></table></figure>
+
+
+<p>详细源码调用链不再赘述，总体逻辑上，当Spring容器试图获得单例bean时，首先会在三级缓存中查找，具体方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> Object <span class="title function_">getSingleton</span><span class="params">(String beanName, <span class="type">boolean</span> allowEarlyReference)</span> &#123;</span><br><span class="line">    <span class="comment">// 查询一级缓存</span></span><br><span class="line">    <span class="type">Object</span> <span class="variable">singletonObject</span> <span class="operator">=</span> <span class="built_in">this</span>.singletonObjects.get(beanName);</span><br><span class="line">    <span class="keyword">if</span> (singletonObject == <span class="literal">null</span> &amp;&amp; isSingletonCurrentlyInCreation(beanName)) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="built_in">this</span>.singletonObjects) &#123;</span><br><span class="line">            <span class="comment">//若一级缓存内不存在，查询二级缓存</span></span><br><span class="line">            singletonObject = <span class="built_in">this</span>.earlySingletonObjects.get(beanName);</span><br><span class="line">            <span class="keyword">if</span> (singletonObject == <span class="literal">null</span> &amp;&amp; allowEarlyReference) &#123;</span><br><span class="line">                <span class="comment">//若二级缓存内不存在，查询三级缓存</span></span><br><span class="line">                ObjectFactory&lt;?&gt; singletonFactory = <span class="built_in">this</span>.singletonFactories.get(beanName);</span><br><span class="line">                <span class="keyword">if</span> (singletonFactory != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="comment">//若三级缓存中的，则通过工厂获得对象，并清除三级缓存，提升至二级缓存</span></span><br><span class="line">                    singletonObject = singletonFactory.getObject();</span><br><span class="line">                    <span class="built_in">this</span>.earlySingletonObjects.put(beanName, singletonObject);</span><br><span class="line">                    <span class="built_in">this</span>.singletonFactories.remove(beanName);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (singletonObject != NULL_OBJECT ? singletonObject : <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>查找位置从一级缓存至三级缓存，注意若三级缓存查找成功，其返回的bean对象并不一定是完全体，而可能是仅完成实例化，还未完成属性装填的提前暴露引用。当三级缓存内都未找到目标，getSingleton方法则会返回null，之后Spring将会执行一系列逻辑，最终将调用以下方法新创建bean对象：    </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> Object <span class="title function_">doCreateBean</span><span class="params">(<span class="keyword">final</span> String beanName, <span class="keyword">final</span> RootBeanDefinition mbd, <span class="keyword">final</span> <span class="meta">@Nullable</span> Object[] args)</span></span><br><span class="line">			<span class="keyword">throws</span> BeanCreationException &#123;</span><br><span class="line">	<span class="comment">//此处略过  做某些事</span></span><br><span class="line">   </span><br><span class="line">	<span class="comment">// Eagerly cache singletons to be able to resolve circular references</span></span><br><span class="line">	<span class="comment">// even when triggered by lifecycle interfaces like BeanFactoryAware.</span></span><br><span class="line">	<span class="comment">// 早期缓存单例对象以解决循环引用问题</span></span><br><span class="line">	<span class="comment">// 即使问题是在如BeanFactoryAware的生命周期阶段接口处发生的</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 允许早期暴露参数</span></span><br><span class="line">	<span class="type">boolean</span> <span class="variable">earlySingletonExposure</span> <span class="operator">=</span> (mbd.isSingleton() &amp;&amp; <span class="built_in">this</span>.allowCircularReferences &amp;&amp;</span><br><span class="line">			isSingletonCurrentlyInCreation(beanName));</span><br><span class="line">	<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">		<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">			logger.trace(<span class="string">&quot;Eagerly caching bean &#x27;&quot;</span> + beanName +</span><br><span class="line">					<span class="string">&quot;&#x27; to allow for resolving potential circular references&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 将实例化完成但还未填装属性的bean引用暴露出来，方法为将beanName和对应singletonFactory加入第三级缓存Map</span></span><br><span class="line">		addSingletonFactory(beanName, () -&gt; getEarlyBeanReference(beanName, mbd, bean));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Initialize the bean instance.</span></span><br><span class="line">	<span class="type">Object</span> <span class="variable">exposedObject</span> <span class="operator">=</span> bean;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 此处省略部分代码</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//填装属性，在此方法内尝试获得循环引用的被引用bean，方法与自身bean获得流程一致</span></span><br><span class="line">	populateBean(beanName, mbd, instanceWrapper);</span><br><span class="line">	exposedObject = initializeBean(beanName, exposedObject, mbd);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 此处省略部分代码</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>以上则是解决循环引用问题的关键：<strong>在初次创建Bean对象的过程中，当bean实例化完成后并不直接开始属性装配，而是先检查是否允许提前暴露，若允许则通过将对应SingletonFactory加入第三级Bean缓存使得外界能够提前获得该Bean的未完成引用，之后再进行属性装配工作。</strong>通过上述执行流程，循环引用问题得以解决：<br>1、设A、B单例对象相互依赖，当我们试图获得A对象时，将首先根据BeanName在三级缓存中查找，显然目前是查询不到的。<br>2、之后将执行doCreateBean方法创建新的A对象，在实例化但未完成属性装配时，方法会通过将对应SingletonFactory将A-Bean的引用提前暴露出去，然后执行属性装配。<br>3、在属性装配方法中，发现A依赖于B，随机尝试获得B-bean，调用getSingleton方法查询三级缓存，结果依然是未找到B-bean，于是和A流程一样调用doCreateBean方法创建一个新的B-bean。<br>4、此处与doCreateBean方法创建A-bean流程一致，成功实例化B-bean但未填装属性，将早期引用暴露，执行属性填装方法，发现B依赖于A，于是试图获得A-bean。<br>5、<strong>差异在此处出现，由于第三步已经将A-bean的早期引用通过第三级缓存暴露出来，在此处执行getSingleton方法时将会成功在三级缓存内获得A-bean引用，由此递归地返回，先后完成B-bean的属性装填工作，B-bean的创建工作，A-Bean的属性装填工作，最后完成A-Bean的创建工作。</strong></p>
+<p>由此通过属性注入的循环依赖问题得以解决，同时上述流程也解释了为何通过构造器注入产生的循环依赖问题会抛出异常，因为在A-bean执行构造方法的时候即需要获得B-bean方法。</p>
+<p>另外bean对象在某些场景下会在三级缓存间迁徙，非本文论述重点，不再讨论。</p>
+<p>为何使用三级缓存而非二级<br>学习解决循环依赖机制过程中便有一个疑问：将缓存分为三级是否有必要，依据处理流程，二级缓存似乎也能很好解决循环依赖问题。查证之后发现许多人也有和我一样的疑问，但很难找到一个权威的解答，最终找到一篇博客给出了令我信服的说法：</p>
+<p><strong>使用三级缓存而非二级缓存并不是因为只有三级缓存才能解决循环引用问题，其实二级缓存同样也能很好解决循环引用问题。使用三级而非二级缓存并非出于IOC的考虑，而是出于AOP的考虑，即若使用二级缓存，在AOP情形下，注入到其他bean的，不是最终的代理对象，而是原始对象。</strong></p>
+<p>相关链接如下：<br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/4340310/blog/4332450">https://my.oschina.net/u/4340310/blog/4332450</a><br>————————————————<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/panda9527z/article/details/107359916">https://blog.csdn.net/panda9527z/article/details/107359916</a></p>
+<p><a href="https://link.zhihu.com/?target=https://juejin.cn/post/6930904292958142478%23heading-5">三级缓存和循环依赖(不看点源码都看不懂)juejin.cn</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98Spring%E7%9A%84%E4%B8%89%E7%BA%A7%E7%BC%93%E5%AD%98%E5%92%8C%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98/" data-id="cl0j84jy100cn04vh1vsc8ll3" data-title="Spring三级缓存" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题https的s是什么" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98https%E7%9A%84s%E6%98%AF%E4%BB%80%E4%B9%88/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98https%E7%9A%84s%E6%98%AF%E4%BB%80%E4%B9%88/">HTTPS的S是什么</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="HTTPS的S是什么"><a href="#HTTPS的S是什么" class="headerlink" title="HTTPS的S是什么"></a>HTTPS的S是什么</h1><p>HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。</p>
+<h2 id="HTTPS和HTTP的区别主要如下："><a href="#HTTPS和HTTP的区别主要如下：" class="headerlink" title="HTTPS和HTTP的区别主要如下："></a><strong>HTTPS和HTTP的区别主要如下：</strong></h2><p>1、https协议需要到ca申请证书，一般免费证书较少，因而需要一定费用。</p>
+<p>2、http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。</p>
+<p>3、http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。</p>
+<p>4、http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。</p>
+<h2 id="一、HTTP和HTTPS的基本概念"><a href="#一、HTTP和HTTPS的基本概念" class="headerlink" title="一、HTTP和HTTPS的基本概念"></a><strong>一、HTTP和HTTPS的基本概念</strong></h2><p><strong>HTTP</strong>：是互联网上应用最为广泛的一种网络协议，是一个客户端和服务器端请求和应答的标准（TCP），用于从WWW服务器传输超文本到本地浏览器的传输协议，它可以使浏览器更加高效，使网络传输减少。</p>
+<p><strong>HTTPS</strong>：是以安全为目标的HTTP通道，简单讲是HTTP的安全版，即HTTP下加入SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。</p>
+<p><strong>HTTPS协议的主要作用可以分为两种</strong>：一种是建立一个信息安全通道，来保证数据传输的安全；另一种就是确认网站的真实性</p>
+<h2 id="二-、HTTP和HTTPS的主要特点和工作流程"><a href="#二-、HTTP和HTTPS的主要特点和工作流程" class="headerlink" title="二 、HTTP和HTTPS的主要特点和工作流程"></a>二 <strong>、</strong>HTTP和HTTPS的主要特点和工作流程</h2><p><strong>HTTP特点</strong></p>
+<p>1.支持客户&#x2F;服务器模式。（C&#x2F;S模式）</p>
+<p>2.简单快速：客户向服务器请求服务时，只需传送请求方法和路径。请求方法常用的有GET、HEAD、POST。每种方法规定了客户与服务器联系的类型不同。由于HTTP协议简单，使得HTTP服务器的程序规模小，因而通信速度很快。</p>
+<p>3.灵活：HTTP允许传输任意类型的数据对象。正在传输的类型由Content-Type加以标记。</p>
+<p>4.无连接：无连接的含义是限制每次连接只处理一个请求。服务器处理完客户的请求，并收到客户的应答后，即断开连接。采用这种方式可以节省传输时间。</p>
+<p>5.无状态：HTTP协议是<strong>无状态协议</strong>。无状态是指协议对于事务处理没有记忆能力。缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快</p>
+<p><strong>HTTP工作流程</strong></p>
+<p>第一步：建立TCP&#x2F;IP连接，客户端与服务器通过Socket三次握手进行连接</p>
+<p>第二步：客户端向服务端发起HTTP请求（例如：POST&#x2F;login.html http&#x2F;1.1）</p>
+<p>第三步：客户端发送请求头信息，请求内容，最后会发送一空白行，标示客户端请求完毕</p>
+<p>第四步：服务器做出应答，表示对于客户端请求的应答，例如：HTTP&#x2F;1.1 200 OK</p>
+<p>第五步：服务器向客户端发送应答头信息</p>
+<p>第六步：服务器向客户端发送请求头信息后，也会发送一空白行，标示应答头信息发送完毕，接着就以Content-type要求的数据格式发送数据给客户端</p>
+<p>第七步：服务端关闭TCP连接，如果服务器或者客户端增Connection:keep-alive就表示客户端与服务器端继续保存连接，在下次请求时可以继续使用这次的连接</p>
+<p><strong>HTTPS特点</strong></p>
+<p>HTTPS是HTTP协议的修改，它加密数据并确保其机密性。其配置可保护用户在与网站交互时免于窃取个人信息和计费数据。</p>
+<p>1、优点</p>
+<p>相比于http，https可以提供更加优质保密的信息，保证了用户数据的安全性，此外https同时也一定程度上保护了服务端，使用恶意攻击和伪装数据的成本大大提高。</p>
+<p>2、缺点</p>
+<p>缺点也同样很明显，第一https的技术门槛较高，多数个人或者私人网站难以支撑，CA机构颁发的证书都是需要年费的，此外对接Https协议也需要额外的技术支持；其二，目前来说大多数网站并不关心数据的安全性和保密性，其https最大的优点对它来说并不适用；其三，https加重了服务端的负担，相比于http其需要更多的资源来支撑，同时也降低了用户的访问速度；第四，目前来说Http网站仍然大规模使用，在浏览器侧也没有特别大的差别，很多用户不关心的话根本不感知。</p>
+<p><strong>HTTPS工作流程</strong></p>
+<p><img src="/HTTPS%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg" alt="HTTPS工作流程图"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题https的s是什么\HTTPS工作流程图.jpg" alt="HTTPS工作流程图"></p>
+<p>第一步：客户使用https的URL访问Web服务器，要求与Web服务器建立SSL连接。</p>
+<p>第二步：Web服务器收到客户端请求后，会将网站的证书信息（证书中包含公钥）传送一份给客户端。</p>
+<p>第三步：客户端的浏览器与Web服务器开始协商SSL连接的安全等级，也就是信息加密的等级。</p>
+<p>第四步：客户端的浏览器根据双方同意的安全等级，建立会话密钥，然后利用网站的公钥将会话密钥加密，并传送给网站。</p>
+<p>第五步：Web服务器利用自己的私钥解密出会话密钥。</p>
+<p>第六步：Web服务器利用会话密钥加密与客户端之间的通信。</p>
+<h1 id="HTTP状态码"><a href="#HTTP状态码" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h1><p>当浏览者访问一个网页时，浏览者的浏览器会向网页所在服务器发出请求。当浏览器接收并显示网页前，此网页所在的服务器会返回一个包含HTTP状态码的信息头（server header）用以响应浏览器的请求。</p>
+<p>HTTP状态码的英文为HTTP Status Code。</p>
+<p>下面是常见的HTTP状态码：</p>
+<ul>
+<li>200 - 请求成功</li>
+<li>301 - 资源（网页等）被永久转移到其它URL</li>
+<li>404 - 请求的资源（网页等）不存在</li>
+<li>500 - 内部服务器错误</li>
+</ul>
+<h2 id="HTTP状态码分类"><a href="#HTTP状态码分类" class="headerlink" title="HTTP状态码分类"></a>HTTP状态码分类</h2><p>HTTP状态码由三个十进制数字组成，第一个十进制数字定义了状态码的类型，后两个数字没有分类的作用。HTTP状态码共分为5种类型：</p>
+<table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">分类描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1**</td>
+<td align="left">信息，服务器收到请求，需要请求者继续执行操作</td>
+</tr>
+<tr>
+<td align="left">2**</td>
+<td align="left">成功，操作被成功接收并处理</td>
+</tr>
+<tr>
+<td align="left">3**</td>
+<td align="left">重定向，需要进一步的操作以完成请求</td>
+</tr>
+<tr>
+<td align="left">4**</td>
+<td align="left">客户端错误，请求包含语法错误或无法完成请求</td>
+</tr>
+<tr>
+<td align="left">5**</td>
+<td align="left">服务器错误，服务器在处理请求的过程中发生了错误</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">状态码</th>
+<th align="left">状态码英文名称</th>
+<th align="left">中文描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">100</td>
+<td align="left">Continue</td>
+<td align="left">继续。<a target="_blank" rel="noopener" href="http://www.dreamdu.com/webbuild/client_vs_server/">客户端</a>应继续其请求</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="left">Switching Protocols</td>
+<td align="left">切换协议。服务器根据客户端的请求切换协议。只能切换到更高级的协议，例如，切换到HTTP的新版本协议</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">200</td>
+<td align="left">OK</td>
+<td align="left">请求成功。一般用于GET与POST请求</td>
+</tr>
+<tr>
+<td align="left">201</td>
+<td align="left">Created</td>
+<td align="left">已创建。成功请求并创建了新的资源</td>
+</tr>
+<tr>
+<td align="left">202</td>
+<td align="left">Accepted</td>
+<td align="left">已接受。已经接受请求，但未处理完成</td>
+</tr>
+<tr>
+<td align="left">203</td>
+<td align="left">Non-Authoritative Information</td>
+<td align="left">非授权信息。请求成功。但返回的meta信息不在原始的服务器，而是一个副本</td>
+</tr>
+<tr>
+<td align="left">204</td>
+<td align="left">No Content</td>
+<td align="left">无内容。服务器成功处理，但未返回内容。在未更新网页的情况下，可确保浏览器继续显示当前文档</td>
+</tr>
+<tr>
+<td align="left">205</td>
+<td align="left">Reset Content</td>
+<td align="left">重置内容。服务器处理成功，用户终端（例如：浏览器）应重置文档视图。可通过此返回码清除浏览器的表单域</td>
+</tr>
+<tr>
+<td align="left">206</td>
+<td align="left">Partial Content</td>
+<td align="left">部分内容。服务器成功处理了部分GET请求</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">300</td>
+<td align="left">Multiple Choices</td>
+<td align="left">多种选择。请求的资源可包括多个位置，相应可返回一个资源特征与地址的列表用于用户终端（例如：浏览器）选择</td>
+</tr>
+<tr>
+<td align="left">301</td>
+<td align="left">Moved Permanently</td>
+<td align="left">永久移动。请求的资源已被永久的移动到新URI，返回信息会包括新的URI，浏览器会自动定向到新URI。今后任何新的请求都应使用新的URI代替</td>
+</tr>
+<tr>
+<td align="left">302</td>
+<td align="left">Found</td>
+<td align="left">临时移动。与301类似。但资源只是临时被移动。客户端应继续使用原有URI</td>
+</tr>
+<tr>
+<td align="left">303</td>
+<td align="left">See Other</td>
+<td align="left">查看其它地址。与301类似。使用GET和POST请求查看</td>
+</tr>
+<tr>
+<td align="left">304</td>
+<td align="left">Not Modified</td>
+<td align="left">未修改。所请求的资源未修改，服务器返回此状态码时，不会返回任何资源。客户端通常会缓存访问过的资源，通过提供一个头信息指出客户端希望只返回在指定日期之后修改的资源</td>
+</tr>
+<tr>
+<td align="left">305</td>
+<td align="left">Use Proxy</td>
+<td align="left">使用代理。所请求的资源必须通过代理访问</td>
+</tr>
+<tr>
+<td align="left">306</td>
+<td align="left">Unused</td>
+<td align="left">已经被废弃的HTTP状态码</td>
+</tr>
+<tr>
+<td align="left">307</td>
+<td align="left">Temporary Redirect</td>
+<td align="left">临时重定向。与302类似。使用GET请求重定向</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">400</td>
+<td align="left">Bad Request</td>
+<td align="left">客户端请求的语法错误，服务器无法理解</td>
+</tr>
+<tr>
+<td align="left">401</td>
+<td align="left">Unauthorized</td>
+<td align="left">请求要求用户的身份认证</td>
+</tr>
+<tr>
+<td align="left">402</td>
+<td align="left">Payment Required</td>
+<td align="left">保留，将来使用</td>
+</tr>
+<tr>
+<td align="left">403</td>
+<td align="left">Forbidden</td>
+<td align="left">服务器理解请求客户端的请求，但是拒绝执行此请求</td>
+</tr>
+<tr>
+<td align="left">404</td>
+<td align="left">Not Found</td>
+<td align="left">服务器无法根据客户端的请求找到资源（网页）。通过此代码，网站设计人员可设置”您所请求的资源无法找到”的个性页面</td>
+</tr>
+<tr>
+<td align="left">405</td>
+<td align="left">Method Not Allowed</td>
+<td align="left">客户端请求中的方法被禁止</td>
+</tr>
+<tr>
+<td align="left">406</td>
+<td align="left">Not Acceptable</td>
+<td align="left">服务器无法根据客户端请求的内容特性完成请求</td>
+</tr>
+<tr>
+<td align="left">407</td>
+<td align="left">Proxy Authentication Required</td>
+<td align="left">请求要求代理的身份认证，与401类似，但请求者应当使用代理进行授权</td>
+</tr>
+<tr>
+<td align="left">408</td>
+<td align="left">Request Time-out</td>
+<td align="left">服务器等待客户端发送的请求时间过长，超时</td>
+</tr>
+<tr>
+<td align="left">409</td>
+<td align="left">Conflict</td>
+<td align="left">服务器完成客户端的 PUT 请求时可能返回此代码，服务器处理请求时发生了冲突</td>
+</tr>
+<tr>
+<td align="left">410</td>
+<td align="left">Gone</td>
+<td align="left">客户端请求的资源已经不存在。410不同于404，如果资源以前有现在被永久删除了可使用410代码，网站设计人员可通过301代码指定资源的新位置</td>
+</tr>
+<tr>
+<td align="left">411</td>
+<td align="left">Length Required</td>
+<td align="left">服务器无法处理客户端发送的不带Content-Length的请求信息</td>
+</tr>
+<tr>
+<td align="left">412</td>
+<td align="left">Precondition Failed</td>
+<td align="left">客户端请求信息的先决条件错误</td>
+</tr>
+<tr>
+<td align="left">413</td>
+<td align="left">Request Entity Too Large</td>
+<td align="left">由于请求的实体过大，服务器无法处理，因此拒绝请求。为防止客户端的连续请求，服务器可能会关闭连接。如果只是服务器暂时无法处理，则会包含一个Retry-After的响应信息</td>
+</tr>
+<tr>
+<td align="left">414</td>
+<td align="left">Request-URI Too Large</td>
+<td align="left">请求的URI过长（URI通常为网址），服务器无法处理</td>
+</tr>
+<tr>
+<td align="left">415</td>
+<td align="left">Unsupported Media Type</td>
+<td align="left">服务器无法处理请求附带的媒体格式</td>
+</tr>
+<tr>
+<td align="left">416</td>
+<td align="left">Requested range not satisfiable</td>
+<td align="left">客户端请求的范围无效</td>
+</tr>
+<tr>
+<td align="left">417</td>
+<td align="left">Expectation Failed</td>
+<td align="left">服务器无法满足Expect的请求头信息</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">500</td>
+<td align="left">Internal Server Error</td>
+<td align="left">服务器内部错误，无法完成请求</td>
+</tr>
+<tr>
+<td align="left">501</td>
+<td align="left">Not Implemented</td>
+<td align="left">服务器不支持请求的功能，无法完成请求</td>
+</tr>
+<tr>
+<td align="left">502</td>
+<td align="left">Bad Gateway</td>
+<td align="left">作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应</td>
+</tr>
+<tr>
+<td align="left">503</td>
+<td align="left">Service Unavailable</td>
+<td align="left">由于超载或系统维护，服务器暂时的无法处理客户端的请求。延时的长度可包含在服务器的Retry-After头信息中</td>
+</tr>
+<tr>
+<td align="left">504</td>
+<td align="left">Gateway Time-out</td>
+<td align="left">充当网关或代理的服务器，未及时从远端服务器获取请求</td>
+</tr>
+<tr>
+<td align="left">505</td>
+<td align="left">HTTP Version not supported</td>
+<td align="left">服务器不支持请求的HTTP协议的版本，无法完成处理</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98https%E7%9A%84s%E6%98%AF%E4%BB%80%E4%B9%88/" data-id="cl0j84jy200cq04vhds0d6s4b" data-title="HTTPS的S是什么" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题java的get与post" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98java%E7%9A%84get%E4%B8%8Epost/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98java%E7%9A%84get%E4%B8%8Epost/">java中get和post的区别？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Java的get请求和post请求"><a href="#Java的get请求和post请求" class="headerlink" title="Java的get请求和post请求"></a>Java的get请求和post请求</h1><p>1：get请求的数据是url地址明文发送，不安全，而post的请求数据不会在地址栏出现，较为安全。get执行效率比post好。</p>
+<p>2：get是把参数数据队列加到提交表单的action属性所指的url中，值和表单内各字段一一对应，在url中可以看到。post时通过HTTP post机制，将表单内各个字段与其内容放置在HTML header内一起传送到action属性所指的url地址。用户看不到这个过程。</p>
+<p>3：对于get方式，服务器端用request.queryString获取变量的值，对于post方式，服务器端用request.form获取提交的数据。</p>
+<p>4：get传送的数据量较小，不能大于2kb。post传送的数据量较大，一般默认为不受限制。但理论上，IIS4中最大量为80kb，IIS5中为100kb。<br>————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Hello_NAndroid/article/details/81676729">https://blog.csdn.net/Hello_NAndroid/article/details/81676729</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98java%E7%9A%84get%E4%B8%8Epost/" data-id="cl0j84jy300ct04vh025r0tc7" data-title="java中get和post的区别？" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题乐观锁怎么实现" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E4%B9%90%E8%A7%82%E9%94%81%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E4%B9%90%E8%A7%82%E9%94%81%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0/">乐观锁怎么实现？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="乐观锁怎么实现？"><a href="#乐观锁怎么实现？" class="headerlink" title="乐观锁怎么实现？"></a>乐观锁怎么实现？</h1><p>先了解什么是悲观锁</p>
+<p><strong>1、悲观锁概念</strong></p>
+<p><strong>悲观锁：总是假设最坏的情况，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会阻塞，直到它拿到锁。</strong></p>
+<p>就比如说java里面的同步机制synchronized关键字就是一个悲观锁，当一个变量或者是方法使用了synchronized修饰时，其他的线程想要拿到这个变量或者是方法的时候将就需要等到别的线程释放。</p>
+<p>数据库里面也用到了这种悲观锁的机制。比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。这样其他的线程就不能同步操作，必须要等到他释放才可以。</p>
+<p><strong>2、乐观锁概念</strong></p>
+<p><strong>乐观锁：总是假设最好的情况，每次去拿数据的时候都认为别人不会修改，所以不会上锁，只在更新的时候会判断一下在此期间别人有没有去更新这个数据。</strong></p>
+<p>注意“在此期间”的含义是拿到数据到更新数据的这段时间。因为没有加锁，所以别的线程可能会更改。还有一点那就是乐观锁其实是不加锁的。</p>
+<p>乐观锁可以由CAS机制+版本机制来实现。</p>
+<p>乐观锁假设认为数据一般情况下不会产生并发冲突，所以在数据进行提交更新的时候，才会正式对数据是否产生并发冲突进行检测，如果发现并发冲突了，则让返回用户错误的信息，让用户决定如何去做。</p>
+<p>（1）CAS机制：当多个线程尝试使用CAS同时更新同一个变量时，只有其中一个线程能更新变量的值，而其它线程都失败。CAS 有效地说明了“ 我认为位置 V 应该包含值 A；如果包含该值，则将 B 放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可“。</p>
+<p>（2）版本机制：CAS机制保证了在更新数据的时候没有被修改为其他数据的同步机制，版本机制就保证了没有被修改过的同步机制（意思是上面的ABA问题）。</p>
+<h4 id="CAS-算法"><a href="#CAS-算法" class="headerlink" title="CAS 算法"></a>CAS 算法</h4><p>即 <strong>compare and swap（比较与交换）</strong>，是一种有名的<strong>无锁算法</strong>。无锁编程，即不使用锁（没有线程被阻塞）的情况下实现多线程之间的变量同步，所以也叫非阻塞同步（Non-blocking Synchronization）。<strong>CAS 算法</strong>涉及到三个操作数：</p>
+<ul>
+<li>需要读写的内存值 V</li>
+<li>进行比较的值 A</li>
+<li>拟写入的新值 B</li>
+</ul>
+<p>当且仅当 V 的值等于 A 时，CAS 通过原子方式用新值 B 来更新 V 的值，否则不会执行任何操作（<strong>比较和替换是一个 native 原子操作</strong>）。一般情况下，这是一个<strong>自旋操作</strong>，即<strong>不断的重试</strong>。</p>
+<h4 id="版本号机制"><a href="#版本号机制" class="headerlink" title="版本号机制"></a>版本号机制</h4><p>一般是在数据表中加上版本号字段 <code>version</code>，表示数据被修改的次数。当数据被修改时，这个字段值会加1。</p>
+<p>举个简单的例子：假设帐户信息表中有一个 version 字段，当前值为 1 ，而当前帐户的余额（ balance ）为 100 。</p>
+<ol>
+<li>操作员 A 此时准备将其读出（ version&#x3D;1 ），并从其帐户余额中扣除 50（ 100-50 ）；</li>
+<li>操作员 A 操作的过程中，操作员 B 也读入此用户信息（ version&#x3D;1 ），并从其帐户余额中扣除 20 （ 100-20 ）；</li>
+<li>操作员 A 完成修改工作，将数据版本号加1（ version&#x3D;2 ），连同帐户扣除后余额（ balance&#x3D;50 ），提交到数据库完成更新；</li>
+<li>操作员 B 完成了操作，也将版本号加1（ version&#x3D;2 ）试图向数据库提交数据（ balance&#x3D;80 ），但此时比对数据库记录版本发现，操作员 B 提交的数据版本号为 2 ，数据库记录的当前版本也为 2 ，不满足 “<strong>提交版本必须大于记录当前版本才能执行更新</strong>“ 的乐观锁策略。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E4%B9%90%E8%A7%82%E9%94%81%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0/" data-id="cl0j84jy300cw04vh87d2bt3p" data-title="乐观锁怎么实现？" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题关键volatile的作用" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E5%85%B3%E9%94%AEvolatile%E7%9A%84%E4%BD%9C%E7%94%A8/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E5%85%B3%E9%94%AEvolatile%E7%9A%84%E4%BD%9C%E7%94%A8/">java中volatile的作用是什么</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>java中volatile的作用：</p>
+<p>1、Java提供了volatile关键字来保证可见性；</p>
+<p>2、保证有序性，代码为【context &#x3D; loadContext();inited &#x3D; true;】；</p>
+<p>3、提供double check。</p>
+<p>1、可见性：Java提供了volatile关键字来保证可见性。</p>
+<p>　　<strong>当一个共享变量被volatile修饰时，它会保证修改的值会立即被更新到主存，当有其他线程需要读取时，它会去内存中读取新值。</strong></p>
+<p>　　而普通的共享变量不能保证可见性，因为普通共享变量被修改之后，什么时候被写入主存是不确定的，当其他线程去读取时，此时内存中可能还是原来的旧值，因此无法保证可见性。</p>
+<p>　　另外，通过synchronized和Lock也能够保证可见性，synchronized和Lock能保证同一时刻只有一个线程获取锁然后执行同步代码，并且在释放锁之前会将对变量的修改刷新到主存当中。因此可以保证可见性。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E5%85%B3%E9%94%AEvolatile%E7%9A%84%E4%BD%9C%E7%94%A8/" data-id="cl0j84jy400cz04vhd34g563f" data-title="java中volatile的作用是什么" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题垃圾回收机制" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/">垃圾回收机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="JVM垃圾回收机制"><a href="#JVM垃圾回收机制" class="headerlink" title="JVM垃圾回收机制"></a>JVM垃圾回收机制</h1><h2 id="1、JVM垃圾定位算法解密"><a href="#1、JVM垃圾定位算法解密" class="headerlink" title="1、JVM垃圾定位算法解密"></a>1、JVM垃圾定位算法解密</h2><p>java语言规范没有明确的说明JVM 使用哪种垃圾回收算法，但是任何一种垃圾回收算法一般要做两件基本事情：（1）发现无用的信息对象；（2）回收将无用对象占用的内存空间。使该空间可被程序再次使用。</p>
+<h3 id="（1）引用计数法"><a href="#（1）引用计数法" class="headerlink" title="（1）引用计数法"></a>（1）引用计数法</h3><ul>
+<li>这个算法的实现是，给对象中添加一个引用计数器，每当一个地方引用这个对象时，计数器值+1；当引用失效时，计数器值-1。任何时刻计数值为0的对象就是不可能再被使用的。这种算法使用场景很多，但是，Java中却没有使用这种算法，因为这种算法很难解决对象之间相互引用(循环引用)的情况。</li>
+</ul>
+<h3 id="（2）可达性分析"><a href="#（2）可达性分析" class="headerlink" title="（2）可达性分析"></a>（2）可达性分析</h3><ul>
+<li><p>这个算法的基本思想是通过一系列称为“GC Roots”的对象作为起始点，从这些节点向下搜索，搜索所走过的路径称为引用链，当一个对象到GC Roots没有任何引用链（即GC Roots到对象不可达）时，则证明此对象是不可用的。</p>
+</li>
+<li><p>那么问题又来了，如何选取GCRoots对象呢？在Java语言中，可以作为GCRoots的对象包括下面几种：</p>
+<p>(1). 虚拟机栈（栈帧中的局部变量区，也叫做局部变量表）中引用的对象。</p>
+<p>(2). 方法区中的类静态属性引用的对象。</p>
+<p>(3). 方法区中常量引用的对象。</p>
+<p>(4). 本地方法栈中JNI(Native方法)引用的对象。</p>
+<p>下面给出一个GCRoots的例子，如下图，为GCRoots的引用链。</p>
+<p><img src="/%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90.png" alt="可达性分析"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题垃圾回收机制\可达性分析.png" alt="可达性分析"></p>
+<p>由图可知，obj8、obj9、obj10都没有到GCRoots对象的引用链，即便obj9和obj10之间有引用链，他们还是会被当成垃圾处理，可以进行回收</p>
+</li>
+</ul>
+<h2 id="2、JVM垃圾回收算法深度剖析"><a href="#2、JVM垃圾回收算法深度剖析" class="headerlink" title="2、JVM垃圾回收算法深度剖析"></a>2、JVM垃圾回收算法深度剖析</h2><p>基础垃圾收集算法</p>
+<h3 id="（1）标记清除算法"><a href="#（1）标记清除算法" class="headerlink" title="（1）标记清除算法"></a>（1）标记清除算法</h3><p> 这是最基础的算法，标记-清除算法就如同它的名字样，分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，标记完成后统一回收所有被标记的对象。这种算法的不足主要体现在效率和空间，从效率的角度讲，标记和清除两个过程的效率都不高；从空间的角度讲，标记清除后会产生大量不连续的内存碎片， 内存碎片太多可能会导致以后程序运行过程中在需要分配较大对象时，无法找到足够的连续内存而不得不提前触发一次垃圾收集动作。标记-清除算法执行过程如图：</p>
+<p><img src="/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95.png" alt="标记清除算法"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题垃圾回收机制\标记清除算法.png" alt="标记清除算法"></p>
+<h3 id="（2）复制算法"><a href="#（2）复制算法" class="headerlink" title="（2）复制算法"></a>（2）复制算法</h3><p> 复制算法是为了解决效率问题而出现的，<strong>它将可用的内存分为两块，每次只用其中一块，当这一块内存用完了，就将还存活着的对象复制到另外一块上面，然后再把已经使用过的内存空间一次性清理掉</strong>。这样每次只需要对整个半区进行内存回收，内存分配时也不需要考虑内存碎片等复杂情况，只需要移动指针，按照顺序分配即可。复制算法的执行过程如图：</p>
+<p><img src="/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95.png" alt="复制算法"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题垃圾回收机制\复制算法.png" alt="复制算法"></p>
+<p>不过这种算法有个缺点，<strong>内存缩小为了原来的一半，这样代价太高了</strong>。现在的商用虚拟机都采用这种算法来<strong>回收新生代</strong>，不过研究表明1:1的比例非常不科学，因此<strong>新生代的内存被划分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor。</strong>每次回收时，将Eden和Survivor中还存活着的对象一次性复制到另外一块Survivor空间上，最后清理掉Eden和刚才用过的Survivor空间。HotSpot虚拟机默认Eden区和Survivor区的比例为8:1，意思是每次新生代中可用内存空间为整个新生代容量的90%。当然，我们没有办法保证每次回收都只有不多于10%的对象存活，当Survivor空间不够用时，需要依赖老年代进行分配担保（Handle Promotion）。</p>
+<h3 id="（3）标记整理算法"><a href="#（3）标记整理算法" class="headerlink" title="（3）标记整理算法"></a>（3）标记整理算法</h3><p> 复制算法在对象存活率较高的场景下要进行大量的复制操作，效率很低。万一对象100%存活，那么需要有额外的空间进行分配担保。老年代都是不易被回收的对象，对象存活率高，因此一般不能直接选用复制算法。根据老年代的特点，有人提出了另外一种标记-整理算法，过程与标记-清除算法一样，不过不是直接对可回收对象进行清理，而是让所有存活对象都向一端移动，然后直接清理掉边界以外的内存。标记-整理算法的工作过程如图：</p>
+<p><img src="/%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86%E7%AE%97%E6%B3%95.png" alt="标记整理算法"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题垃圾回收机制\标记整理算法.png" alt="标记整理算法"></p>
+<h2 id="3、JVM垃圾回收器深度剖析"><a href="#3、JVM垃圾回收器深度剖析" class="headerlink" title="3、JVM垃圾回收器深度剖析"></a>3、JVM垃圾回收器深度剖析</h2><p><strong>垃圾收集器</strong></p>
+<p>垃圾收集器就是上面讲的理论知识的具体实现了。不同虚拟机所提供的垃圾收集器可能会有很大差别，我们使用的是HotSpot，HotSpot这个虚拟机所包含的所有收集器如图：</p>
+<p><img src="/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8.png" alt="垃圾收集器"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题垃圾回收机制\垃圾收集器.png" alt="垃圾收集器"></p>
+<h3 id="（1）SerialGC（单线程、复制算法）"><a href="#（1）SerialGC（单线程、复制算法）" class="headerlink" title="（1）SerialGC（单线程、复制算法）"></a>（1）SerialGC（单线程、复制算法）</h3><p>Serial(英文连续、串行）是最基本垃圾收集器，使用<strong>复制算法</strong>，曾经是JDK1.3.1之前新生代唯一的垃圾收集器。Serial是一个单线程的收集器，它不但只会使用一个CPU或一条线程去完成垃圾收集工作，并且在进行垃圾收集的同时，必须暂停其他所有的工作线程，直到垃圾收集结束。<br>Serial垃圾收集器虽然在收集垃圾过程中需要暂停所有其他的工作线程，但是它简单高效，对于限定单个CPU环境来说，没有线程交互的开销，可以获得最高的单线程垃圾收集效率，因此Serial垃圾收集器依然是java虚拟机运行在Client模式下默认的新生代垃圾收集器。</p>
+<h3 id="Serial-Old-收集器（单线程标记整理算法-）"><a href="#Serial-Old-收集器（单线程标记整理算法-）" class="headerlink" title="Serial Old 收集器（单线程标记整理算法 ）"></a>Serial Old 收集器（单线程标记整理算法 ）</h3><p>Serial Old 是 Serial 垃圾收集器年老代版本，它同样是个单线程的收集器，使用<strong>标记-整理算法</strong>，这个收集器也主要是运行在 Client 默认的 java 虚拟机默认的年老代垃圾收集器。在 Server 模式下，主要有两个用途：</p>
+<ol>
+<li><p>在 JDK1.5 之前版本中与新生代的 Parallel Scavenge 收集器搭配使用。</p>
+</li>
+<li><p>作为年老代中使用 CMS 收集器的后备垃圾收集方案。新生代 Serial 与年老代 Serial Old 搭配垃圾</p>
+</li>
+</ol>
+<p>收集过程图：</p>
+<h3 id="（2）Parallel-Scavenge（多线程复制算法、高效）"><a href="#（2）Parallel-Scavenge（多线程复制算法、高效）" class="headerlink" title="（2）Parallel Scavenge（多线程复制算法、高效）"></a>（2）Parallel Scavenge（多线程复制算法、高效）</h3><p>Parallel Scavenge收集器也是一个新生代垃圾收集器，同样使用<strong>复制算法</strong>，也是一个多线程的垃圾收集器，它重点关注的是程序达到一个可控制的吞吐量(Thoughput，CPU 用于运行用户代码的时间&#x2F;CPU总消耗时间，即吞吐量&#x3D;运行用户代码时间&#x2F;(运行用户代码时间+垃圾收集时间))，高吞吐量可以最高效率地利用CPU时间，尽快地完成程序的运算任务，主要适用于在后台运算而不需要太多交互的任务。自适应调节策略也是ParallelScavenge收集器与ParNew收集器的一个重要区别。</p>
+<p>JDK1.8默认</p>
+<h3 id="Parallel-Old收集器（多线程标记整理算法"><a href="#Parallel-Old收集器（多线程标记整理算法" class="headerlink" title="Parallel Old收集器（多线程标记整理算法)"></a>Parallel Old收集器（多线程标记整理算法)</h3><p>Parallel Old 收集器是Parallel Scavenge的年老代版本，使用多线程的<strong>标记-整理算法</strong>，在JDK1.6才开始提供。<br>在JDK1.6之前，新生代使用ParallelScavenge 收集器只能搭配年老代的Serial Old 收集器，只能保证新生代的吞吐量优先，无法保证整体的吞吐量，Parallel Old正是为了在年老代同样提供吞吐量优先的垃圾收集器，如果系统对吞吐量要求比较高，可以优先考虑新生代Parallel Scavenge和年老代 ParallelOld收集器的搭配策略。<br>新生代Parallel Scavenge和年老代 Parallel Old 收集器搭配运行过程图：</p>
+<h3 id="（3）ParNew垃圾收集器-Serial-多线程"><a href="#（3）ParNew垃圾收集器-Serial-多线程" class="headerlink" title="（3）ParNew垃圾收集器(Serial+多线程)"></a>（3）ParNew垃圾收集器(Serial+多线程)</h3><p>ParNew垃圾收集器其实是Serial 收集器的多线程版本，也使用<strong>复制算法</strong>，除了使用多线程进行垃圾收集之外，其余的行为和Serial收集器完全一样，ParNew垃圾收集器在垃圾收集过程中同样也要暂停所有其他的工作线程。<br>ParNew收集器默认开启和CPU数目相同的线程数，可以通过-XX:ParallelGCThreads参数来限制垃圾收集器的线程数。【Parallel :平行的】<br>ParNew虽然是除了多线程外和Serial 收集器几乎完全一样，但是ParNew垃圾收集器是很多java虚拟机运行在Server模式下新生代的默认垃圾收集器。</p>
+<h3 id="（4）CMS收集器（多线程标记清除清除）"><a href="#（4）CMS收集器（多线程标记清除清除）" class="headerlink" title="（4）CMS收集器（多线程标记清除清除）"></a>（4）CMS收集器（多线程标记清除清除）</h3><p>Concurrent mark sweep(CMS)收集器是一种年老代垃圾收集器，其最主要目标是获取最短垃圾回收停顿时间，和其他年老代使用<strong>标记-整理算法</strong>不同，它使用多线程的&#x3D;&#x3D;<strong>标记-清除算法</strong>&#x3D;&#x3D;。最短的垃圾收集停顿时间可以为交互比较高的程序提高用户体验。CMS工作机制相比其他的垃圾收集器来说更复杂。整个过程分为以下4个阶段:</p>
+<p><strong>初始标记</strong><br>只是标记一下GC Roots 能直接关联的对象，速度很快，仍然需要暂停所有的工作线程。</p>
+<p><strong>并发标记</strong><br>进行GC Roots 跟踪的过程，和用户线程一起工作，不需要暂停工作线程。</p>
+<p><strong>重新标记</strong><br>为了修正在并发标记期间，因用户程序继续运行而导致标记产生变动的那一部分对象的标记记录，仍然需要暂停所有的工作线程。</p>
+<p><strong>并发清除</strong><br>清除GCRoots 不可达对象，和用户线程一起工作，不需要暂停工作线程。由于耗时最长的并发标记和并发清除过程中，垃圾收集线程可以和用户现在一起并发工作，所以总体上来看CMS收集器的内存回收和用户线程是一起并发地执行。CMS 收集器工作过程。</p>
+<h3 id="（5）G1收集器"><a href="#（5）G1收集器" class="headerlink" title="（5）G1收集器"></a>（5）G1收集器</h3><p>Garbage first垃圾收集器是目前垃圾收集器理论发展的最前沿成果，相比与CMS收集器，G1收集器两个最突出的改进是:</p>
+<ol>
+<li><p>基于标记-整理算法，不产生内存碎片。</p>
+</li>
+<li><p>可以非常精确控制停顿时间，在不牺牲吞吐量前提下，实现低停顿垃圾回收。G1收集器避免全区域垃圾收集，它把堆内存划分为大小固定的几个独立区域，并且跟踪这些区域的垃圾收集进度，同时在后台维护一个优先级列表，每次根据所允许的收集时间， 优先回收垃圾最多的区域。区域划分和优先级区域回收机制，确保 G1 收集器可以在有限时间获得最高的垃圾收集效率。</p>
+</li>
+</ol>
+<p>JDK1.9默认</p>
+<h2 id="4、JVM垃圾回收调优工具使用详情"><a href="#4、JVM垃圾回收调优工具使用详情" class="headerlink" title="4、JVM垃圾回收调优工具使用详情"></a>4、JVM垃圾回收调优工具使用详情</h2><h3 id="（1）调优工具"><a href="#（1）调优工具" class="headerlink" title="（1）调优工具"></a>（1）调优工具</h3><p>常用调优工具分为两类jdk自带监控工具:jconsole和jvisualvm，第三方有:MAT(Memory AnalyzerTool)、GChisto。</p>
+<ol>
+<li>jconsole , Java Monitoring and Management Console是从java5开始，在JDK中自带的java监控和管理控制台，用于对VM中内存，线程和类等的监控</li>
+<li>jvisualvm , jdk自带全能工具，可以分析内存快照、线程快照;监控内存变化、GC变化等。</li>
+<li>3.MAT ，Memory Analyzer Tool，一个基于Eclipse的内存分析工具，是一个快速、功能丰富的Javaheap分析工具，它可以帮助我们查找内存泄漏和减少内存消耗</li>
+<li>4.GChisto，一款专业分析gc日志的工具</li>
+</ol>
+<h3 id="（2）调优命令有哪些"><a href="#（2）调优命令有哪些" class="headerlink" title="（2）调优命令有哪些?"></a>（2）调优命令有哪些?</h3><p><strong>sunJDK监控和故障处理命令有jps、jstat、jmap、jhat、jstack、jinfo</strong></p>
+<ol>
+<li>jps，JVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程。</li>
+<li>jstat，JVM statistics Monitoring是用于监视虚拟机运行时状态信息的命令，它可以显示出虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据。</li>
+<li>jmap , JVM Memory Map命令用于生成heap dump文件</li>
+<li>jhat，JVM Heap Analysis Tool命令是与jmap搭配使用，用来分析jmap生成的dump , jhat内置了一个微型的HTTP&#x2F;HTML服务器，生成dump的分析结果后，可以在浏览器中查看</li>
+<li>jstack，用于生成java虚拟机当前时刻的线程快照。</li>
+<li>jinfo , JvM Configuration info这个命令作用是实时查看和调整虚拟机运行参数</li>
+</ol>
+<h3 id="（3）你知道哪些JVM性能调优"><a href="#（3）你知道哪些JVM性能调优" class="headerlink" title="（3）你知道哪些JVM性能调优"></a>（3）你知道哪些JVM性能调优</h3><ol>
+<li><p>设定堆内存大小</p>
+<p>-Xmx:堆内存最大限制。</p>
+</li>
+<li><p>设定新生代大小。新生代不宜太小，否则会有大量对象涌入老年代</p>
+<p>-XX:NewSize:新生代大小</p>
+<p>-XX:NewRatio:新生代和老生代占比</p>
+<p>-xXx:SurvivorRatio :伊甸园空间和幸存者空间的占比</p>
+</li>
+<li><p>设定垃圾回收器</p>
+<p>年轻代用-XX:+UseParNewGC</p>
+<p>年老代用-XX:+UseConcMarkSweepGC</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" data-id="cl0j84jy500d204vh7nn8h2rj" data-title="垃圾回收机制" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试必考题形成死锁的方法和解决方法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E5%BD%A2%E6%88%90%E6%AD%BB%E9%94%81%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E5%BD%A2%E6%88%90%E6%AD%BB%E9%94%81%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">死锁产生的原因以及解决方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="死锁产生的原因以及解决方法"><a href="#死锁产生的原因以及解决方法" class="headerlink" title="死锁产生的原因以及解决方法"></a>死锁产生的原因以及解决方法</h1><h2 id="一-什么是死锁？"><a href="#一-什么是死锁？" class="headerlink" title="一.什么是死锁？"></a>一.什么是死锁？</h2><p>​    死锁是由于两个或以上的线程互相持有对方需要的资源，导致这些线程处于等待状态，无法执行。</p>
+<h2 id="二-产生死锁的四个必要条件"><a href="#二-产生死锁的四个必要条件" class="headerlink" title="二.产生死锁的四个必要条件"></a>二.产生死锁的四个必要条件</h2><p>1.<strong>互斥性</strong>：线程对资源的占有是排他性的，一个资源只能被一个线程占有，直到释放。</p>
+<p>2.<strong>请求和保持条件</strong>：一个线程对请求被占有资源发生阻塞时，对已经获得的资源不释放。</p>
+<p>3.<strong>不剥夺</strong>：一个线程在释放资源之前，其他的线程无法剥夺占用。</p>
+<p>4.<strong>循环等待</strong>：发生死锁时，线程进入死循环，永久阻塞。</p>
+<h2 id="三-产生死锁的原因"><a href="#三-产生死锁的原因" class="headerlink" title="三.产生死锁的原因"></a>三.产生死锁的原因</h2><p>1.<strong>竞争不可抢占性资源</strong>:<br>　　　　p1已经打开F1，想去打开F2，p2已经打开F2，想去打开F1，但是F1和F2都是不可抢占的，这是发生死锁。</p>
+<p>2**.竞争可消耗资源引起死锁**<br>　　　　进程间通信，如果顺序不当，会产生死锁，比如p1发消息m1给p2，p1接收p3的消息m3，p2接收p1的m1，发m2给p3，p3，以此类推，如果进程之间是先发信息的那么可以完成通信，但是如果是先接收信息就会产生死锁。</p>
+<p>3.<strong>进程推进顺序不当</strong><br>　　　　进程在运行过程中，请求和释放资源的顺序不当，也同样会导致产生进程死锁。</p>
+<h2 id="四-避免死锁的方法"><a href="#四-避免死锁的方法" class="headerlink" title="四.避免死锁的方法"></a>四.避免死锁的方法</h2><p>1.破坏“请求和保持”条件<br>　　　　想办法，让进程不要那么贪心，自己已经有了资源就不要去竞争那些不可抢占的资源。比如，让进程在申请资源时，一次性申请所有需要用到的资源，不要一次一次来申请，当申请的资源有一些没空，那就让线程等待。不过这个方法比较浪费资源，进程可能经常处于饥饿状态。还有一种方法是，要求进程在申请资源前，要释放自己拥有的资源。</p>
+<p>2.破坏“不可抢占”条件<br>　　　　允许进程进行抢占，方法一：如果去抢资源，被拒绝，就释放自己的资源。方法二：操作系统允许抢，只要你优先级大，可以抢到。</p>
+<p>3.破坏“循环等待”条件<br>　　　　将系统中的所有资源统一编号，进程可在任何时刻提出资源申请，但所有申请必须按照资源的编号顺序（升序）提出</p>
+<h2 id="五-死锁的检测"><a href="#五-死锁的检测" class="headerlink" title="五.死锁的检测"></a>五.死锁的检测</h2><p>1.每个进程、每个资源制定唯一编号</p>
+<p>2.设定一张资源分配表，记录各进程与占用资源之间的关系</p>
+<p>3.设置一张进程等待表，记录各进程与要申请资源之间的关系</p>
+<h2 id="六-死锁的解除"><a href="#六-死锁的解除" class="headerlink" title="六.死锁的解除"></a>六.死锁的解除</h2><p>1.抢占资源，从一个或多个进程中抢占足够数量的资源，分配给死锁进程，以解除死锁状态。</p>
+<p>2.终止（或撤销）进程，终止（或撤销）系统中的一个或多个死锁进程，直至打破循环环路，使系统从死锁状态解脱出来<br>————————————————<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44959058/article/details/115637265">https://blog.csdn.net/weixin_44959058/article/details/115637265</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E5%BD%A2%E6%88%90%E6%AD%BB%E9%94%81%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" data-id="cl0j84jy500d504vh9wuz9as9" data-title="死锁产生的原因以及解决方法" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/12/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/14/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

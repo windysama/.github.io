@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="MyHomePage">
+<meta property="og:url" content="http://example.com/page/10/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Lee yunbo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Redis事务" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%E4%BA%8B%E5%8A%A1/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T13:26:54.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%E4%BA%8B%E5%8A%A1/">Redis事务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p>Redis可以通过MUTI, EXEC, DISCARD和WATCH等命令来实现事务(transaction)功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; MULTI</span><br><span class="line">OK</span><br><span class="line">&gt; INCR foo</span><br><span class="line">QUEUED</span><br><span class="line">&gt; INCR bar</span><br><span class="line">QUEUED</span><br><span class="line">&gt; EXEC</span><br><span class="line">1) (integer) 1</span><br><span class="line">2) (integer) 1</span><br></pre></td></tr></table></figure>
+
+<p>使⽤ MULTI命令后可以输⼊多个命令。Redis不会⽴即执⾏这些命令，⽽是将它们放到队列，当 调⽤了EXEC命令将执⾏所有命令。</p>
+<p>但是，Redis 的事务和我们平时理解的关系型数据库的事务不同。我们知道数据库事务具有四大特性:1.原子性，2.隔离性，3.持久性，4.—致性。</p>
+<p>1、原子性(Atomicity)︰事务是最小的执行单位，不允许分割。事务的原子性确保动作要么全部完成，要么完全不起作用;</p>
+<p>2、隔离性(Isolation)︰并发访问数据库时，一个用户的事务不被其他事务所干扰，各并发事务之间数据库是独立的;</p>
+<p>3、持久性(Durability) :一个事务被提交之后。它对数据库中数据的改变是持久的，即使数据库发生故障也不应该对其有任何影响.</p>
+<p>4、一致性(Consistency)︰执行事务前后，数据保持一致，多个事务对同一个数据读取的结果是相同的;</p>
+<p><strong>Redis是不支持roll back 的，因而不满足原子性的(而且不满足持久性)。</strong></p>
+<p>Redis官网也解释了自己为啥不支持回滚。简单来说就是Redis开发者们觉得没必要支持回滚，这样更简单便捷并且性能更好。Redls开发者觉得即使命令执行错误也应该在开发过程中就被发现而不是生产过程中。</p>
+<p>Redis会将一个事务中的所有命令序列化，然后按顺序执行。</p>
+<p>1.redis 不支持回滚”Redis在事务失败时不进行回滚，而是继续执行余下的命令”，所以Redis的内部可以保持简单且快速。</p>
+<p>2.如果在一个事务中的命令出现错误，那么所有的命令都不会执行;</p>
+<p>3.如果在一个事务中出现运行错误，那么正确的命令会被执行。</p>
+<p>1 )MULTI命令用于开启一个事务，它总是返回OK。MULTI执行之后，客户端可以继续向服务器发送任意多条命令，这些命令不会立即被执行，而是被放到一个队列中，当EXEC命令被调用时，所有队列中的命令才会被执行。</p>
+<p>2)EXEC∶执行所有事务块内的命令。返回事务块内所有命令的返回值，按命令执行的先后顺序排列。当操作被打断时，返回空值nil 。</p>
+<p>3)通过调用DISCARD，客户端可以清空事务队列，并放弃执行事务，并且客户端会从事务状态中退出。</p>
+<p>4 )WATCH命令可以为Redis事务提供check-and-set ( CAS)行为。可以监控一个或多个键，一旦其中有一个键被修改（或删除），之后的事务就不会执行，监控一直持续到EXEC命令</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%E4%BA%8B%E5%8A%A1/" data-id="cl0j84jwl007304vhdise2gow" data-title="Redis事务" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis如何保证缓存和数据库数据的⼀致性？" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B0%E6%8D%AE%E7%9A%84%E2%BC%80%E8%87%B4%E6%80%A7%EF%BC%9F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T13:26:54.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B0%E6%8D%AE%E7%9A%84%E2%BC%80%E8%87%B4%E6%80%A7%EF%BC%9F/">如何保证缓存和数据库数据的⼀致性？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="如何保证缓存和数据库数据的⼀致性？"><a href="#如何保证缓存和数据库数据的⼀致性？" class="headerlink" title="如何保证缓存和数据库数据的⼀致性？"></a>如何保证缓存和数据库数据的⼀致性？</h1><p>Cache Aside Pattern中遇到写请求是这样的︰更新DB，然后直接删除cache 。<br>如果更新数据库成功，而删除缓存这一步失败的情况的话，简单说两个解决方案:</p>
+<ol>
+<li><p>缓存失效时间变短（不推荐，治标不治本)︰我们让缓存数据的过期时间变短，这样的话缓存就会从数据库中加载数据。另外，这种解决办法对于先操作缓存后操作数据库的场景不适用。</p>
+</li>
+<li><p>增加cache更新重试机制（常用)︰如果cache服务当前不可用导致缓存删除失败的话，我们就隔一段时间进行重试，重试次数可以自己定。如果多次重试还是失败的话，我们可以把当前更新失败的key存入队列中，等缓存服务可用之后，再将缓存中对应的 key删除即可。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B0%E6%8D%AE%E7%9A%84%E2%BC%80%E8%87%B4%E6%80%A7%EF%BC%9F/" data-id="cl0j84jwo007d04vh06mghy1h" data-title="如何保证缓存和数据库数据的⼀致性？" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis缓存雪崩" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T13:26:54.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9/">Redis缓存雪崩</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis缓存雪崩"><a href="#Redis缓存雪崩" class="headerlink" title="Redis缓存雪崩"></a>Redis缓存雪崩</h1><h2 id="1-什么是缓存雪崩"><a href="#1-什么是缓存雪崩" class="headerlink" title="1.什么是缓存雪崩?"></a>1.什么是缓存雪崩?</h2><p>我们可以简单的理解为︰由于原有缓存失效，新缓存未到期间(例如∶我们设置缓存时采用了相同的过期时间，在同一时刻出现大面积的缓存过期)，所有原本应该访问缓存的请求都去查询数据库了，而对数据库CPU和内存造成巨大压力，严重的会造成数据库宕机。从而形成一系列连锁反应，造成整个系统崩溃。</p>
+<p>实际上，缓存雪崩描述的就是这样一个简单的场景︰缓存在同一时间大面积的失效，后面的请求都直接落到了数据库上，造成数据库短时间内承受大量请求。这就好比雪崩一样，摧枯拉朽之势，数据库的压力可想而知，可能直接就被这么多请求弄宕机了。</p>
+<p>举个例子︰系统的缓存模块出了问题比如宕机导致不可用。造成系统的所有访问，都要走数据库。</p>
+<p>还有一种缓存雪崩的场景是:有一些被大量访问数据（热点缓存）在某一时刻大面积失效，导致对应的请求直接落到了数据库上。这样的情况，有下面几种解决办法:</p>
+<p>举个例子︰秒杀开始12个小时之前，我们统一存放了一批商品到Redis 中，设置的缓存过期时间也是12个小时，那么秒杀开始的时候，这些秒杀的商品的访问直接就失效了。导致的情况就是，相应的请求直接就落到了数据库上，就像雪崩一样可怕。</p>
+<p>解决办法:<br>大多数系统设计者考虑用加锁(最多的解决方案）或者队列的方式保证来保证不会有大量的线程对数据库一次性进行读写，从而避免失效时大量的并发请求落到底层存储系统上。还有一个简单方案就时讲缓存失效时间分散开。</p>
+<h2 id="2-有哪些解决办法-针对Redis-服务不可用的情况"><a href="#2-有哪些解决办法-针对Redis-服务不可用的情况" class="headerlink" title="2.有哪些解决办法?针对Redis 服务不可用的情况:"></a>2.有哪些解决办法?针对Redis 服务不可用的情况:</h2><p>1.采用Redis 集群，避免单机出现问题整个缓存服务都没办法使用。</p>
+<p>2.限流，避免同时处理大量的请求。</p>
+<p><strong>针对热点缓存失效的情况︰</strong></p>
+<p>1．设置不同的失效时间比如随机设置缓存的失效时间。</p>
+<p>2．缓存永不失效。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9/" data-id="cl0j84jwr007u04vh1qzba92q" data-title="Redis缓存雪崩" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis过期的数据的删除策略了解么？" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%E8%BF%87%E6%9C%9F%E7%9A%84%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T13:06:10.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%E8%BF%87%E6%9C%9F%E7%9A%84%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F/">过期的数据的删除策略了解么？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="过期的数据的删除策略了解么？"><a href="#过期的数据的删除策略了解么？" class="headerlink" title="过期的数据的删除策略了解么？"></a>过期的数据的删除策略了解么？</h1><p>如果假设你设置了一批 key只能存活1分钟，那么1分钟后，Redis 是怎么对这批 key进行删除的呢?</p>
+<p>常用的过期数据的删除策略就两个（重要!自己造缓存轮子的时候需要格外考虑的东西)︰</p>
+<ol>
+<li><p><strong>惰性删除</strong>︰只会在取出key的时候才对数据进行过期检查。这样对CPU最友好，但是可能会造成太多过期key没有被删除。</p>
+</li>
+<li><p><strong>定期删除</strong>︰每隔一段时间抽取一批 key执行删除过期key操作。并且，Redis 底层会通过限制删除操作执行的时长和频率来减少删除操作对CPU时间的影响。</p>
+</li>
+</ol>
+<p>定期删除对内存更加友好，惰性删除对CPU更加友好。两者各有千秋，<strong>所以Redis 采用的是定期删除+惰性&#x2F;懒汉式删除。</strong></p>
+<p>定期删除+惰性删除是如何工作的呢?</p>
+<p>定期删除，redis默认每个<strong>100ms</strong>检查，是否有过期的key,有过期key则删除。需要说明的是，redis不是每个100ms将所有的key检查一次，而是<strong>随机抽取</strong>进行检查(如果每隔100ms,全部key进行检查，redis岂不是卡死)。因此，如果只采用定期删除策略，会导致很多key到时间没有删除。于是，惰性删除派上用场。也就是说在你获取某个key的时候，redis会检查一下，这个key如果设置了过期时间那么是否过期了?如果过期了此时就会删除。</p>
+<p>但是，仅仅通过给key设置过期时间还是有问题的。因为还是可能存在定期删除和惰性删除漏掉了很多过期key 的情况。这样就导致大量过期key堆积在内存里，然后就Out of memory了。</p>
+<p>怎么解决这个问题呢?答案就是: Redis内存淘汰机制。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%E8%BF%87%E6%9C%9F%E7%9A%84%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F/" data-id="cl0j84jws008004vhduh1dfgm" data-title="过期的数据的删除策略了解么？" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis6.0之后为何引入了多线程？" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis6.0%E4%B9%8B%E5%90%8E%E4%B8%BA%E4%BD%95%E5%BC%95%E5%85%A5%E4%BA%86%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%9F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T12:55:25.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis6.0%E4%B9%8B%E5%90%8E%E4%B8%BA%E4%BD%95%E5%BC%95%E5%85%A5%E4%BA%86%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%9F/">redis6.0之后为何引入了多线程？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Redis6.0引入多线程主要是为了提高网络IO读写性能，因为这个算是Redis 中的一个性能瓶颈(Redis 的瓶颈主要受限于内存和网络)。<br>虽然，Redis6.0引入了多线程，但是Redis的多线程只是在网络数据的读写这类耗时操作上使用了，执行命令仍然是单线程顺序执行。因此，你也不需要担心线程安全问题。<br>Redis6.0的多线程默认是禁用的，只使用主线程。如需开启需要修改redis配置文<code>redis.conf</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">io-threads-do-reads yes</span><br></pre></td></tr></table></figure>
+
+<p>开启多线程后，还需要设置线程数，否则是不⽣效的。同样需要修改 redis 配置⽂件 redis.conf :</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">io-threads 4 #官⽹建议4核的机器建议设置为2或3个线程，8核的建议设置为6个线程</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis6.0%E4%B9%8B%E5%90%8E%E4%B8%BA%E4%BD%95%E5%BC%95%E5%85%A5%E4%BA%86%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="cl0j84jwk006y04vh8k06gsfk" data-title="redis6.0之后为何引入了多线程？" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis单线程模型" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T12:50:53.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/">Redis单线程模型</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis单线程模型详解"><a href="#Redis单线程模型详解" class="headerlink" title="Redis单线程模型详解"></a>Redis单线程模型详解</h1><p>Redis是单进程单线程的，redis利用队列技术将并发访问变为串行访问，消除了传统数据库串行控制的开销。</p>
+<p>Redis 基于 Reactor模式来设计开发了自己的一套高效的事件处理模型(Netty的线程模型也基于Reactor模式,Reactor模式不愧是高性能IO的基石)，这套事件处理模型对应的是Redis中的文件事件处理器（file event handler)。由于文件事件处理器（file event handler)是单线程方式运行的，所以我们一般都说Redis是单线程模型。</p>
+<p>既然是单线程，那怎么监听大量的客户端连接呢?</p>
+<p>Redis通过IO多路复用程序来监听来自客户端的大量连接（或者说是监听多个socket) ,它会将感兴趣的事件及类型(读、写)注册到内核中并监听每个事件是否发生。</p>
+<p>这样的好处非常明显:VO多路复用技术的使用让Redis 不需要额外创建多余的线程来监听客户端的大量连接，降低了资源的消耗（和NIO中的Selector组件很像)。</p>
+<p>另外, Redis服务器是一个事件驱动程序，服务器需要处理两类事件:1.文件事件;2.时间事件。</p>
+<p>时间事件不需要多花时间了解，我们接触最多的还是文件事件（(客户端进行读取写入等操作，涉及一系列网络通信)。</p>
+<p>《Redis 设计与实现》有⼀段话是如是介绍⽂件事件的，我觉得写得挺不错。</p>
+<blockquote>
+<p>Redis 基于 Reactor模式开发了自己的网络事件处理器︰这个处理器被称为文件事件处理器(file event handler)。文件事件处理器使用IO多路复用(multiplexing)程序来同时监听多个套接字，并根据套接字目前执行的任务来为套接字关联不同的事件处理器。<br>当被监听的套接字准备好执行连接应答(accept)、读取(read) .写入(write)、关闭(close)等操作时，与操作相对应的文件事件就会产生，这时文件事件处理器就会调用套接字之前关联好的事件处理器来处理这些事件。<br>虽然文件事件处理器以单线程方式运行，但通过使用VO多路复用程序来监听多个套接字，文件事件处理器既实现了高性能的网络通信模型，又可以很好地与Redis 服务器中其他同样以单线程方式运行的模块进行对接，这保持了Redis内部单线程设计的简单性。</p>
+</blockquote>
+<p>可以看出，⽂件事件处理器（file event handler）主要是包含 4 个部分： </p>
+<p>多个 socket（客户端连接） </p>
+<p>IO 多路复⽤程序（⽀持多个客户端连接的关键）</p>
+<p>⽂件事件分派器（将 socket 关联到相应的事件处理器） </p>
+<p>事件处理器（连接应答处理器、命令请求处理器、命令回复处理器)</p>
+<p><img src="/1.png" alt="1"></p>
+<p><img src="E:\MyBolg\source_posts\Redis单线程模型\1.png" alt="1"></p>
+<h1 id="单线程的redis为什么这么快"><a href="#单线程的redis为什么这么快" class="headerlink" title="单线程的redis为什么这么快"></a>单线程的redis为什么这么快</h1><p>(一)纯内存操作</p>
+<p>(二)单线程操作，避免了频繁的上下文切换</p>
+<p>(三)采用了非阻塞VO多路复用机制</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/" data-id="cl0j84jwn007a04vh85zt2ow8" data-title="Redis单线程模型" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis常见数据结构" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T12:16:20.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">Redis常见数据结构</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis常见数据结构"><a href="#Redis常见数据结构" class="headerlink" title="Redis常见数据结构"></a>Redis常见数据结构</h1><h2 id="1-string"><a href="#1-string" class="headerlink" title="1. string"></a>1. string</h2><ol>
+<li>介绍 ：string 数据结构是简单的 key-value 类型。虽然 Redis 是⽤ C 语⾔写的，但是 Redis 并没有使⽤ C 的字符串表示，⽽是⾃⼰构建了⼀种 简单动态字符串（simple dynamic string，SDS）。相⽐于 C 的原⽣字符串，Redis 的 SDS 不光可以保存⽂本数据还可以保存 ⼆进制数据，并且获取字符串⻓度复杂度为 O(1)（C 字符串为 O(N)）,除此之外,Redis 的 SDS API 是安全的，不会造成缓冲区溢出。 </li>
+<li>常⽤命令: set,get,strlen,exists,dect,incr,setex 等等。 </li>
+<li>应⽤场景 ：⼀般常⽤在需要计数的场景，⽐如⽤户的访问次数、热点⽂章的点赞转发数量等 等。</li>
+<li><strong>一个字符串类型的值能存储最大容量是多少？</strong>512M</li>
+</ol>
+<p>普通字符串的基本操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set key value #设置 key-value 类型的值</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get key # 根据 key 获得对应的 value</span><br><span class="line">&quot;value&quot;</span><br><span class="line">127.0.0.1:6379&gt; exists key # 判断某个 key 是否存在</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; strlen key # 返回 key 所储存的字符串值的⻓度。</span><br><span class="line">(integer) 5</span><br><span class="line">127.0.0.1:6379&gt; del key # 删除某个 key 对应的值</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; get key</span><br><span class="line">(nil)</span><br></pre></td></tr></table></figure>
+
+<p>批量设置 :</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; mset key1 value1 key2 value2 # 批量设置 key-value 类型的值</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; mget key1 key2 # 批量获取多个 key 对应的 value</span><br><span class="line">1) &quot;value1&quot;</span><br><span class="line">2) &quot;value2</span><br></pre></td></tr></table></figure>
+
+<p>计数器（字符串的内容为整数的时候可以使⽤）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set number 1</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; incr number # 将 key 中储存的数字值增⼀</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; get number</span><br><span class="line">&quot;2&quot;</span><br><span class="line">127.0.0.1:6379&gt; decr number # 将 key 中储存的数字值减⼀</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; get number</span><br><span class="line">&quot;1&quot;</span><br></pre></td></tr></table></figure>
+
+<p>过期：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; expire key 60 # 数据在 60s 后过期</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; setex key 60 value # 数据在 60s 后过期 (setex:[set] + [ex]pire)</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; ttl key # 查看数据还有多久过期</span><br><span class="line">(integer) 56</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-list"><a href="#2-list" class="headerlink" title="2. list"></a>2. list</h2><ol>
+<li>介绍 ：list 即是 链表。链表是⼀种⾮常常⻅的数据结构，特点是易于数据元素的插⼊和删除 并且且可以灵活调整链表⻓度，但是链表的随机访问困难。许多⾼级编程语⾔都内置了链表 的实现⽐如 Java 中的 LinkedList，但是 C 语⾔并没有实现链表，所以 Redis 实现了⾃⼰ 的链表数据结构。Redis 的 list 的实现为⼀个 双向链表，即可以⽀持反向查找和遍历，更⽅ 便操作，不过带来了部分额外的内存开销。</li>
+<li>常⽤命令: rpush,lpop,lpush,rpop,lrangellen 等。</li>
+<li>应⽤场景: 发布与订阅或者说消息队列、慢查询</li>
+</ol>
+<p>通过 rpush&#x2F;lpop 实现队列：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; rpush myList value1 # 向 list 的头部（右边）添加元素</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; rpush myList value2 value3 # 向list的头部（最右边）添加多个元素</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; lpop myList # 将 list的尾部(最左边)元素取出</span><br><span class="line">&quot;value1&quot;</span><br><span class="line">127.0.0.1:6379&gt; lrange myList 0 1 # 查看对应下标的list列表， 0 为 start,1为 end</span><br><span class="line">1) &quot;value2&quot;</span><br><span class="line">2) &quot;value3&quot;</span><br><span class="line">127.0.0.1:6379&gt; lrange myList 0 -1 # 查看列表中的所有元素，-1表示倒数第⼀</span><br><span class="line">1) &quot;value2&quot;</span><br><span class="line">2) &quot;value3&quot;</span><br></pre></td></tr></table></figure>
+
+<p>通过 rpush&#x2F;rpop 实现栈：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; rpush myList2 value1 value2 value3</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; rpop myList2 # 将 list的头部(最右边)元素取出</span><br><span class="line">&quot;value3</span><br></pre></td></tr></table></figure>
+
+<p><img src="/1.png" alt="1"></p>
+<p><img src="E:\MyBolg\source_posts\Redis常见数据结构\1.png" alt="1"></p>
+<p>通过 lrange 查看对应下标范围的列表元素：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; rpush myList value1 value2 value3</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; lrange myList 0 1 # 查看对应下标的list列表， 0 为 start,1为 end</span><br><span class="line">1) &quot;value1&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">127.0.0.1:6379&gt; lrange myList 0 -1 # 查看列表中的所有元素，-1表示倒数第⼀</span><br><span class="line">1) &quot;value1&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">3) &quot;value3&quot;</span><br></pre></td></tr></table></figure>
+
+<p>通过 lrange 命令，你可以基于 list 实现分⻚查询，性能⾮常⾼！ </p>
+<p>通过 llen 查看链表⻓度:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; llen myList</span><br><span class="line">(integer) </span><br></pre></td></tr></table></figure>
+
+<h2 id="3-hash"><a href="#3-hash" class="headerlink" title="3 hash"></a>3 hash</h2><ol>
+<li>介绍 ：hash 类似于 JDK1.8 前的 HashMap，内部实现也差不多(数组 + 链表)。不过， Redis 的 hash 做了更多优化。另外，hash 是⼀个 string 类型的 field 和 value 的映射表， 特别适合⽤于存储对象，后续操作的时候，你可以直接仅仅修改这个对象中的某个字段的 值。 ⽐如我们可以 hash 数据结构来存储⽤户信息，商品信息等等。</li>
+<li>常⽤命令： hset,hmset,hexists,hget,hgetall,hkeys,hvals 等。</li>
+<li>应⽤场景: 系统中对象数据的存储。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hset userInfoKey name &quot;guide&quot; description &quot;dev&quot; age &quot;24&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; hexists userInfoKey name # 查看 key 对应的 value中指定的字段是否存</span><br><span class="line">在。</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; hget userInfoKey name # 获取存储在哈希表中指定字段的值。</span><br><span class="line">&quot;guide&quot;</span><br><span class="line">127.0.0.1:6379&gt; hget userInfoKey age</span><br><span class="line">&quot;24&quot;</span><br><span class="line">127.0.0.1:6379&gt; hgetall userInfoKey # 获取在哈希表中指定 key 的所有字段和值</span><br><span class="line">1) &quot;name&quot;</span><br><span class="line">2) &quot;guide&quot;</span><br><span class="line">3) &quot;description&quot;</span><br><span class="line">4) &quot;dev&quot;</span><br><span class="line">5) &quot;age&quot;</span><br><span class="line">6) &quot;24&quot;</span><br><span class="line">127.0.0.1:6379&gt; hkeys userInfoKey # 获取 key 列表</span><br><span class="line">1) &quot;name&quot;</span><br><span class="line">2) &quot;description&quot;</span><br><span class="line">3) &quot;age&quot;</span><br><span class="line">127.0.0.1:6379&gt; hvals userInfoKey # 获取 value 列表</span><br><span class="line">1) &quot;guide&quot;</span><br><span class="line">2) &quot;dev&quot;</span><br><span class="line">3) &quot;24&quot;</span><br><span class="line">127.0.0.1:6379&gt; hset userInfoKey name &quot;GuideGeGe&quot; # 修改某个字段对应的值</span><br><span class="line">127.0.0.1:6379&gt; hget userInfoKey name</span><br><span class="line">&quot;GuideGeGe</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-set"><a href="#4-set" class="headerlink" title="4. set"></a>4. set</h2><ol>
+<li>介绍 ： set 类似于 Java 中的 HashSet 。Redis 中的 set 类型是⼀种⽆序集合，集合中的元 素没有先后顺序。当你需要存储⼀个列表数据，⼜不希望出现重复数据时，set 是⼀个很好 的选择，并且 set 提供了判断某个成员是否在⼀个 set 集合内的重要接⼝，这个也是 list 所 不能提供的。可以基于 set 轻易实现交集、并集、差集的操作。⽐如：你可以将⼀个⽤户所 有的关注⼈存在⼀个集合中，将其所有粉丝存在⼀个集合。Redis 可以⾮常⽅便的实现如共 同关注、共同粉丝、共同喜好等功能。这个过程也就是求交集的过程。 </li>
+<li>常⽤命令： sadd,spop,smembers,sismember,scard,sinterstore,sunion 等。 </li>
+<li>应⽤场景: 需要存放的数据不能重复以及需要获取多个数据源交集和并集等场景</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sadd mySet value1 value2 # 添加元素进去</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; sadd mySet value1 # 不允许有重复元素</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; smembers mySet # 查看 set 中所有的元素</span><br><span class="line">1) &quot;value1&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">127.0.0.1:6379&gt; scard mySet # 查看 set 的⻓度</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; sismember mySet value1 # 检查某个元素是否存在set 中，只能接收单个元</span><br><span class="line">素</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd mySet2 value2 value3</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; sinterstore mySet3 mySet mySet2 # 获取 mySet 和 mySet2 的交集并</span><br><span class="line">存放在 mySet3 中</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; smembers mySet3</span><br><span class="line">1) &quot;value2&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="5-sorted-set"><a href="#5-sorted-set" class="headerlink" title="5. sorted set"></a>5. sorted set</h2><ol>
+<li>介绍： 和 set 相⽐，sorted set 增加了⼀个权重参数 score，使得集合中的元素能够按 score 进⾏有序排列，还可以通过 score 的范围来获取元素的列表。有点像是 Java 中 HashMap 和 TreeSet 的结合体。 </li>
+<li>常⽤命令：zadd,zcard,zscore,zrange,zrevrange,zrem 等。</li>
+<li>应⽤场景： 需要对数据根据某个权重进⾏排序的场景。⽐如在直播系统中，实时排⾏信息包 含直播间在线⽤户列表，各种礼物排⾏榜，弹幕消息（可以理解为按消息维度的消息排⾏ 榜）等信息。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zadd myZset 3.0 value1 # 添加元素到 sorted set 中 3.0 为权重</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd myZset 2.0 value2 1.0 value3 # ⼀次添加多个元素</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; zcard myZset # 查看 sorted set 中的元素数量</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; zscore myZset value1 # 查看某个 value 的权重</span><br><span class="line">&quot;3&quot;</span><br><span class="line">127.0.0.1:6379&gt; zrange myZset 0 -1 # 顺序输出某个范围区间的元素，0 -1 表示输出所有元</span><br><span class="line">素</span><br><span class="line">1) &quot;value3&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">3) &quot;value1&quot;</span><br><span class="line">127.0.0.1:6379&gt; zrange myZset 0 1 # 顺序输出某个范围区间的元素，0 为 start 1 为</span><br><span class="line">stop</span><br><span class="line">1) &quot;value3&quot;</span><br><span class="line">2) &quot;value2&quot;</span><br><span class="line">127.0.0.1:6379&gt; zrevrange myZset 0 1 # 逆序输出某个范围区间的元素，0 为 start 1</span><br><span class="line">为 stop</span><br><span class="line">1) &quot;value1</span><br><span class="line">2) &quot;value2&quot;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" data-id="cl0j84jwp007h04vh7bf8glc5" data-title="Redis常见数据结构" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis 内存淘汰机制了解么？" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%20%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T11:53:27.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%20%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F/">Redis 内存淘汰机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis-内存淘汰机制"><a href="#Redis-内存淘汰机制" class="headerlink" title="Redis 内存淘汰机制"></a>Redis 内存淘汰机制</h1><blockquote>
+<p> 相关问题：MySQL ⾥有 2000w 数据，Redis 中只存 20w 的数据，如何保证 Redis 中的数 据都是热点数据?</p>
+</blockquote>
+<p>Redis提供6种数据淘汰策略:</p>
+<ol>
+<li><p><strong>volatile-Iru (least recently used)</strong>:从已设置过期时间的数据集(server.db[i].expires)中挑选<strong>最近最少使用</strong>的数据淘汰</p>
+</li>
+<li><p><strong>volatile-ttl</strong>:从已设置过期时间的数据集(server.db[i].expires)中挑选<strong>将要过期</strong>的数据淘汰</p>
+</li>
+<li><p><strong>volatile-random</strong>:从已设置过期时间的数据集(server.db[i].expires）中<strong>任意</strong>选择数据淘汰</p>
+</li>
+<li><p><strong>allkeys-lru (least recently used)</strong>:当内存不足以容纳新写入数据时，在键空间中，移除<strong>最近最少使用</strong>的key(这个是最常用的)</p>
+</li>
+<li><p><strong>allkeys-random</strong>:从数据集(server.db[i].dict)中<strong>任意选择</strong>数据淘汰</p>
+</li>
+<li><p><strong>no-eviction</strong>:禁止驱逐数据，也就是说当内存不足以容纳新写入数据时，<strong>新写入操作会报错</strong>。这个应该没人使用吧!</p>
+</li>
+</ol>
+<p>  4.0版本后增加以下两种:</p>
+<ol start="7">
+<li><p>**volatile-lfu (least frequently used)**︰从已设置过期时间的数据集(server.db[i].expires)中挑选最不经常使用的数据淘汰</p>
+</li>
+<li><p><strong>alkeys-lfu</strong> (least frequently used):当内存不足以容纳新写入数据时，在键空间中，移除最不经常使用的key</p>
+</li>
+</ol>
+<h1 id="MysQL里有2000w数据，redis-中只存20w的数据，如何保证redis-中的数据都是热点数据"><a href="#MysQL里有2000w数据，redis-中只存20w的数据，如何保证redis-中的数据都是热点数据" class="headerlink" title="MysQL里有2000w数据，redis 中只存20w的数据，如何保证redis 中的数据都是热点数据?"></a>MysQL里有2000w数据，redis 中只存20w的数据，如何保证redis 中的数据都是热点数据?</h1><p>Redis内存数据集大小上升到一定大小的时候，就会施行数据淘汰策略。相关知识:Redis提供6种数据淘汰策略:</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%20%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F/" data-id="cl0j84jwg006e04vha69pfvw4" data-title="Redis 内存淘汰机制" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis 和 Memcached 的区别和共同点" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%20%E5%92%8C%20Memcached%20%E7%9A%84%E5%8C%BA%E5%88%AB%E5%92%8C%E5%85%B1%E5%90%8C%E7%82%B9/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T11:53:27.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%20%E5%92%8C%20Memcached%20%E7%9A%84%E5%8C%BA%E5%88%AB%E5%92%8C%E5%85%B1%E5%90%8C%E7%82%B9/">说⼀下 Redis 和 Memcached 的区别和共同点</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="说⼀下-Redis-和-Memcached-的区别和共同点"><a href="#说⼀下-Redis-和-Memcached-的区别和共同点" class="headerlink" title="说⼀下 Redis 和 Memcached 的区别和共同点"></a>说⼀下 Redis 和 Memcached 的区别和共同点</h1><p>现在公司一般都是用Redis来实现缓存，而且 Redis自身也越来越强大了!不过，了解Redis和Memcached的区别和共同点，有助于我们在做相应的技术选型的时候，能够做到有理有据!</p>
+<p>共同点︰</p>
+<p>1.都是基于内存的数据库，—般都用来当做缓存使用。</p>
+<p>2.都有过期策略。</p>
+<p>3.两者的性能都非常高。</p>
+<p>区别:</p>
+<ol>
+<li>Redis支持更丰富的数据类型(支持更复杂的应用场景)。Redis 不仅仅支持简单的k&#x2F;v类型的数据，同时还提供list，set,zset,hash等数据结构的存储。Memcached 只支持最简单的k&#x2F;v数据类型。</li>
+<li>Redls支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用,而 Memecache把数据全部存在内存之中。</li>
+<li>Redis有灾难恢复机制。因为可以把缓存中的数据持久化到磁盘上。</li>
+<li>Redis 在服务器内存使用完之后，可以将不用的数据放到磁盘上。但是，Memcached在服务器内存使用完之后，就会直接报异常。</li>
+<li>Memcached没有原生的集群模式，需要依靠客户端来实现往集群中分片写入数据;但是Redls目前是原生支持cluster 模式的.</li>
+<li>Memcached是多线程，非阻塞IO复用的网络模型;Redls使用单线程的多路IO复用模型。(Redis 6.o引入了多线程IO)</li>
+<li>Redls支持发布订阅模型、Lua脚本、事务等功能，而Memcached不支持。并且，Redls<br>  支持更多的编程语言。</li>
+<li>Memcached过期数据的删除策略只用了惰性删除，而Redls同时使用了惰性删除与定期删除。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%20%E5%92%8C%20Memcached%20%E7%9A%84%E5%8C%BA%E5%88%AB%E5%92%8C%E5%85%B1%E5%90%8C%E7%82%B9/" data-id="cl0j84jwh006h04vhhz3hcklv" data-title="说⼀下 Redis 和 Memcached 的区别和共同点" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis 持久化机制" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%20%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T11:53:27.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%20%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/">Redis持久化机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis持久化机制-怎么保证-Redis-挂掉之后再重启数据可以进⾏恢复"><a href="#Redis持久化机制-怎么保证-Redis-挂掉之后再重启数据可以进⾏恢复" class="headerlink" title="Redis持久化机制(怎么保证 Redis 挂掉之后再重启数据可以进⾏恢复)"></a>Redis持久化机制(怎么保证 Redis 挂掉之后再重启数据可以进⾏恢复)</h1><p>很多时候我们需要持久化数据也就是将内存中的数据写入到硬盘里面，大部分原因是为了之后重用数据（比如重启机器、机器故障之后恢复数据)，或者是为了防止系统故障而将数据备份到一个远程位置。</p>
+<p>Redis 不同于Memcached 的很重要一点就是，Redis支持持久化，而且支持两种不同的持久化操作。Redis 的一种持久化方式叫快照(snapshotting，RDB)，另一种方式是只追加文件(append-only file,AOF)。这两种方法各有千秋，下面我会详细这两种持久化方法是什么，怎么用，如何选择适合自己的持久化方法。</p>
+<h2 id="快照-snapshotting-持久化-RDB"><a href="#快照-snapshotting-持久化-RDB" class="headerlink" title="快照(snapshotting)持久化(RDB)"></a>快照(snapshotting)持久化(RDB)</h2><p>Redis 可以通过创建快照来获得存储在内存里面的数据在某个时间点上的副本。</p>
+<p>Redis 创建快照之后，可以对快照进行备份，可以将快照复制到其他服务器从而创建具有相同数据的服务器副本(Redis主从结构，主要用来提高Redis 性能)，还可以将快照留在原地以便重启服务器的时候使用。</p>
+<p>快照持久化是Redis默认采用的持久化方式，在Redis.conf配置文件中默认有此下配置:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">save 900 1 #在900秒(15分钟)之后，如果⾄少有1个key发⽣变化，Redis就会⾃动触发</span><br><span class="line">BGSAVE命令创建快照。</span><br><span class="line">save 300 10 #在300秒(5分钟)之后，如果⾄少有10个key发⽣变化，Redis就会⾃动触发</span><br><span class="line">BGSAVE命令创建快照。</span><br><span class="line">save 60 10000 #在60秒(1分钟)之后，如果⾄少有10000个key发⽣变化，Redis就会⾃动</span><br><span class="line">触发BGSAVE命令创建快照。</span><br></pre></td></tr></table></figure>
+
+<h2 id="AOF（append-only-file）持久化"><a href="#AOF（append-only-file）持久化" class="headerlink" title="AOF（append-only file）持久化"></a>AOF（append-only file）持久化</h2><p>与快照持久化相⽐，AOF 持久化 的实时性更好，因此已成为主流的持久化⽅案。默认情况下 Redis 没有开启 AOF（append only file）⽅式的持久化，可以通过 appendonly 参数开启： 开启 AOF 持久化后每执⾏⼀条会更改 Redis 中的数据的命令，Redis 就会将该命令写⼊硬盘中 的 AOF ⽂件。AOF ⽂件的保存位置和 RDB ⽂件的位置相同，都是通过 dir 参数设置的，默认的 ⽂件名是 appendonly.aof。</p>
+<p> 在 Redis 的配置⽂件中存在三种不同的 AOF 持久化⽅式，它们分别是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">appendfsync always #每次有数据修改发⽣时都会写⼊AOF⽂件,这样会严重降低Redis的速度</span><br><span class="line"></span><br><span class="line">appendfsync everysec #每秒钟同步⼀次，显示地将多个写命令同步到硬盘 </span><br><span class="line"></span><br><span class="line">appendfsync no #让操作系统决定何时进⾏同步</span><br></pre></td></tr></table></figure>
+
+<p>为了兼顾数据和写⼊性能，⽤户可以考虑 appendfsync everysec 选项 ，让 Redis 每秒同步⼀次 AOF ⽂件，Redis 性能⼏乎没受到任何影响。⽽且这样即使出现系统崩溃，⽤户最多只会丢失⼀ 秒之内产⽣的数据。当硬盘忙于执⾏写⼊操作的时候，Redis 还会优雅的放慢⾃⼰的速度以便适 应硬盘的最⼤写⼊速度。</p>
+<p>拓展:Redis 4.0对于持久化机制的优化</p>
+<p>Redis 4.0开始支持RDB和AOF的混合持久化(默认关闭，可以通过配置项<br>aof-use-rdb-preamble开启)。</p>
+<p>如果把混合持久化打开，AOF重写的时候就直接把 RDB的内容写到AOF文件开头。这样做的好处是可以结合RDB和AOF 的优点,快速加载同时避免丢失过多的数据。当然缺点也是有的，AOF里面的RDB部分是压缩格式不再是AOF格式，可读性较差。</p>
+<p>补充内容:AOF重写</p>
+<p>AOF重写可以产生一个新的AOF文件，这个新的AOF文件和原有的AOF文件所保存的数据库状态一样，但体积更小。</p>
+<p>AOF重写是一个有歧义的名字，该功能是通过读取数据库中的键值对来实现的，程序无须对现有AOF文件进行任何读入、分析或者写入操作。</p>
+<p>在执行BGREWRITEAOF命令时，Redis 服务器会维护一个AOF重写缓冲区，该缓冲区会在子进程创建新AOF文件期间，记录服务器执行的所有写命令。当子进程完成创建新AOF文件的工作之后，服务器会将重写缓冲区中的所有内容追加到新AOF文件的末尾，使得新旧两个AOF文件所保存的数据库状态一致。最后，服务器用新的AOF文件替换旧的AOF文件，以此来完成AOF文件重写操作</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%20%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/" data-id="cl0j84jwi006m04vhcg341hr3" data-title="Redis持久化机制" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

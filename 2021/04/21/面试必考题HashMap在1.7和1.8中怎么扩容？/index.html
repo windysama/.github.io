@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>HashMap在1.7和1.8中怎么扩容？ | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Hashmap的结构，1.7和1.8有哪些区别？（一） 真实面试题之：Hashmap的结构，1.7和1.8有哪些区别不同点： （1）JDK1.7用的是头插法，而JDK1.8及之后使用的都是尾插法，那么他们为什么要这样做呢？因为JDK1.7是用单链表进行的纵向延伸，当采用头插法时会容易出现逆序且环形链表死循环问题。但是在JDK1.8之后是因为加入了红黑树使用尾插法，能够避免出现逆序且链表死循环的问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashMap在1.7和1.8中怎么扩容？">
+<meta property="og:url" content="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98HashMap%E5%9C%A81.7%E5%92%8C1.8%E4%B8%AD%E6%80%8E%E4%B9%88%E6%89%A9%E5%AE%B9%EF%BC%9F/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="Hashmap的结构，1.7和1.8有哪些区别？（一） 真实面试题之：Hashmap的结构，1.7和1.8有哪些区别不同点： （1）JDK1.7用的是头插法，而JDK1.8及之后使用的都是尾插法，那么他们为什么要这样做呢？因为JDK1.7是用单链表进行的纵向延伸，当采用头插法时会容易出现逆序且环形链表死循环问题。但是在JDK1.8之后是因为加入了红黑树使用尾插法，能够避免出现逆序且链表死循环的问题">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/%E6%89%A9%E5%AE%B9.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/面试必考题HashMap在1.7和1.8中怎么扩容？/扩容.png">
+<meta property="og:image" content="http://example.com/%E6%89%A9%E5%AE%B9%E6%B5%81%E7%A8%8B%E5%AF%B9%E6%AF%94%E5%9B%BE.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/面试必考题HashMap在1.7和1.8中怎么扩容？/扩容流程对比图.png">
+<meta property="og:image" content="http://example.com/%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/面试必考题HashMap在1.7和1.8中怎么扩容？/流程图.png">
+<meta property="og:image" content="http://example.com/hash%E5%86%B2%E7%AA%81.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/面试必考题HashMap在1.7和1.8中怎么扩容？/hash冲突.png">
+<meta property="og:image" content="http://example.com/hashmap%E7%89%B9%E7%82%B9.jpg">
+<meta property="og:image" content="e:/MyBolg/source_posts/面试必考题HashMap在1.7和1.8中怎么扩容？/hashmap特点.jpg">
+<meta property="og:image" content="http://example.com/%E5%8C%85%E8%A3%85%E7%B1%BB.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/面试必考题HashMap在1.7和1.8中怎么扩容？/包装类.png">
+<meta property="og:image" content="http://example.com/object%E7%B1%BB%E5%9E%8B.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/面试必考题HashMap在1.7和1.8中怎么扩容？/object类型.png">
+<meta property="article:published_time" content="2021-04-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-04-25T09:38:10.901Z">
+<meta property="article:author" content="Lee yunbo">
+<meta property="article:tag" content="MySql、面试题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/%E6%89%A9%E5%AE%B9.png">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-面试必考题HashMap在1.7和1.8中怎么扩容？" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98HashMap%E5%9C%A81.7%E5%92%8C1.8%E4%B8%AD%E6%80%8E%E4%B9%88%E6%89%A9%E5%AE%B9%EF%BC%9F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-20T16:00:00.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      HashMap在1.7和1.8中怎么扩容？
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Hashmap的结构，1-7和1-8有哪些区别？"><a href="#Hashmap的结构，1-7和1-8有哪些区别？" class="headerlink" title="Hashmap的结构，1.7和1.8有哪些区别？"></a>Hashmap的结构，1.7和1.8有哪些区别？</h1><h2 id="（一）-真实面试题之：Hashmap的结构，1-7和1-8有哪些区别"><a href="#（一）-真实面试题之：Hashmap的结构，1-7和1-8有哪些区别" class="headerlink" title="（一） 真实面试题之：Hashmap的结构，1.7和1.8有哪些区别"></a>（一） 真实面试题之：Hashmap的结构，1.7和1.8有哪些区别</h2><p>不同点：</p>
+<p>（1）JDK1.7用的是头插法，而JDK1.8及之后使用的都是尾插法，那么他们为什么要这样做呢？因为JDK1.7是用单链表进行的纵向延伸，当采用头插法时会容易出现逆序且环形链表死循环问题。但是在JDK1.8之后是因为加入了红黑树使用尾插法，能够避免出现逆序且链表死循环的问题。</p>
+<p>（2）扩容后数据存储位置的计算方式也不一样：</p>
+<ol>
+<li>在JDK1.7的时候是直接用hash值和需要扩容的二进制数进行&amp;按位与（这里就是为什么扩容的时候为啥一定必须是2的多少次幂的原因所在，因为如果只有2的n次幂的情况时最后一位二进制数才一定是1，这样能最大程度减少hash碰撞）（hash值 &amp; length-1）</li>
+<li>而在JDK1.8的时候直接用了JDK1.7的时候计算的规律，也就是扩容前的原始位置+扩容的大小值&#x3D;JDK1.8的计算方式，而不再是JDK1.7的那种异或的方法。但是这种方式就相当于只需要判断Hash值的新增参与运算的位是0还是1就直接迅速计算出了扩容后的储存方式</li>
+</ol>
+<p><img src="/%E6%89%A9%E5%AE%B9.png" alt="扩容"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题HashMap在1.7和1.8中怎么扩容？\扩容.png" alt="扩容"></p>
+<p>在计算hash值的时候，JDK1.7用了9次扰动处理&#x3D;4次位运算+5次异或，而JDK1.8只用了2次扰动处理&#x3D;1次位运算+1次异或。</p>
+<p><strong>扩容流程对比图：</strong></p>
+<p><img src="/%E6%89%A9%E5%AE%B9%E6%B5%81%E7%A8%8B%E5%AF%B9%E6%AF%94%E5%9B%BE.png" alt="扩容流程对比图"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题HashMap在1.7和1.8中怎么扩容？\扩容流程对比图.png" alt="扩容流程对比图"></p>
+<p><strong>（3）JDK1.7的时候使用的是数组+ 单链表的数据结构。但是在JDK1.8及之后时，使用的是数组+链表+红黑树的数据结构（当链表的深度达到8的时候，也就是默认阈值，就会自动扩容把链表转成红黑树的数据结构来把时间复杂度从O（n）变成O（logN）提高了效率）</strong></p>
+<p><img src="/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="流程图"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题HashMap在1.7和1.8中怎么扩容？\流程图.png" alt="流程图"></p>
+<p>**这里在重新进行补充两个问题：</p>
+<p><strong>（1）为什么在JDK1.7的时候是先进行扩容后进行插入，而在JDK1.8的时候则是先插入后进行扩容的呢？</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//其实就是当这个Map中实际插入的键值对的值的大小如果大于这个默认的阈值的时候（初始是16*0.75=12）的时候才会触发扩容，</span></span><br><span class="line"><span class="comment">//这个是在JDK1.8中的先插入后扩容</span></span><br><span class="line"><span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">            resize();</span><br></pre></td></tr></table></figure>
+
+<p>其实这个问题也是JDK8对HashMap中，主要是因为对链表转为红黑树进行的优化，因为你插入这个节点的时候有可能是普通链表节点，也有可能是红黑树节点，但是为什么1.8之后HashMap变为先插入后扩容的原因，我也有点不是很理解？欢迎来讨论这个问题？</p>
+<p>但是在JDK1.7中的话，是先进行扩容后进行插入的，就是当你发现你插入的桶是不是为空，如果不为空说明存在值就发生了hash冲突，那么就必须得扩容，但是如果不发生Hash冲突的话，说明当前桶是空的（后面并没有挂有链表），那就等到下一次发生Hash冲突的时候在进行扩容，但是当如果以后都没有发生hash冲突产生，那么就不会进行扩容了，减少了一次无用扩容，也减少了内存的使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">addEntry</span><span class="params">(<span class="type">int</span> hash, K key, V value, <span class="type">int</span> bucketIndex)</span> &#123;</span><br><span class="line">		<span class="comment">//这里当钱数组如果大于等于12（假如）阈值的话，并且当前的数组的Entry数组还不能为空的时候就扩容</span></span><br><span class="line">    　　<span class="keyword">if</span> ((size &gt;= threshold) &amp;&amp; (<span class="literal">null</span> != table[bucketIndex])) &#123;</span><br><span class="line">　　　　　　 <span class="comment">//扩容数组，比较耗时</span></span><br><span class="line">       　　 resize(<span class="number">2</span> * table.length);</span><br><span class="line">        　　hash = (<span class="literal">null</span> != key) ? hash(key) : <span class="number">0</span>;</span><br><span class="line">        　　bucketIndex = indexFor(hash, table.length);</span><br><span class="line">    　　&#125;</span><br><span class="line"></span><br><span class="line">    　　createEntry(hash, key, value, bucketIndex);</span><br><span class="line">　　&#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">void</span> <span class="title function_">createEntry</span><span class="params">(<span class="type">int</span> hash, K key, V value, <span class="type">int</span> bucketIndex)</span> &#123;</span><br><span class="line">    　　Entry&lt;K,V&gt; e = table[bucketIndex];</span><br><span class="line">　　　　<span class="comment">//把新加的放在原先在的前面，原先的是e，现在的是new，next指向e</span></span><br><span class="line">   　　 table[bucketIndex] = <span class="keyword">new</span> <span class="title class_">Entry</span>&lt;&gt;(hash, key, value, e);<span class="comment">//假设现在是new</span></span><br><span class="line">    　　size++;</span><br><span class="line">　　&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>（2）为什么在JDK1.8中进行对HashMap优化的时候，把链表转化为红黑树的阈值是8,而不是7或者不是20呢（面试蘑菇街问过）？</p>
+<p>如果选择6和8（如果链表小于等于6树还原转为链表，大于等于8转为树），中间有个差值7可以有效防止链表和树频繁转换。假设一下，如果设计成链表个数超过8则链表转换成树结构，链表个数小于8则树结构转换成链表，如果一个HashMap不停的插入、删除元素，链表个数在8左右徘徊，就会频繁的发生树转链表、链表转树，效率会很低。<br>还有一点重要的就是由于treenodes的大小大约是常规节点的两倍，因此我们仅在容器包含足够的节点以保证使用时才使用它们，当它们变得太小（由于移除或调整大小）时，它们会被转换回普通的node节点，容器中节点分布在hash桶中的频率遵循泊松分布，桶的长度超过8的概率非常非常小。所以作者应该是根据概率统计而选择了8作为阀值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Java中解释的原因</span></span><br><span class="line">  * Because TreeNodes are about twice the size of regular nodes, we</span><br><span class="line">    * use them only when bins contain enough nodes to warrant use</span><br><span class="line">    * (see TREEIFY_THRESHOLD). And when they become too <span class="title function_">small</span> <span class="params">(due to</span></span><br><span class="line"><span class="params">    * removal or resizing)</span> they are converted back to plain bins.  In</span><br><span class="line">    * usages with well-distributed user hashCodes, tree bins are</span><br><span class="line">    * rarely used.  Ideally, under random hashCodes, the frequency of</span><br><span class="line">    * nodes in bins follows a Poisson distribution</span><br><span class="line">    * (http:<span class="comment">//en.wikipedia.org/wiki/Poisson_distribution) with a</span></span><br><span class="line">    * parameter of about <span class="number">0.5</span> on average <span class="keyword">for</span> the <span class="keyword">default</span> resizing</span><br><span class="line">    * threshold of <span class="number">0.75</span>, although with a large variance because of</span><br><span class="line">    * resizing granularity. Ignoring variance, the expected</span><br><span class="line">    * occurrences of list size k <span class="title function_">are</span> <span class="params">(exp(-<span class="number">0.5</span>)</span> * pow(<span class="number">0.5</span>, k) /</span><br><span class="line">    * factorial(k)). The first values are:</span><br><span class="line">    *</span><br><span class="line">    * <span class="number">0</span>:    <span class="number">0.60653066</span></span><br><span class="line">    * <span class="number">1</span>:    <span class="number">0.30326533</span></span><br><span class="line">    * <span class="number">2</span>:    <span class="number">0.07581633</span></span><br><span class="line">    * <span class="number">3</span>:    <span class="number">0.01263606</span></span><br><span class="line">    * <span class="number">4</span>:    <span class="number">0.00157952</span></span><br><span class="line">    * <span class="number">5</span>:    <span class="number">0.00015795</span></span><br><span class="line">    * <span class="number">6</span>:    <span class="number">0.00001316</span></span><br><span class="line">    * <span class="number">7</span>:    <span class="number">0.00000094</span></span><br><span class="line">    * <span class="number">8</span>:    <span class="number">0.00000006</span></span><br><span class="line">    * more: less than <span class="number">1</span> in ten million</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="（二）哈希表如何解决Hash冲突？"><a href="#（二）哈希表如何解决Hash冲突？" class="headerlink" title="（二）哈希表如何解决Hash冲突？"></a>（二）哈希表如何解决Hash冲突？</h2><p><img src="/hash%E5%86%B2%E7%AA%81.png" alt="hash冲突"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题HashMap在1.7和1.8中怎么扩容？\hash冲突.png" alt="hash冲突"></p>
+<h2 id="（三）为什么HashMap具备下述特点：键-值（key-value）都允许为空、线程不安全、不保证有序、存储位置随时间变化"><a href="#（三）为什么HashMap具备下述特点：键-值（key-value）都允许为空、线程不安全、不保证有序、存储位置随时间变化" class="headerlink" title="（三）为什么HashMap具备下述特点：键-值（key-value）都允许为空、线程不安全、不保证有序、存储位置随时间变化"></a>（三）为什么HashMap具备下述特点：键-值（key-value）都允许为空、线程不安全、不保证有序、存储位置随时间变化</h2><p><img src="/hashmap%E7%89%B9%E7%82%B9.jpg" alt="hashmap特点"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题HashMap在1.7和1.8中怎么扩容？\hashmap特点.jpg" alt="hashmap特点"></p>
+<h2 id="（四）为什么-HashMap-中-String、Integer-这样的包装类适合作为-key-键"><a href="#（四）为什么-HashMap-中-String、Integer-这样的包装类适合作为-key-键" class="headerlink" title="（四）为什么 HashMap 中 String、Integer 这样的包装类适合作为 key 键"></a>（四）为什么 HashMap 中 String、Integer 这样的包装类适合作为 key 键</h2><p><img src="/%E5%8C%85%E8%A3%85%E7%B1%BB.png" alt="包装类"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题HashMap在1.7和1.8中怎么扩容？\包装类.png" alt="包装类"></p>
+<h2 id="（五）HashMap-中的-key若-Object类型，-则需实现哪些方法？"><a href="#（五）HashMap-中的-key若-Object类型，-则需实现哪些方法？" class="headerlink" title="（五）HashMap 中的 key若 Object类型， 则需实现哪些方法？"></a>（五）HashMap 中的 key若 Object类型， 则需实现哪些方法？</h2><p><img src="/object%E7%B1%BB%E5%9E%8B.png" alt="object类型"></p>
+<p><img src="E:\MyBolg\source_posts\面试必考题HashMap在1.7和1.8中怎么扩容？\object类型.png" alt="object类型"></p>
+<p>原文连接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36520235/article/details/82417949">https://blog.csdn.net/qq_36520235/article/details/82417949</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98HashMap%E5%9C%A81.7%E5%92%8C1.8%E4%B8%AD%E6%80%8E%E4%B9%88%E6%89%A9%E5%AE%B9%EF%BC%9F/" data-id="cl0j84jxy00c904vh74d62p2v" data-title="HashMap在1.7和1.8中怎么扩容？" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98HashMap%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%A7%A6%E5%8F%91%E6%89%A9%E5%AE%B9/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          面试必考题HashMap什么时候触发扩容
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98LRU%E5%92%8CLFU/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">面试必考题LRU和LFU</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

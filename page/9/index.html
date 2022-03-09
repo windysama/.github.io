@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="MyHomePage">
+<meta property="og:url" content="http://example.com/page/9/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Lee yunbo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-SpringIOCandAOP" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/SpringIOCandAOP/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T07:19:09.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/SpringIOCandAOP/">SpringIOCandAOP</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Spring-IoC-和-AOP"><a href="#Spring-IoC-和-AOP" class="headerlink" title="Spring IoC 和 AOP"></a>Spring IoC 和 AOP</h1><h2 id="loC"><a href="#loC" class="headerlink" title="loC"></a>loC</h2><p><strong>loC(Inverse of Control:控制反转)是一种设计思想，就是将原本在程序中手动创建对象的控制权，交由Spring框架来管理。loC在其他语言中也有应用，并非 Spring特有。loC容器是Spring 用来实现 loC的载体，loC容器实际上就是个Map (key，value) ,Map中存放的是各种对象。</strong></p>
+<p>将对象之间的相互依赖关系交给loC容器来管理，并由loC容器完成对象的注入。这样可以很大程度上简化应用的开发，把应用从复杂的依赖关系中解放出来。loC容器就像是一个工厂一样，当我们需要创建一个对象的时候，只需要配置好配置文件&#x2F;注解即可，完全不用考虑对象是如何被创建出来的。在实际项目中一个Service类可能有几百甚至上千个类作为它的底层，假如我们需要实例化这个Service，你可能要每次都要搞清这个 Service所有底层类的构造函数，这可能会把人逼疯。如果利用loC的话，你只需要配置好，然后在需要的地方引用就行了，这大大增加了项目的可维护性且降低了开发难度。</p>
+<p>Spring时代我们一般通过XML文件来配置Bean，后来开发人员觉得XML文件来配置不太好，于是 SpringBoot注解配置就慢慢开始流行起来。</p>
+<p>![Spring IOC初始化过程](Spring IOC初始化过程.png)</p>
+<p>![Spring IOC初始化过程](E:\MyBolg\source_posts\SpringIOCandAOP\Spring IOC初始化过程.png)</p>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p><strong>AOP(Aspect-Oriented Programming:面向切面编程)能够将那些与业务无关，却为业务模块所共同调用的逻辑或责任（例如事务处理、日志管理、权限控制等）封装起来，便于减少系统的重复代码，降低模块间的耦合度，并有利于未来的可拓展性和可维护性。</strong></p>
+<p>Spring AOP就是基于动态代理的，如果要代理的对象，实现了某个接口，那么Spring AOP会使用JDK Proxy，去创建代理对象，而对于没有实现接口的对象，就无法使用JDK Proxy去进行代理了，这时候Spring AOP会使用Cglib，这时候Spring AOP会使用Cglib生成一个被代理对象的子类来作为代理，如下图所示:</p>
+<p><img src="/AOP%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86.png" alt="AOP动态代理"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOCandAOP\AOP动态代理.png" alt="AOP动态代理"></p>
+<p>当然也可以使⽤ AspectJ ,Spring AOP 已经集成了AspectJ ，AspectJ 应该算的上是 Java ⽣ 态系统中最完整的 AOP 框架了。</p>
+<p>使⽤ AOP 之后可以把⼀些通⽤功能抽象出来，在需要⽤到的地⽅直接使⽤即可，这样⼤⼤ 简化了代码量。我们需要增加新功能时也⽅便，这样也提⾼了系统扩展性。⽇志功能、事务管理 等等场景都⽤到了 AOP 。</p>
+<h2 id="Spring-AOP-和-AspectJ-AOP-有什么区别？"><a href="#Spring-AOP-和-AspectJ-AOP-有什么区别？" class="headerlink" title="Spring AOP 和 AspectJ AOP 有什么区别？"></a>Spring AOP 和 AspectJ AOP 有什么区别？</h2><p>Spring AOP 属于运⾏时增强，⽽ AspectJ 是编译时增强。 Spring AOP 基于代理(Proxying)， ⽽ AspectJ 基于字节码操作(Bytecode Manipulation)。 </p>
+<p>Spring AOP 已经集成了 AspectJ ，AspectJ 应该算的上是 Java ⽣态系统中最完整的 AOP 框 架了。AspectJ 相⽐于 Spring AOP 功能更加强⼤，但是 Spring AOP 相对来说更简单， 如果我们的切⾯比较少，那么两者性能差异不⼤。但是，当切⾯太多的话，最好选择 AspectJ ， 它⽐Spring AOP 快很多。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/SpringIOCandAOP/" data-id="cl0j84jwy008p04vhh8ixelju" data-title="SpringIOCandAOP" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-SpringBoot请介绍自动配置的原理" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/SpringBoot%E8%AF%B7%E4%BB%8B%E7%BB%8D%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E7%9A%84%E5%8E%9F%E7%90%86/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T07:19:09.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Springboot/">Springboot</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/SpringBoot%E8%AF%B7%E4%BB%8B%E7%BB%8D%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E7%9A%84%E5%8E%9F%E7%90%86/">SpringBoot请介绍自动配置的原理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="SpringBoot请介绍自动配置的原理"><a href="#SpringBoot请介绍自动配置的原理" class="headerlink" title="SpringBoot请介绍自动配置的原理"></a>SpringBoot请介绍自动配置的原理</h1>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/SpringBoot%E8%AF%B7%E4%BB%8B%E7%BB%8D%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E7%9A%84%E5%8E%9F%E7%90%86/" data-id="cl0j84jwz008q04vh6fjp8inl" data-title="SpringBoot请介绍自动配置的原理" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-SpringIOC容器面试专题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/SpringIOC%E5%AE%B9%E5%99%A8%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T07:19:09.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/SpringIOC%E5%AE%B9%E5%99%A8%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98/">SpringIOC容器面试专题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="1-Spring源码环境搭建过程中遇到过什么问题"><a href="#1-Spring源码环境搭建过程中遇到过什么问题" class="headerlink" title="1. Spring源码环境搭建过程中遇到过什么问题?"></a>1. Spring源码环境搭建过程中遇到过什么问题?</h2><h2 id="2-Spring将配置解析成什么后注册到容器的"><a href="#2-Spring将配置解析成什么后注册到容器的" class="headerlink" title="2. Spring将配置解析成什么后注册到容器的?"></a>2. Spring将配置解析成什么后注册到容器的?</h2><p>Spring是通过IoC容器对Bean进行管理的，而Bean的初始化主要分为两个过程：Bean的注册和Bean实例化。Bean的注册主要是指Spring通过读取配置文件获取各个bean的声明信息，并且对这些信息进行注册的过程。Bean的实例化则指的是Spring通过Bean的注册信息对各个Bean进行实例化的过程。</p>
+<p><strong>向Spring容器中注入Bean对象的四种方式：</strong></p>
+<blockquote>
+<p>1.通过@Component: 你随便用</p>
+<p>@Repository:一般用在Dao实现类上。</p>
+<p>@Service：一般用在Service层中的Service实现类上。</p>
+<p>@Controller+ComponentScan：一般用在试图层的Controller实现类上。</p>
+<p>的方式向Spring容器中注册Bean对象。</p>
+</blockquote>
+<p>在容器启动的时候，spring会将配置文件中定义的信息或则使用注解（如@Componet @Service @Controller等）定义的bean封装成一个个BeanDefinition对象，每个bean对应一个BeanDefinition对象，在对象实例化期间，使用bean对应的BeanDenifition对象通过反射生成实例对象。BeanDefinition接口方法用来管理bean的属性信息，如父类名、类名、作用域、懒加载等。</p>
+<h2 id="3-BeanFactoryPostProcessor可以做哪些事情呢"><a href="#3-BeanFactoryPostProcessor可以做哪些事情呢" class="headerlink" title="3. BeanFactoryPostProcessor可以做哪些事情呢?"></a>3. BeanFactoryPostProcessor可以做哪些事情呢?</h2><h2 id="4-BeanPostProcessor和BeanFactoryPostProcessor有什么区别呢"><a href="#4-BeanPostProcessor和BeanFactoryPostProcessor有什么区别呢" class="headerlink" title="4. BeanPostProcessor和BeanFactoryPostProcessor有什么区别呢?"></a>4. BeanPostProcessor和BeanFactoryPostProcessor有什么区别呢?</h2><h2 id="5-Spring事件传播器有什么作用呢-监听者如何提供给事件传播器"><a href="#5-Spring事件传播器有什么作用呢-监听者如何提供给事件传播器" class="headerlink" title="5. Spring事件传播器有什么作用呢?监听者如何提供给事件传播器?"></a>5. Spring事件传播器有什么作用呢?监听者如何提供给事件传播器?</h2><h2 id="6-预先实例化单实例的流程，简单说一下"><a href="#6-预先实例化单实例的流程，简单说一下" class="headerlink" title="6. 预先实例化单实例的流程，简单说一下?"></a>6. 预先实例化单实例的流程，简单说一下?</h2><h2 id="7-什么是循环依赖问题呢"><a href="#7-什么是循环依赖问题呢" class="headerlink" title="7. 什么是循环依赖问题呢?"></a>7. 什么是循环依赖问题呢?</h2><p>Spring bean循环依赖即循环引用。是指2个或以上bean 互相持有对方，最终形成闭环。比如A依赖于B，B依赖A。</p>
+<h2 id="8-Spring中的循环依赖有几种情况"><a href="#8-Spring中的循环依赖有几种情况" class="headerlink" title="8. Spring中的循环依赖有几种情况?"></a>8. Spring中的循环依赖有几种情况?</h2><p>产生循环依赖的方式有两种，一种是通过构造器注入形成的循环依赖，第二种是通过field属性注入形成的循环依赖。Spring通过特殊的bean生成机制解决了第二种方式产生的循环依赖问题，使得循环链的所有bean对象都能正确创建，而构造器注入方式阐释的循环依赖则会抛出异常。两者之间的差异能在bean创建机制中得到解释。</p>
+<p>第一种情况：自己依赖自己的直接依赖</p>
+<p><img src="/1.png" alt="1"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\1.png" alt="1"></p>
+<p>第二种情况：两个对象之间的直接依赖</p>
+<p><img src="/2.png" alt="2"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\2.png" alt="2"></p>
+<p>第三种情况：多个对象之间的间接依赖</p>
+<p><img src="/3.png" alt="3"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\3.png" alt="3"></p>
+<p>前面两种情况的直接循环依赖比较直观，非常好识别，但是第三种间接循环依赖的情况有时候因为业务代码调用层级很深，不容易识别出来</p>
+<p><img src="/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E4%B8%BB%E8%A6%81%E5%9C%BA%E6%99%AF.png" alt="循环依赖的主要场景"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\循环依赖的主要场景.png" alt="循环依赖的主要场景"></p>
+<h2 id="9-Spring是如何判定目前发生循环依赖的呢"><a href="#9-Spring是如何判定目前发生循环依赖的呢" class="headerlink" title="9. Spring是如何判定目前发生循环依赖的呢?"></a>9. Spring是如何判定目前发生循环依赖的呢?</h2><h2 id="10-Spring-setter注入依赖产生的循环依赖是可以解决的，原理是什么呢"><a href="#10-Spring-setter注入依赖产生的循环依赖是可以解决的，原理是什么呢" class="headerlink" title="10. Spring setter注入依赖产生的循环依赖是可以解决的，原理是什么呢?"></a>10. Spring setter注入依赖产生的循环依赖是可以解决的，原理是什么呢?</h2><h3 id="单例的setter注入"><a href="#单例的setter注入" class="headerlink" title="单例的setter注入"></a><strong>单例的setter注入</strong></h3><p>这种注入方式应该是spring用的最多的，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService2 testService2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个经典的循环依赖，但是它能正常运行，得益于spring的内部机制，让我们根本无法感知它有问题，因为spring默默帮我们解决了。</p>
+<p>spring内部有三级缓存：</p>
+<ul>
+<li>singletonObjects 一级缓存，用于保存实例化、注入、初始化完成的bean实例</li>
+<li>earlySingletonObjects 二级缓存，用于保存实例化完成的bean实例</li>
+<li>singletonFactories 三级缓存，用于保存bean创建工厂，以便于后面扩展有机会创建代理对象。</li>
+</ul>
+<p>下面用一张图告诉你，spring是如何解决循环依赖的：</p>
+<p><img src="/4.png" alt="4"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\4.png" alt="4"></p>
+<p>图1</p>
+<p>细心的朋友可能会发现在这种场景中第二级缓存作用不大。</p>
+<p>那么问题来了，为什么要用第二级缓存呢？</p>
+<p>试想一下，如果出现以下这种情况，我们要如何处理？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService2 testService2;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService3 testService3;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService3</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test3</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>TestService1依赖于TestService2和TestService3，而TestService2依赖于TestService1，同时TestService3也依赖于TestService1。</p>
+<p>按照上图的流程可以把TestService1注入到TestService2，并且TestService1的实例是从第三级缓存中获取的。</p>
+<p>假设不用第二级缓存，TestService1注入到TestService3的流程如图：</p>
+<p><img src="/5.png" alt="5"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\5.png" alt="5"></p>
+<p>图2</p>
+<p>TestService1注入到TestService3又需要从第三级缓存中获取实例，而第三级缓存里保存的并非真正的实例对象，而是<code>ObjectFactory</code>对象。说白了，两次从三级缓存中获取都是<code>ObjectFactory</code>对象，而通过它创建的实例对象每次可能都不一样的。</p>
+<p>这样不是有问题？</p>
+<p>为了解决这个问题，spring引入的第二级缓存。上面图1其实TestService1对象的实例已经被添加到第二级缓存中了，而在TestService1注入到TestService3时，只用从第二级缓存中获取该对象即可。</p>
+<p><img src="/6.png" alt="6"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\6.png" alt="6"></p>
+<p>还有个问题，第三级缓存中为什么要添加<code>ObjectFactory</code>对象，直接保存实例对象不行吗？</p>
+<p>答：不行，因为假如你想对添加到三级缓存中的实例对象进行增强，直接用实例对象是行不通的。</p>
+<p>针对这种场景spring是怎么做的呢？</p>
+<p>答案就在<code>AbstractAutowireCapableBeanFactory</code>类<code>doCreateBean</code>方法的这段代码中：</p>
+<p><img src="/7.png" alt="7"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\7.png" alt="7"></p>
+<p>它定义了一个匿名内部类，通过<code>getEarlyBeanReference</code>方法获取代理对象，其实底层是通过<code>AbstractAutoProxyCreator</code>类的<code>getEarlyBeanReference</code>生成代理对象。</p>
+<h3 id="多例的setter注入"><a href="#多例的setter注入" class="headerlink" title="多例的setter注入"></a><strong>多例的setter注入</strong></h3><p>这种注入方法偶然会有，特别是在多线程的场景下，具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService2 testService2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很多人说这种情况spring容器启动会报错，其实是不对的，我非常负责任的告诉你程序能够正常启动。</p>
+<p>为什么呢？</p>
+<p>其实在<code>AbstractApplicationContext</code>类的<code>refresh</code>方法中告诉了我们答案，它会调用<code>finishBeanFactoryInitialization</code>方法，该方法的作用是为了spring容器启动的时候提前初始化一些bean。该方法的内部又调用了<code>preInstantiateSingletons</code>方法</p>
+<p><img src="/8.png" alt="8"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\8.png" alt="8"></p>
+<p>标红的地方明显能够看出：非抽象、单例 并且非懒加载的类才能被提前初始bean。</p>
+<p>而多例即<code>SCOPE_PROTOTYPE</code>类型的类，非单例，不会被提前初始化bean，所以程序能够正常启动。</p>
+<p>如何让他提前初始化bean呢？</p>
+<p>只需要再定义一个单例的类，在它里面注入TestService1</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService3</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重新启动程序，执行结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Requested bean is currently in creation: Is there an unresolvable circular reference?</span><br></pre></td></tr></table></figure>
+
+<p>果然出现了循环依赖。</p>
+<p>注意：这种循环依赖问题是无法解决的，因为它没有用缓存，每次都会生成一个新对象。</p>
+<h3 id="构造器注入"><a href="#构造器注入" class="headerlink" title="构造器注入"></a><strong>构造器注入</strong></h3><p>这种注入方式现在其实用的已经非常少了，但是我们还是有必要了解一下，看看如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TestService1</span><span class="params">(TestService2 testService2)</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TestService2</span><span class="params">(TestService1 testService1)</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Requested bean is currently in creation: Is there an unresolvable circular reference?</span><br></pre></td></tr></table></figure>
+
+<p>出现了循环依赖，为什么呢？</p>
+<p><img src="/9.png" alt="9"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\9.png" alt="9"></p>
+<p>从图中的流程看出构造器注入没能添加到三级缓存，也没有使用缓存，所以也无法解决循环依赖问题。</p>
+<h3 id="单例的代理对象setter注入"><a href="#单例的代理对象setter注入" class="headerlink" title="单例的代理对象setter注入"></a><strong>单例的代理对象setter注入</strong></h3><p>这种注入方式其实也比较常用，比如平时使用：<code>@Async</code>注解的场景，会通过<code>AOP</code>自动生成代理对象.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService2 testService2;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从前面得知程序启动会报错，出现了循环依赖：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.<span class="property">springframework</span>.<span class="property">beans</span>.<span class="property">factory</span>.<span class="property">BeanCurrentlyInCreationException</span>: <span class="title class_">Error</span> creating bean <span class="keyword">with</span> name <span class="string">&#x27;testService1&#x27;</span>: <span class="title class_">Bean</span> <span class="keyword">with</span> name <span class="string">&#x27;testService1&#x27;</span> has been injected into other beans [testService2] <span class="keyword">in</span> its raw version <span class="keyword">as</span> part <span class="keyword">of</span> a circular reference, but has eventually been wrapped. <span class="title class_">This</span> means that said other beans <span class="keyword">do</span> not use the final version <span class="keyword">of</span> the bean. <span class="title class_">This</span> is often the result <span class="keyword">of</span> over-eager type matching - consider using <span class="string">&#x27;getBeanNamesOfType&#x27;</span> <span class="keyword">with</span> the <span class="string">&#x27;allowEagerInit&#x27;</span> flag turned off, <span class="keyword">for</span> example.</span><br></pre></td></tr></table></figure>
+
+<p>为什么会循环依赖呢？</p>
+<p>答案就在下面这张图中：</p>
+<p><img src="/10.png" alt="10"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\10.png" alt="10"></p>
+<p>说白了，bean初始化完成之后，后面还有一步去检查：第二级缓存 和 原始对象 是否相等。由于它对前面流程来说无关紧要，所以前面的流程图中省略了，但是在这里是关键点，我们重点说说：</p>
+<p><img src="/11.png" alt="11"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\11.png" alt="11"></p>
+<p>发现第二级缓存 和 原始对象不相等，所以抛出了循环依赖的异常。</p>
+<p>如果这时候把TestService1改个名字，改成：TestService6，其他的都不变。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">Service</span></span><br><span class="line">public<span class="keyword">class</span> <span class="title class_">TestService6</span> &#123;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Autowired</span></span><br><span class="line">    private <span class="title class_">TestService2</span> testService2;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Async</span></span><br><span class="line">    public <span class="keyword">void</span> <span class="title function_">test1</span>(<span class="params"></span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再重新启动一下程序，神奇般的好了。</p>
+<p>what？ 这又是为什么？</p>
+<p>这就要从spring的bean加载顺序说起了，默认情况下，spring是按照文件完整路径递归查找的，按路径+文件名排序，排在前面的先加载。所以TestService1比TestService2先加载，而改了文件名称之后，TestService2比TestService6先加载。</p>
+<p>为什么TestService2比TestService6先加载就没问题呢？</p>
+<p>答案在下面这张图中：</p>
+<p><img src="/12.png" alt="12"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\12.png" alt="12"></p>
+<p>这种情况testService6中其实第二级缓存是空的，不需要跟原始对象判断，所以不会抛出循环依赖。</p>
+<h3 id="DependsOn循环依赖"><a href="#DependsOn循环依赖" class="headerlink" title="DependsOn循环依赖"></a><strong>DependsOn循环依赖</strong></h3><p>还有一种有些特殊的场景，比如我们需要在实例化Bean A之前，先实例化Bean B，这个时候就可以使用<code>@DependsOn</code>注解。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">DependsOn</span>(value = <span class="string">&quot;testService2&quot;</span>)</span><br><span class="line">@<span class="title class_">Service</span></span><br><span class="line">public <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Autowired</span></span><br><span class="line">    private <span class="title class_">TestService2</span> testService2;</span><br><span class="line"></span><br><span class="line">    public <span class="keyword">void</span> <span class="title function_">test1</span>(<span class="params"></span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">DependsOn</span>(value = <span class="string">&quot;testService1&quot;</span>)</span><br><span class="line">@<span class="title class_">Service</span></span><br><span class="line">public <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Autowired</span></span><br><span class="line">    private <span class="title class_">TestService1</span> testService1;</span><br><span class="line"></span><br><span class="line">    public <span class="keyword">void</span> <span class="title function_">test2</span>(<span class="params"></span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>程序启动之后，执行结果：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Circular</span> depends-on relationship between <span class="string">&#x27;testService2&#x27;</span> and <span class="string">&#x27;testService1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个例子中本来如果TestService1和TestService2都没有加<code>@DependsOn</code>注解是没问题的，反而加了这个注解会出现循环依赖问题。</p>
+<p>这又是为什么？</p>
+<p>答案在<code>AbstractBeanFactory</code>类的<code>doGetBean</code>方法的这段代码中</p>
+<p><img src="/13.png" alt="13"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\13.png" alt="13"></p>
+<p>它会检查dependsOn的实例有没有循环依赖，如果有循环依赖则抛异常。</p>
+<h2 id="11-出现循环依赖如何解决？"><a href="#11-出现循环依赖如何解决？" class="headerlink" title="11. 出现循环依赖如何解决？"></a>11. <strong>出现循环依赖如何解决？</strong></h2><p>项目中如果出现循环依赖问题，说明是spring默认无法解决的循环依赖，要看项目的打印日志，属于哪种循环依赖。目前包含下面几种情况：</p>
+<p><img src="/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E5%88%92%E5%88%86.png" alt="循环依赖的划分"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\循环依赖的划分.png" alt="循环依赖的划分"></p>
+<h3 id="生成代理对象产生的循环依赖"><a href="#生成代理对象产生的循环依赖" class="headerlink" title="生成代理对象产生的循环依赖"></a><strong>生成代理对象产生的循环依赖</strong></h3><p>这类循环依赖问题解决方法很多，主要有：</p>
+<ol>
+<li>使用<code>@Lazy</code>注解，延迟加载</li>
+<li>使用<code>@DependsOn</code>注解，指定加载先后关系</li>
+<li>修改文件名称，改变循环依赖类的加载顺序</li>
+</ol>
+<h3 id="使用-DependsOn产生的循环依赖"><a href="#使用-DependsOn产生的循环依赖" class="headerlink" title="使用@DependsOn产生的循环依赖"></a><strong>使用@DependsOn产生的循环依赖</strong></h3><p>这类循环依赖问题要找到<code>@DependsOn</code>注解循环依赖的地方，迫使它不循环依赖就可以解决问题。</p>
+<h3 id="多例循环依赖"><a href="#多例循环依赖" class="headerlink" title="多例循环依赖"></a><strong>多例循环依赖</strong></h3><p>这类循环依赖问题可以通过把bean改成单例的解决。</p>
+<h3 id="构造器循环依赖"><a href="#构造器循环依赖" class="headerlink" title="构造器循环依赖"></a><strong>构造器循环依赖</strong></h3><p>这类循环依赖问题可以通过使用<code>@Lazy</code>注解解决。</p>
+<h2 id="12-Spring三级缓存的数据，什么时候升级到二级缓存的呢"><a href="#12-Spring三级缓存的数据，什么时候升级到二级缓存的呢" class="headerlink" title="12. Spring三级缓存的数据，什么时候升级到二级缓存的呢?"></a>12. Spring三级缓存的数据，什么时候升级到二级缓存的呢?</h2><h2 id="13-Spring-只要二级缓存不行么-为什么必须要有第三级缓存呢"><a href="#13-Spring-只要二级缓存不行么-为什么必须要有第三级缓存呢" class="headerlink" title="13. Spring 只要二级缓存不行么?为什么必须要有第三级缓存呢?"></a>13. Spring 只要二级缓存不行么?为什么必须要有第三级缓存呢?</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/SpringIOC%E5%AE%B9%E5%99%A8%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98/" data-id="cl0j84jx0008v04vh0zkg6f0d" data-title="SpringIOC容器面试专题" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Spring 框架中⽤到了哪些设计模式" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/Spring%20%E6%A1%86%E6%9E%B6%E4%B8%AD%E2%BD%A4%E5%88%B0%E4%BA%86%E5%93%AA%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T07:19:09.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/Spring%20%E6%A1%86%E6%9E%B6%E4%B8%AD%E2%BD%A4%E5%88%B0%E4%BA%86%E5%93%AA%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">Spring框架中⽤到了哪些设计模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Spring-框架中⽤到了哪些设计模式"><a href="#Spring-框架中⽤到了哪些设计模式" class="headerlink" title="Spring 框架中⽤到了哪些设计模式?"></a>Spring 框架中⽤到了哪些设计模式?</h1><h2 id="工厂设计模式"><a href="#工厂设计模式" class="headerlink" title="工厂设计模式"></a>工厂设计模式</h2><p>Spring使用工厂模式可以通过 <code>BeanFactory</code> 或 <code>ApplicationContext</code> 创建 bean 对象。</p>
+<p><strong>两者对比：</strong></p>
+<ul>
+<li><code>BeanFactory</code> ：延迟注入(使用到某个 bean 的时候才会注入),相比于<code>BeanFactory</code>来说会占用更少的内存，程序启动速度更快。</li>
+<li><code>ApplicationContext</code> ：容器启动的时候，不管你用没用到，一次性创建所有 bean 。<code>BeanFactory</code> 仅提供了最基本的依赖注入支持，<code>ApplicationContext</code> 扩展了 <code>BeanFactory</code> ,除了有<code>BeanFactory</code>的功能还有额外更多功能，所以一般开发人员使用<code>ApplicationContext</code>会更多。</li>
+</ul>
+<p>ApplicationContext的三个实现类：</p>
+<ol>
+<li><code>ClassPathXmlApplication</code>：把上下文文件当成类路径资源。</li>
+<li><code>FileSystemXmlApplication</code>：从文件系统中的 XML 文件载入上下文定义信息。</li>
+<li><code>XmlWebApplicationContext</code>：从Web系统中的XML文件载入上下文定义信息。</li>
+</ol>
+<p>Example:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.FileSystemXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileSystemXmlApplicationContext</span>(</span><br><span class="line">                <span class="string">&quot;C:/work/IOC Containers/springframework.applicationcontext/src/main/resources/bean-factory-config.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">HelloApplicationContext</span> <span class="variable">obj</span> <span class="operator">=</span> (HelloApplicationContext) context.getBean(<span class="string">&quot;helloApplicationContext&quot;</span>);</span><br><span class="line">        obj.getMsg();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="单例设计模式"><a href="#单例设计模式" class="headerlink" title="单例设计模式"></a>单例设计模式</h2><p>在我们的系统中，有一些对象其实我们只需要一个，比如说：线程池、缓存、对话框、注册表、日志对象、充当打印机、显卡等设备驱动程序的对象。事实上，这一类对象只能有一个实例，如果制造出多个实例就可能会导致一些问题的产生，比如：程序的行为异常、资源使用过量、或者不一致性的结果。</p>
+<p><strong>使用单例模式的好处:</strong></p>
+<ul>
+<li>对于频繁使用的对象，可以省略创建对象所花费的时间，这对于那些重量级对象而言，是非常可观的一笔系统开销；</li>
+<li>由于 new 操作的次数减少，因而对系统内存的使用频率也会降低，这将减轻 GC 压力，缩短 GC 停顿时间。</li>
+</ul>
+<p><strong>Spring 中 bean 的默认作用域就是 singleton(单例)的。</strong> 除了 singleton 作用域，Spring 中 bean 还有下面几种作用域：</p>
+<ul>
+<li>prototype : 每次请求都会创建一个新的 bean 实例。</li>
+<li>request : 每一次HTTP请求都会产生一个新的bean，该bean仅在当前HTTP request内有效。</li>
+<li>session : 每一次HTTP请求都会产生一个新的 bean，该bean仅在当前 HTTP session 内有效。</li>
+<li>global-session： 全局session作用域，仅仅在基于portlet的web应用中才有意义，Spring5已经没有了。Portlet是能够生成语义代码(例如：HTML)片段的小型Java Web插件。它们基于portlet容器，可以像servlet一样处理HTTP请求。但是，与 servlet 不同，每个 portlet 都有不同的会话</li>
+</ul>
+<p><strong>Spring 实现单例的方式：</strong></p>
+<ul>
+<li>xml:<bean id="userService" class="top.snailclimb.UserService" scope="singleton"/>&#96;&#96;</li>
+<li>注解：<code>@Scope(value = &quot;singleton&quot;)</code></li>
+</ul>
+<p>Spring 通过 <code>ConcurrentHashMap</code> 实现单例注册表的特殊方式实现单例模式。Spring 实现单例的核心代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过 ConcurrentHashMap（线程安全） 实现单例注册表</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Object&gt; singletonObjects = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;String, Object&gt;(<span class="number">64</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Object <span class="title function_">getSingleton</span><span class="params">(String beanName, ObjectFactory&lt;?&gt; singletonFactory)</span> &#123;</span><br><span class="line">        Assert.notNull(beanName, <span class="string">&quot;&#x27;beanName&#x27; must not be null&quot;</span>);</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="built_in">this</span>.singletonObjects) &#123;</span><br><span class="line">            <span class="comment">// 检查缓存中是否存在实例  </span></span><br><span class="line">            <span class="type">Object</span> <span class="variable">singletonObject</span> <span class="operator">=</span> <span class="built_in">this</span>.singletonObjects.get(beanName);</span><br><span class="line">            <span class="keyword">if</span> (singletonObject == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">//...省略了很多代码</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    singletonObject = singletonFactory.getObject();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//...省略了很多代码</span></span><br><span class="line">                <span class="comment">// 如果实例对象在不存在，我们注册到单例注册表中。</span></span><br><span class="line">                addSingleton(beanName, singletonObject);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> (singletonObject != NULL_OBJECT ? singletonObject : <span class="literal">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//将对象添加到单例注册表</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">addSingleton</span><span class="params">(String beanName, Object singletonObject)</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="built_in">this</span>.singletonObjects) &#123;</span><br><span class="line">                <span class="built_in">this</span>.singletonObjects.put(beanName, (singletonObject != <span class="literal">null</span> ? singletonObject : NULL_OBJECT));</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="代理设计模式"><a href="#代理设计模式" class="headerlink" title="代理设计模式"></a>代理设计模式</h2><p>代理模式在 AOP 中的应用</p>
+<p>AOP(Aspect-Oriented Programming:面向切面编程)能够将那些与业务无关，却为业务模块所共同调用的逻辑或责任（例如事务处理、日志管理、权限控制等）封装起来，便于减少系统的重复代码，降低模块间的耦合度，并有利于未来的可拓展性和可维护性。</p>
+<p><strong>Spring AOP 就是基于动态代理的</strong>，如果要代理的对象，实现了某个接口，那么Spring AOP会使用<strong>JDK Proxy</strong>，去创建代理对象，而对于没有实现接口的对象，就无法使用 JDK Proxy 去进行代理了，这时候Spring AOP会使用<strong>Cglib</strong> ，这时候Spring AOP会使用 <strong>Cglib</strong> 生成一个被代理对象的子类来作为代理.</p>
+<p>当然你也可以使用 AspectJ ,Spring AOP 已经集成了AspectJ ，AspectJ 应该算的上是 Java 生态系统中最完整的 AOP 框架了。</p>
+<p>使用 AOP 之后我们可以把一些通用功能抽象出来，在需要用到的地方直接使用即可，这样大大简化了代码量。我们需要增加新功能时也方便，这样也提高了系统扩展性。日志功能、事务管理等等场景都用到了 AOP 。</p>
+<h2 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h2><p>模板方法模式是一种行为设计模式，它定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。 模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤的实现方式。</p>
+<p><img src="/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95.png" alt="模板方法"></p>
+<p>![模板方法](E:\MyBolg\source_posts\Spring 框架中⽤到了哪些设计模式\模板方法.png)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Template</span> &#123;</span><br><span class="line">    <span class="comment">//这是我们的模板方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">TemplateMethod</span><span class="params">()</span>&#123;</span><br><span class="line">        PrimitiveOperation1();  </span><br><span class="line">        PrimitiveOperation2();</span><br><span class="line">        PrimitiveOperation3();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span>  <span class="title function_">PrimitiveOperation1</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//当前类实现</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//被子类实现的方法</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">PrimitiveOperation2</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">PrimitiveOperation3</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TemplateImpl</span> <span class="keyword">extends</span> <span class="title class_">Template</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">PrimitiveOperation2</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//当前类实现</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">PrimitiveOperation3</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//当前类实现</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Spring 中 <code>jdbcTemplate</code>、<code>hibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。一般情况下，我们都是使用继承的方式来实现模板模式，但是 Spring 并没有使用这种方式，而是使用Callback 模式与模板方法模式配合，既达到了代码复用的效果，同时增加了灵活性。</p>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p>观察者模式是一种对象行为型模式。它表示的是一种对象与对象之间具有依赖关系，当一个对象发生改变的时候，这个对象所依赖的对象也会做出反应。Spring 事件驱动模型就是观察者模式很经典的一个应用。Spring 事件驱动模型非常有用，在很多场景都可以解耦我们的代码。比如我们每次添加商品的时候都需要重新更新商品索引，这个时候就可以利用观察者模式来解决这个问题。</p>
+<h3 id="Spring-事件驱动模型中的三种角色"><a href="#Spring-事件驱动模型中的三种角色" class="headerlink" title="Spring 事件驱动模型中的三种角色"></a>Spring 事件驱动模型中的三种角色</h3><h4 id="事件角色"><a href="#事件角色" class="headerlink" title="事件角色"></a>事件角色</h4><p><code>ApplicationEvent</code> (<code>org.springframework.context</code>包下)充当事件的角色,这是一个抽象类，它继承了<code>java.util.EventObject</code>并实现了 <code>java.io.Serializable</code>接口。</p>
+<p>Spring 中默认存在以下事件，他们都是对 <code>ApplicationContextEvent</code> 的实现(继承自<code>ApplicationContextEvent</code>)：</p>
+<ul>
+<li><code>ContextStartedEvent</code>：<code>ApplicationContext</code> 启动后触发的事件;</li>
+<li><code>ContextStoppedEvent</code>：<code>ApplicationContext</code> 停止后触发的事件;</li>
+<li><code>ContextRefreshedEvent</code>：<code>ApplicationContext</code> 初始化或刷新完成后触发的事件;</li>
+<li><code>ContextClosedEvent</code>：<code>ApplicationContext</code> 关闭后触发的事件。</li>
+</ul>
+<p><img src="/%E4%BA%8B%E4%BB%B6%E8%A7%92%E8%89%B2.png" alt="事件角色"></p>
+<p>![事件角色](E:\MyBolg\source_posts\Spring 框架中⽤到了哪些设计模式\事件角色.png)</p>
+<h4 id="事件监听者角色"><a href="#事件监听者角色" class="headerlink" title="事件监听者角色"></a>事件监听者角色</h4><p><code>ApplicationListener</code> 充当了事件监听者角色，它是一个接口，里面只定义了一个 <code>onApplicationEvent（）</code>方法来处理<code>ApplicationEvent</code>。<code>ApplicationListener</code>接口类源码如下，可以看出接口定义看出接口中的事件只要实现了 <code>ApplicationEvent</code>就可以了。所以，在 Spring中我们只要实现 <code>ApplicationListener</code> 接口实现 <code>onApplicationEvent()</code> 方法即可完成监听事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.context;</span><br><span class="line"><span class="keyword">import</span> java.util.EventListener;</span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ApplicationListener</span>&lt;E <span class="keyword">extends</span> <span class="title class_">ApplicationEvent</span>&gt; <span class="keyword">extends</span> <span class="title class_">EventListener</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">onApplicationEvent</span><span class="params">(E var1)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="事件发布者角色"><a href="#事件发布者角色" class="headerlink" title="事件发布者角色"></a>事件发布者角色</h4><p><code>ApplicationEventPublisher</code> 充当了事件的发布者，它也是一个接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ApplicationEventPublisher</span> &#123;</span><br><span class="line">    <span class="keyword">default</span> <span class="keyword">void</span> <span class="title function_">publishEvent</span><span class="params">(ApplicationEvent event)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.publishEvent((Object)event);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">publishEvent</span><span class="params">(Object var1)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>ApplicationEventPublisher</code> 接口的<code>publishEvent（）</code>这个方法在<code>AbstractApplicationContext</code>类中被实现，阅读这个方法的实现，你会发现实际上事件真正是通过<code>ApplicationEventMulticaster</code>来广播出去的。具体内容过多，就不在这里分析了，后面可能会单独写一篇文章提到。</p>
+<h3 id="Spring-的事件流程总结"><a href="#Spring-的事件流程总结" class="headerlink" title="Spring 的事件流程总结"></a>Spring 的事件流程总结</h3><ol>
+<li>定义一个事件: 实现一个继承自 <code>ApplicationEvent</code>，并且写相应的构造函数；</li>
+<li>定义一个事件监听者：实现 <code>ApplicationListener</code> 接口，重写 <code>onApplicationEvent()</code> 方法；</li>
+<li>使用事件发布者发布消息: 可以通过 <code>ApplicationEventPublisher</code> 的 <code>publishEvent()</code> 方法发布消息。</li>
+</ol>
+<p>Example:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoEvent</span> <span class="keyword">extends</span> <span class="title class_">ApplicationEvent</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DemoEvent</span><span class="params">(Object source,String message)</span>&#123;</span><br><span class="line">        <span class="built_in">super</span>(source);</span><br><span class="line">        <span class="built_in">this</span>.message = message;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getMessage</span><span class="params">()</span> &#123;</span><br><span class="line">         <span class="keyword">return</span> message;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoListener</span> <span class="keyword">implements</span> <span class="title class_">ApplicationListener</span>&lt;DemoEvent&gt;&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用onApplicationEvent接收消息</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onApplicationEvent</span><span class="params">(DemoEvent event)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> event.getMessage();</span><br><span class="line">        System.out.println(<span class="string">&quot;接收到的信息是：&quot;</span>+msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoPublisher</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    ApplicationContext applicationContext;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">publish</span><span class="params">(String message)</span>&#123;</span><br><span class="line">        <span class="comment">//发布事件</span></span><br><span class="line">        applicationContext.publishEvent(<span class="keyword">new</span> <span class="title class_">DemoEvent</span>(<span class="built_in">this</span>, message));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当调用 <code>DemoPublisher</code> 的 <code>publish()</code> 方法的时候，比如 <code>demoPublisher.publish(&quot;你好&quot;)</code> ，控制台就会打印出:<code>接收到的信息是：你好</code> 。</p>
+<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><p>适配器模式(Adapter Pattern) 将一个接口转换成客户希望的另一个接口，适配器模式使接口不兼容的那些类可以一起工作，其别名为包装器(Wrapper)。</p>
+<h3 id="spring-AOP中的适配器模式"><a href="#spring-AOP中的适配器模式" class="headerlink" title="spring AOP中的适配器模式"></a>spring AOP中的适配器模式</h3><p>我们知道 Spring AOP 的实现是基于代理模式，但是 Spring AOP 的增强或通知(Advice)使用到了适配器模式，与之相关的接口是<code>AdvisorAdapter</code> 。Advice 常用的类型有：<code>BeforeAdvice</code>（目标方法调用前,前置通知）、<code>AfterAdvice</code>（目标方法调用后,后置通知）、<code>AfterReturningAdvice</code>(目标方法执行结束后，return之前)等等。每个类型Advice（通知）都有对应的拦截器:<code>MethodBeforeAdviceInterceptor</code>、<code>AfterReturningAdviceAdapter</code>、<code>AfterReturningAdviceInterceptor</code>。Spring预定义的通知要通过对应的适配器，适配成 <code>MethodInterceptor</code>接口(方法拦截器)类型的对象（如：<code>MethodBeforeAdviceInterceptor</code> 负责适配 <code>MethodBeforeAdvice</code>）。</p>
+<h3 id="spring-MVC中的适配器模式"><a href="#spring-MVC中的适配器模式" class="headerlink" title="spring MVC中的适配器模式"></a>spring MVC中的适配器模式</h3><p>在Spring MVC中，<code>DispatcherServlet</code> 根据请求信息调用 <code>HandlerMapping</code>，解析请求对应的 <code>Handler</code>。解析到对应的 <code>Handler</code>（也就是我们平常说的 <code>Controller</code> 控制器）后，开始由<code>HandlerAdapter</code> 适配器处理。<code>HandlerAdapter</code> 作为期望接口，具体的适配器实现类用于对目标类进行适配，<code>Controller</code> 作为需要适配的类。</p>
+<p><strong>为什么要在 Spring MVC 中使用适配器模式？</strong> Spring MVC 中的 <code>Controller</code> 种类众多，不同类型的 <code>Controller</code> 通过不同的方法来对请求进行处理。如果不利用适配器模式的话，<code>DispatcherServlet</code> 直接获取对应类型的 <code>Controller</code>，需要的自行来判断，像下面这段代码一样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(mappedHandler.getHandler() <span class="keyword">instanceof</span> MultiActionController)&#123;  </span><br><span class="line">   ((MultiActionController)mappedHandler.getHandler()).xxx  </span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(mappedHandler.getHandler() <span class="keyword">instanceof</span> XXX)&#123;  </span><br><span class="line">    ...  </span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(...)&#123;  </span><br><span class="line">   ...  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p>假如我们再增加一个 <code>Controller</code>类型就要在上面代码中再加入一行 判断语句，这种形式就使得程序难以维护，也违反了设计模式中的开闭原则 – 对扩展开放，对修改关闭。</p>
+<h2 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h2><p>装饰者模式可以动态地给对象添加一些额外的属性或行为。相比于使用继承，装饰者模式更加灵活。简单点儿说就是当我们需要修改原有的功能，但我们又不愿直接去修改原有的代码时，设计一个Decorator套在原有代码外面。其实在 JDK 中就有很多地方用到了装饰者模式，比如 <code>InputStream</code>家族，<code>InputStream</code> 类下有 <code>FileInputStream</code> (读取文件)、<code>BufferedInputStream</code> (增加缓存,使读取文件速度大大提升)等子类都在不修改<code>InputStream</code> 代码的情况下扩展了它的功能。</p>
+<p><img src="/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F.png" alt="装饰模式"></p>
+<p>![装饰模式](E:\MyBolg\source_posts\Spring 框架中⽤到了哪些设计模式\装饰模式.png)</p>
+<p>Spring 中配置 DataSource 的时候，DataSource 可能是不同的数据库和数据源。我们能否根据客户的需求在少修改原有类的代码下动态切换不同的数据源？这个时候就要用到装饰者模式(这一点我自己还没太理解具体原理)。Spring 中用到的包装器模式在类名上含有 <code>Wrapper</code>或者 <code>Decorator</code>。这些类基本上都是动态地给一个对象添加一些额外的职责</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Spring 框架中用到了哪些设计模式：</p>
+<ul>
+<li><strong>工厂设计模式</strong> : Spring使用工厂模式通过 <code>BeanFactory</code>、<code>ApplicationContext</code> 创建 bean 对象。</li>
+<li><strong>代理设计模式</strong> : Spring AOP 功能的实现。</li>
+<li><strong>单例设计模式</strong> : Spring 中的 Bean 默认都是单例的。</li>
+<li><strong>模板方法模式</strong> : Spring 中 <code>jdbcTemplate</code>、<code>hibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。</li>
+<li><strong>包装器设计模式</strong> : 我们的项目需要连接多个数据库，而且不同的客户在每次访问中根据需要会去访问不同的数据库。这种模式让我们可以根据客户的需求能够动态切换不同的数据源。</li>
+<li><strong>观察者模式:</strong> Spring 事件驱动模型就是观察者模式很经典的一个应用。</li>
+<li><strong>适配器模式</strong> :Spring AOP 的增强或通知(Advice)使用到了适配器模式、spring MVC 中也是用到了适配器模式适配<code>Controller</code>。</li>
+<li>……</li>
+</ul>
+<p>原文链接:<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&mid=2247485303&idx=1&sn=9e4626a1e3f001f9b0d84a6fa0cff04a&chksm=cea248bcf9d5c1aaf48b67cc52bac74eb29d6037848d6cf213b0e5466f2d1fda970db700ba41&token=255050878&lang=zh_CN%23rd">面试官:“谈谈Spring中都用到了那些设计模式?”。 (qq.com)</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/Spring%20%E6%A1%86%E6%9E%B6%E4%B8%AD%E2%BD%A4%E5%88%B0%E4%BA%86%E5%93%AA%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" data-id="cl0j84jyk00e104vh0nt2am8v" data-title="Spring框架中⽤到了哪些设计模式" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-操作系统内存管理基础" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/" class="article-date">
+  <time class="dt-published" datetime="2021-04-25T11:54:21.000Z" itemprop="datePublished">2021-04-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">操作系统内存管理基础</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="操作系统内存管理基础"><a href="#操作系统内存管理基础" class="headerlink" title="操作系统内存管理基础"></a>操作系统内存管理基础</h1><h2 id="常⻅的⼏种内存管理机制"><a href="#常⻅的⼏种内存管理机制" class="headerlink" title="常⻅的⼏种内存管理机制"></a>常⻅的⼏种内存管理机制</h2><p>简单分为<strong>连续分配管理方式</strong>和<strong>非连续分配管理方式</strong>这两种。连续分配管理方式是指为一个用户程序分配一个连续的内存空间，常见的如<strong>块式管理</strong>。同样地，非连续分配管理方式允许一个程序使用的内存分布在离散或者说不相邻的内存中，常见的如<strong>页式管理</strong>和<strong>段式管理</strong>。</p>
+<p>1．块式管理︰远古时代的计算机操系统的内存管理方式。将内存分为几个固定大小的块，每个块中只包含一个进程。如果程序运行需要内存的话，操作系统就分配给它一块，如果程序运行只需要很小的空间的话，分配的这块内存很大一部分几乎被浪费了。这些在每个块中未被利用的空间，我们称之为碎片。</p>
+<p>2．页式管理︰把主存分为大小相等且固定的一页一页的形式，页较小，相对相比于块式管理的划分力度更大，提高了内存利用率，减少了碎片。页式管理通过页表对应逻辑地址和物理地址。</p>
+<p>3．段式管理︰页式管理虽然提高了内存利用率，但是页式管理其中的页实际并无任何实际意义。段式管理把主存分为一段段的，每一段的空间又要比一页的空间小很多。但是，最重要的是段是有实际意义的，每个段定义了一组逻辑信息，例如,有主程序段MAIN、子程序段×、数据段D及栈段S等。段式管理通过段表对应逻辑地址和物理地址。</p>
+<p><strong>段页式管理机制</strong>结合了段式管理和页式管理的优点。简单来说段页式管理机制就是把主存先分成若干段，每个段又分成若干页，也就是说段页式管理机制中段与段之间以及段的内部的都是离散的。</p>
+<h2 id="快表和多级⻚表"><a href="#快表和多级⻚表" class="headerlink" title="快表和多级⻚表"></a>快表和多级⻚表</h2><p>⻚表管理机制中有两个很重要的概念：快表和多级⻚表，这两个东⻄分别解决了⻚ 表管理中很重要的两个问题。</p>
+<p>在分⻚内存管理中，很重要的两点是： 1. 虚拟地址到物理地址的转换要快。 2. 解决虚拟地址空间⼤，⻚表也会很⼤的问题。</p>
+<h3 id="快表"><a href="#快表" class="headerlink" title="快表"></a>快表</h3><p>为了解决虚拟地址到物理地址的转换速度，操作系统在 ⻚表⽅案 基础之上引⼊了 快表 来加速虚 拟地址到物理地址的转换。我们可以把快表理解为⼀种特殊的⾼速缓冲存储器（Cache），其中 的内容是⻚表的⼀部分或者全部内容。作为⻚表的 Cache，它的作⽤与⻚表相似，但是提⾼了访 问速率。由于采⽤⻚表做地址转换，读写内存数据时 CPU 要访问两次主存。有了快表，有时只 要访问⼀次⾼速缓冲存储器，⼀次主存，这样可加速查找并提⾼指令执⾏速度</p>
+<p>使⽤快表之后的地址转换流程是这样的： </p>
+<ol>
+<li><p>根据虚拟地址中的⻚号查快表；</p>
+</li>
+<li><p>如果该⻚在快表中，直接从快表中读取相应的物理地址； </p>
+</li>
+<li><p>如果该⻚不在快表中，就访问内存中的⻚表，再从⻚表中得到物理地址，同时将⻚表中的该 映射表项添加到快表中； </p>
+</li>
+<li><p>当快表填满后，⼜要登记新⻚时，就按照⼀定的淘汰策略淘汰掉快表中的⼀个⻚</p>
+</li>
+</ol>
+<h3 id="多级⻚表"><a href="#多级⻚表" class="headerlink" title="多级⻚表"></a>多级⻚表</h3><p>引⼊多级⻚表的主要⽬的是为了避免把全部⻚表⼀直放在内存中占⽤过多空间，特别是那些根本 就不需要的⻚表就不需要保留在内存中。多级⻚表属于时间换空间的典型场景</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>为了提⾼内存的空间性能，提出了多级⻚表的概念；但是提到空间性能是以浪费时间性能为基础 的，因此为了补充损失的时间性能，提出了快表（即 TLB）的概念。 不论是快表还是多级⻚表实 际上都利⽤到了程序的局部性原理，局部性原理在后⾯的虚拟内存这部分会介绍到。</p>
+<h2 id="分⻚机制和分段机制的共同点和区别"><a href="#分⻚机制和分段机制的共同点和区别" class="headerlink" title="分⻚机制和分段机制的共同点和区别"></a>分⻚机制和分段机制的共同点和区别</h2><ol>
+<li>共同点 ： 分⻚机制和分段机制都是为了提⾼内存利⽤率，较少内存碎⽚。 ⻚和段都是离散存储的，所以两者都是离散分配内存的⽅式。但是，每个⻚和段中的内存是连续的。 </li>
+<li>区别 ：<ol>
+<li>⻚的⼤⼩是固定的，由操作系统决定；⽽段的⼤⼩不固定，取决于我们当前运⾏的程 序。 </li>
+<li>分⻚仅仅是为了满⾜操作系统内存管理的需求，⽽段是逻辑信息的单位，在程序中可以 体现为代码段，数据段，能够更好满⾜⽤户的需要。</li>
+</ol>
+</li>
+</ol>
+<h2 id="逻辑-虚拟-地址和物理地址"><a href="#逻辑-虚拟-地址和物理地址" class="headerlink" title="逻辑(虚拟)地址和物理地址"></a>逻辑(虚拟)地址和物理地址</h2><p>我们编程⼀般只有可能和逻辑地址打交道，⽐如在 C 语⾔中，指针⾥⾯存 储的数值就可以理解成为内存⾥的⼀个地址，这个地址也就是我们说的逻辑地址，逻辑地址由操作系统决定。物理地址指的是真实物理内存中地址，更具体⼀点来说就是内存地址寄存器中的地 址。物理地址是内存单元真正的地址</p>
+<h2 id="CPU-寻址了解吗-为什么需要虚拟地址空间"><a href="#CPU-寻址了解吗-为什么需要虚拟地址空间" class="headerlink" title="CPU 寻址了解吗?为什么需要虚拟地址空间?"></a>CPU 寻址了解吗?为什么需要虚拟地址空间?</h2><p>现代处理器使⽤的是⼀种称为 虚拟寻址(Virtual Addressing) 的寻址⽅式。使⽤虚拟寻址，CPU 需要将虚拟地址翻译成物理地址，这样才能访问到真实的物理内存。 实际上完成虚拟地址转换为 物理地址转换的硬件是 CPU 中含有⼀个被称为内存管理单元（Memory Management Unit, MMU） 的硬件。</p>
+<p>为什么要有虚拟地址空间呢？ 先从没有虚拟地址空间的时候说起吧！没有虚拟地址空间的时候，程序都是直接访问和操作的都 是物理内存 。但是这样有什么问题呢</p>
+<ol>
+<li>⽤户程序可以访问任意内存，寻址内存的每个字节，这样就很容易（有意或者⽆意）破坏操作系统，造成操作系统崩溃。 </li>
+<li>想要同时运⾏多个程序特别困难，⽐如你想同时运⾏⼀个微信和⼀个 QQ ⾳乐都不⾏。为什么呢？举个简单的例⼦：微信在运⾏的时候给内存地址 1xxx 赋值后，QQ ⾳乐也同样给内 存地址 1xxx 赋值，那么 QQ ⾳乐对内存的赋值就会覆盖微信之前所赋的值，这就造成了微信这个程序就会崩溃</li>
+</ol>
+<p><strong>总结来说：如果直接把物理地址暴露出来的话会带来严重问题，⽐如可能对操作系统造成伤害以 及给同时运⾏多个程序造成困难。</strong></p>
+<p>通过虚拟地址访问内存有以下优势：</p>
+<p>​    程序可以使⽤⼀系列相邻的虚拟地址来访问物理内存中不相邻的⼤内存缓冲区。 </p>
+<p>​    程序可以使⽤⼀系列虚拟地址来访问⼤于可⽤物理内存的内存缓冲区。当物理内存的供应量 变⼩时，内存管理器会将物理内存⻚（通常⼤⼩为 4 KB）保存到磁盘⽂件。数据或代码⻚会根据需要在物理内存与磁盘之间移动。</p>
+<p>​    不同进程使⽤的虚拟地址彼此隔离。⼀个进程中的代码⽆法更改正在由另⼀进程或操作系统 使⽤的物理内存。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/" data-id="cl0j84jxf00ag04vh55l125xl" data-title="操作系统内存管理基础" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-操作系统堆和栈的区别" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%8C%BA%E5%88%AB/" class="article-date">
+  <time class="dt-published" datetime="2021-04-25T11:54:21.000Z" itemprop="datePublished">2021-04-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%8C%BA%E5%88%AB/">堆与栈区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="堆与栈区别"><a href="#堆与栈区别" class="headerlink" title="堆与栈区别"></a>堆与栈区别</h1><p>堆与栈实际上是操作系统对进程占用的内存空间的两种管理方式，主要有如下几种区别：<br>（1）<strong>管理方式不同</strong>。栈由操作系统自动分配释放，无需我们手动控制；堆的申请和释放工作由程序员控制，容易产生内存泄漏；</p>
+<p>（2）<strong>空间大小不同</strong>。每个进程拥有的栈的大小要远远小于堆的大小。理论上，程序员可申请的堆大小为虚拟内存的大小，进程栈的大小 64bits 的 Windows 默认 1MB，64bits 的 Linux 默认 10MB；</p>
+<p>（3）<strong>生长方向不同</strong>。堆的生长方向向上，内存地址由低到高；栈的生长方向向下，内存地址由高到低。</p>
+<p>（4）<strong>分配方式不同</strong>。堆都是动态分配的，没有静态分配的堆。栈有2种分配方式：静态分配和动态分配。静态分配是由操作系统完成的，比如局部变量的分配。动态分配由alloca函数进行分配，但是栈的动态分配和堆是不同的，他的动态分配是由操作系统进行释放，无需我们手工实现。</p>
+<p>（5）<strong>分配效率不同</strong>。栈由操作系统自动分配，会在硬件层级对栈提供支持：分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率比较高。堆则是由C&#x2F;C++提供的库函数或运算符来完成申请与管理，实现机制较为复杂，频繁的内存申请容易产生内存碎片。显然，堆的效率比栈要低得多。</p>
+<p>（6）<strong>存放内容不同</strong>。栈存放的内容，函数返回地址、相关参数、局部变量和寄存器内容等。当主函数调用另外一个函数的时候，要对当前函数执行断点进行保存，需要使用栈来实现，首先入栈的是主函数下一条语句的地址，即扩展指针寄存器的内容（EIP），然后是当前栈帧的底部地址，即扩展基址指针寄存器内容（EBP），再然后是被调函数的实参等，一般情况下是按照从右向左的顺序入栈，之后是被调函数的局部变量，注意静态变量是存放在数据段或者BSS段，是不入栈的。出栈的顺序正好相反，最终栈顶指向主函数下一条语句的地址，主程序又从该地址开始执行。堆，一般情况堆顶使用一个字节的空间来存放堆的大小，而堆中具体存放内容是由程序员来填充的。</p>
+<p>从以上可以看到，堆和栈相比，由于大量malloc()&#x2F;free()或new&#x2F;delete的使用，容易造成大量的内存碎片，并且可能引发用户态和核心态的切换，效率较低。栈相比于堆，在程序中应用较为广泛，最常见的是函数的调用过程由栈来实现，函数返回地址、EBP、实参和局部变量都采用栈的方式存放。虽然栈有众多的好处，但是由于和堆相比不是那么灵活，有时候分配大量的内存空间，主要还是用堆。</p>
+<p>无论是堆还是栈，在内存使用时都要防止非法越界，越界导致的非法内存访问可能会摧毁程序的堆、栈数据，轻则导致程序运行处于不确定状态，获取不到预期结果，重则导致程序异常崩溃，这些都是我们编程时与内存打交道时应该注意的问题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cl0j84jxg00ak04vh9m4df4vs" data-title="堆与栈区别" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-操作系统虚拟内存" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" class="article-date">
+  <time class="dt-published" datetime="2021-04-25T11:54:21.000Z" itemprop="datePublished">2021-04-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">操作系统虚拟内存</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="操作系统虚拟内存"><a href="#操作系统虚拟内存" class="headerlink" title="操作系统虚拟内存"></a>操作系统虚拟内存</h1><p>这个在我们平时使用电脑特别是Windows系统的时候太常见了。很多时候我们使用点开了很多占内存的软件，这些软件占用的内存可能已经远远超出了我们电脑本身具有的物理内存。为什么可以这样呢?正是因为虚拟内存的存在，通过虚拟内存可以让程序可以拥有超过系统物理内存大小的可用内存空间。另外，虚拟内存为每个进程提供了一个一致的、私有的地址空间，它让每个进程产生了一种自己在独享主存的错觉（每个进程拥有一片连续完整的内存空间)。这样会更加有效地管理内存并减少出错。<br>虚拟内存是计算机系统内存管理的一种技术，我们可以手动设置自己电脑的虚拟内存。不要单纯认为虚拟内存只是“使用硬盘空问来扩展内存”的技术。虚拟内存的重要意义是它定义了一个连续的虚拟地址空间，并且把内存扩展到硬盘空间。</p>
+<blockquote>
+<p>虚拟内存 使得应⽤程序认为它拥有连续的可⽤的内存（⼀个连续完整的地址空间），⽽实 际上，它通常是被分隔成多个物理内存碎⽚，还有部分暂时存储在外部磁盘存储器上，在需 要时进⾏数据交换。与没有使⽤虚拟内存技术的系统相⽐，使⽤这种技术的系统使得⼤型程 序的编写变得更容易，对真正的物理内存（例如 RAM）的使⽤也更有效率。⽬前，⼤多数 操作系统都使⽤了虚拟内存，如 Windows 家族的“虚拟内存”；Linux 的“交换空间”等。                                    ——–维基百科</p>
+</blockquote>
+<h1 id="局部性原理"><a href="#局部性原理" class="headerlink" title="局部性原理"></a>局部性原理</h1><p>局部性原理是虚拟内存技术的基础，正是因为程序运⾏具有局部性原理，才可以只装⼊ 部分程序到内存就开始运⾏。</p>
+<p>局部性原理表现在以下两个方面:</p>
+<ol>
+<li>时间局部性︰如果程序中的某条指令一旦执行，不久以后该指令可能再次执行;如果某数据被访问过，不久以后该数据可能再次被访问。产生时间局部性的典型原因，是由于在程序中存在着大量的循环操作。</li>
+<li>空间局部性︰一旦程序访问了某个存储单元，在不久之后，其附近的存储单元也将被访问，即程序在一段时间内所访问的地址，可能集中在一定的范围之内，这是因为指令通常是顺序存放、顺序执行的，数据也一般是以向量、数组、表等形式簇聚存储的。</li>
+</ol>
+<p>时间局部性是通过将近来使用的指令和数据保存到高速缓存存储器中，并使用高速缓存的层次结构实现。空间局部性通常是使用较大的高速缓存，并将预取机制集成到高速缓存控制逻辑中实现。虚拟内存技术实际上就是建立了“内存一外存”的两级存储器的结构，利用局部性原理实现高速缓存。</p>
+<h1 id="虚拟存储器"><a href="#虚拟存储器" class="headerlink" title="虚拟存储器"></a>虚拟存储器</h1><blockquote>
+<p>勘误：虚拟存储器⼜叫做虚拟内存，都是 Virtual Memory 的翻译，属于同⼀个概念。</p>
+</blockquote>
+<p>基于局部性原理，在程序装⼊时，可以将程序的⼀部分装⼊内存，⽽将其他部分留在外存，就可 以启动程序执⾏。由于外存往往⽐内存⼤很多，所以我们运⾏的软件的内存⼤⼩实际上是可以⽐ 计算机系统实际的内存⼤⼩⼤的。在程序执⾏过程中，当所访问的信息不在内存时，由操作系统 将所需要的部分调⼊内存，然后继续执⾏程序。另⼀⽅⾯，操作系统将内存中暂时不使⽤的内容 换到外存上，从⽽腾出空间存放将要调⼊内存的信息。这样，计算机好像为⽤户提供了⼀个⽐实 际内存⼤的多的存储器——虚拟存储器</p>
+<h1 id="虚拟内存的技术实现"><a href="#虚拟内存的技术实现" class="headerlink" title="虚拟内存的技术实现"></a>虚拟内存的技术实现</h1><p>虚拟内存的实现需要建⽴在离散分配的内存管理⽅式的基础上。 虚拟内存的实现有以下 三种⽅式：</p>
+<ol>
+<li>请求分⻚存储管理 ：建⽴在分⻚管理之上，为了⽀持虚拟存储器功能⽽增加了请求调⻚功能 和⻚⾯置换功能。请求分⻚是⽬前最常⽤的⼀种实现虚拟存储器的⽅法。请求分⻚存储管理 系统中，在作业开始运⾏之前，仅装⼊当前要执⾏的部分段即可运⾏。假如在作业运⾏的过 程中发现要访问的⻚⾯不在内存，则由处理器通知操作系统按照对应的⻚⾯置换算法将相应 的⻚⾯调⼊到主存，同时操作系统也可以将暂时不⽤的⻚⾯置换到外存中。</li>
+<li>请求分段存储管理 ：建⽴在分段存储管理之上，增加了请求调段功能、分段置换功能。请求 分段储存管理⽅式就如同请求分⻚储存管理⽅式⼀样，在作业开始运⾏之前，仅装⼊当前要 执⾏的部分段即可运⾏；在执⾏过程中，可使⽤请求调⼊中断动态装⼊要访问但⼜不在内存 的程序段；当内存空间已满，⽽⼜需要装⼊新的段时，根据置换功能适当调出某个段，以便 腾出空间⽽装⼊新的段。</li>
+<li>请求段⻚式存储管理</li>
+</ol>
+<p>很多⼈容易搞混请求分⻚与分⻚存储管理，两者有何不同呢？</p>
+<p>请求分⻚存储管理建⽴在分⻚管理之上。他们的根本区别是是否将程序全部所需的全部地址空间 都装⼊主存，这也是请求分⻚存储管理可以提供虚拟内存的原因。 它们之间的根本区别在于是否将⼀作业的全部地址空间同时装⼊主存。请求分⻚存储管理不要求 将作业全部地址空间同时装⼊主存。基于这⼀点，请求分⻚存储管理可以提供虚存，⽽分⻚存储 管理却不能提供虚存。 不管是上⾯那种实现⽅式，我们⼀般都需要：</p>
+<ol>
+<li>⼀定容量的内存和外存：在载⼊程序的时候，只需要将程序的⼀部分装⼊内存，⽽将其他部 分留在外存，然后程序就可以执⾏了； </li>
+<li>缺⻚中断：如果需执⾏的指令或访问的数据尚未在内存（称为缺⻚或缺段），则由处理器通 知操作系统将相应的⻚⾯或段调⼊到内存，然后继续执⾏程序； </li>
+<li>虚拟地址空间 ：逻辑地址到物理地址的变换。</li>
+</ol>
+<h1 id="⻚⾯置换算法"><a href="#⻚⾯置换算法" class="headerlink" title="⻚⾯置换算法"></a>⻚⾯置换算法</h1><p>地址映射过程中，若在⻚⾯中发现所要访问的⻚⾯不在内存中，则发⽣缺⻚中断 。</p>
+<blockquote>
+<p>缺⻚中断 就是要访问的⻚不在主存，需要操作系统将其调⼊主存后再进⾏访问。 在这个时 候，被内存映射的⽂件实际上成了⼀个分⻚交换⽂件。</p>
+</blockquote>
+<p>当发⽣缺⻚中断时，如果当前内存中并没有空闲的⻚⾯，操作系统就必须在内存选择⼀个⻚⾯将 其移出内存，以便为即将调⼊的⻚⾯让出空间。⽤来选择淘汰哪⼀⻚的规则叫做⻚⾯置换算法， 我们可以把⻚⾯置换算法看成是淘汰⻚⾯的规则。</p>
+<p>**OPT页面置换算法（最佳页面置换算法)**︰最佳(Optimal,OPT)置换算法所选择的被淘汰页面将是以后永不使用的，或者是在最长时间内不再被访问的页面,这样可以保证获 得最低的缺页率。但由于人们目前无法预知进程在内存下的若千页面中哪个是未来最长时间内不再被访问的,因而该算法无法实现。一般作为衡量其他置换算法的方法。</p>
+<p>**FIFO (First In First Out)页面置换算法（先进先出页面置换算法)**︰总是淘汰最先进入内存的页面，即选择在内存中驻留时间最久的页面进行淘汰。</p>
+<p>**LRU (Least Currently Used)页面置换算法（最近最久未使用页面置换算法)**︰LRU算法赋予每个页面一个访问字段，用来记录一个页面自上次被访问以来所经历的时间T，当须淘汰一个页面时，选择现有页面中其T值最大的，即最近最久未使用的页面予以淘汰。</p>
+<p>**LFU (Least Frequently Used)页面置换算法（最少使用页面置换算法)**︰该置换算法选择在之前时期使用最少的页面作为淘汰页。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" data-id="cl0j84jxh00as04vhe58u6bkv" data-title="操作系统虚拟内存" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-操作系统页面置换算法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/" class="article-date">
+  <time class="dt-published" datetime="2021-04-25T11:54:21.000Z" itemprop="datePublished">2021-04-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">页面置换算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="页面置换算法"><a href="#页面置换算法" class="headerlink" title="页面置换算法"></a>页面置换算法</h1><h2 id="1-最佳置换算法（OPT，Optimal）"><a href="#1-最佳置换算法（OPT，Optimal）" class="headerlink" title="1 最佳置换算法（OPT，Optimal）"></a>1 最佳置换算法（OPT，Optimal）</h2><p> 算法思想：每次选择<strong>淘汰的页面</strong>将是<strong>以后永不使用</strong>，或者<strong>在最长时间内不再被访问的页面</strong>，这样可以保证最低的缺页率。</p>
+<h2 id="2-先进先出置换算法（FIFO）"><a href="#2-先进先出置换算法（FIFO）" class="headerlink" title="2 先进先出置换算法（FIFO）"></a>2 先进先出置换算法（FIFO）</h2><p> 算法思想：每次选择<strong>淘汰的页面是最早进入内存的页面。</strong></p>
+<h2 id="3-最近最久未使用置换算法（LRU，Least-Recently-Used）"><a href="#3-最近最久未使用置换算法（LRU，Least-Recently-Used）" class="headerlink" title="3 最近最久未使用置换算法（LRU，Least Recently Used）"></a>3 最近最久未使用置换算法（LRU，Least Recently Used）</h2><p> 算法思想：<strong>每次淘汰的页面是最近最久未使用的页面。</strong></p>
+<h2 id="4-时钟置换算法"><a href="#4-时钟置换算法" class="headerlink" title="4 时钟置换算法"></a>4 时钟置换算法</h2><p> 最佳置换算法那性能最好，但无法实现。先进先出置换算法实现简单，但是算法性能差。最近最久未使用置换算法性能好，是最接近OPT算法性能的，但是实现起来需要专门的硬件支持，算法开销大。<strong>时钟置换算法</strong>是一种<strong>性能和开销均平衡</strong>的算法。又称<strong>CLOCK算法</strong>，或<strong>最近未用算法</strong>（<strong>NRU</strong>，Not Recently Used）<br>  <strong>简单CLOCK算法</strong>算法思想：为每个页面设置一个<strong>访问位</strong>，再将内存中的页面都通过<strong>链接指针链接成一个循环队列</strong>。当某个页被访问时，其访问位置1.当需要淘汰一个页面时，只需检查页的访问位。如果是0，就选择该页换出；如果是1，暂不换出，将访问位改为0，继续检查下一个页面，若第一轮扫描中所有的页面都是1，则将这些页面的访问位一次置为0后，再进行第二轮扫描（第二轮扫描中一定会有访问位为0的页面，因此简单的CLOCK算法选择一个淘汰页面最多会经过<strong>两轮扫描</strong>）。</p>
+<h2 id="5-改进型的时钟置换算法"><a href="#5-改进型的时钟置换算法" class="headerlink" title="5 改进型的时钟置换算法"></a>5 改进型的时钟置换算法</h2><p> 简单的时钟置换算法仅考虑到了一个页面最近是否被访问过。事实上，如果淘汰的页面没有被修改过，就不需要执行I&#x2F;O操作写回外存。<strong>只有淘汰的页面被修改过时，才需要写回外存。</strong><br>  因此，除了考虑一个页面最近有没有被访问过之外，操作系统还需要考虑页面有没有被修改过。<br>  改进型时钟置换算法的<strong>算法思想</strong>：<strong>在其他在条件相同时，应该优先淘汰没有被修改过的页面，</strong>从而来避免I&#x2F;O操作。<br>  为了方便讨论，用（访问位，修改位）的形式表示各页面的状态。如（1,1）表示一个页面近期被访问过，且被修改过。<br>  <strong>算法规则</strong>：将所有可能被置换的页面排成一个循环队列</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/" data-id="cl0j84jxi00av04vh22q65oa2" data-title="页面置换算法" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-操作系统进程和线程" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/" class="article-date">
+  <time class="dt-published" datetime="2021-04-25T11:54:21.000Z" itemprop="datePublished">2021-04-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">操作系统进程和线程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h1><h2 id="进程和线程的区别"><a href="#进程和线程的区别" class="headerlink" title="进程和线程的区别"></a>进程和线程的区别</h2><p>⼀个进程中可以有多个线程，多个线程共享进程的堆和⽅法区 (JDK1.8 之后的 元空间)资源，但是每个线程有⾃⼰的程序计数器、虚拟机栈 和 本地⽅法栈。</p>
+<p>总结： 线程是进程划分成的更⼩的运⾏单位,⼀个进程在其执⾏的过程中可以产⽣多个线程。线 程和进程最⼤的不同在于基本上各进程是独⽴的，⽽各线程则不⼀定，因为同⼀进程中的线程极 有可能会相互影响。线程执⾏开销⼩，但不利于资源的管理和保护；⽽进程正相反。</p>
+<h2 id="进程有哪⼏种状态"><a href="#进程有哪⼏种状态" class="headerlink" title="进程有哪⼏种状态?"></a>进程有哪⼏种状态?</h2><p>创建状态(new): 进程正在被创建，尚未到就绪状态。</p>
+<p>就绪状态(ready): 进程已处于准备运行状态，即进程获得了除了处理器之外的一切所需资源，—旦得到处理器资源(处理器分配的时间片)即可运行。</p>
+<p>运行状态(running): 讲释正在处理器上上运行(单核CPU下任意时刻只有一个进程处于运行状态)。</p>
+<p>阻塞状态(waiting): 又称为等待状态，进程正在等待某一事件而暂停运行如等待某资源为可用或等待IO操作完成。即使处理器空闲，该进程也不能运行。</p>
+<p>结束状态(terminated): 进程正在从系统中消失。可能是进程正常结束或其他原因中断退出运行。</p>
+<h2 id="进程间的同步⽅式"><a href="#进程间的同步⽅式" class="headerlink" title="进程间的同步⽅式"></a>进程间的同步⽅式</h2><p>1．<strong>管道&#x2F;匿名管道(Pipes)</strong>:用于具有亲缘关系的父子进程间或者兄弟进程之间的通信。</p>
+<p>2.<strong>有名管道(Names Pipes)</strong>:匿名管道由于没有名字，只能用于亲缘关系的进程间通信。为了克服这个缺点，提出了有名管道。有名管道严格遵循先进先出(first in first out)。有名管道以磁盘文件的方式存在，可以实现本机任意两个进程通信。</p>
+<p>3.**信号(Signal)**︰信号是一种比较复杂的通信方式，用于通知接收进程某个事件已经发生;</p>
+<p>4．**消息队列(Message Queuing)**︰消息队列是消息的链表,具有特定的格式,存放在内存中并由消息队列标识符标识。管道和消息队列的通信数据都是先进先出的原则。与管道（无名管道:只存在于内存中的文件;命名管道:存在于实际的磁盘介质或者文件系统)不同的是消息队列存放在内核中，只有在内核重启(即，操作系统重启)或者显示地删除一个消息队列时，该消息队列才会被真正的删除。消息队列可以实现消息的随机查询,消息不一定要以先进先出的次序读取,也可以按消息的类型读取.比FIFO更有优势。消息队列克服了信号承载信息量少，管道只能承载无格式字节流以及缓冲区大小受限等缺。</p>
+<p>5．**信号量(Semaphores)**︰信号量是一个计数器，用于多进程对共享数据的访问，信号量的意图在于进程间同步。这种通信方式主要用于解决与同步相关的问题并避免竞争条件。</p>
+<p>6.**共享内存(Shared memory)**︰使得多个进程可以访问同一块内存空间，不同进程可以及时看到对方进程中对共享内存中数据的更新。这种方式需要依靠某种同步操作，如互斥锁和信号量等。可以说这是最有用的进程间通信方式。</p>
+<p>7．<strong>套接字(Sockets)</strong>:此方法主要用于在客户端和服务器之间通过网络进行通信。套接字是支持TCP&#x2F;IP的网络通信的基本操作单元，可以看做是不同主机之间的进程进行双向通信的端点，简单的说就是通信的两方的一种约定，用套接字中的相关函数来完成通信过程。</p>
+<h2 id="线程间的同步的⽅式"><a href="#线程间的同步的⽅式" class="headerlink" title="线程间的同步的⽅式"></a>线程间的同步的⽅式</h2><p>线程同步是两个或多个共享关键资源的线程的并发执行。应该同步线程以避免关键的资源使用冲突。操作系统—般有下面三种线程同步的方式:</p>
+<p>1.互斥量(Mutex)︰采用互斥对象机制，只有拥有互斥对象的线程才有访问公共资源的权限。因为互斥对象只有一个，所以可以保证公共资源不会被多个线程同时访问。比如Java中的synchronized 关键词和各种Lock 都是这种机制。</p>
+<p>2.信号量(Semphares)︰它允许同一时刻多个线程访问同一资源，但是需要控制同一时刻访问此资源的最大线程数量</p>
+<p>3.事件(Event) :Wait&#x2F;Notify:通过通知操作的方式来保持多线程同步，还可以方便的实现多线程优先级的比较操</p>
+<h2 id="进程的调度算法"><a href="#进程的调度算法" class="headerlink" title="进程的调度算法"></a>进程的调度算法</h2><p>为了确定首先执行哪个进程以及最后执行哪个进程以实现最大CPU利用率，计算机科学家已经定义了一些算法，它们是:</p>
+<p><strong>先到先服务(FCFS)调度算法</strong>︰从就绪队列中选择一个最先进入该队列的进程为之分配资源，使它立即执行并一直执行到完成或发生某事件而被阻塞放弃占用CPU时再重新调度。</p>
+<p><strong>短作业优先(SJF)的调度算法</strong>︰从就绪队列中选出一个估计运行时间最短的进程为之分配资源，使它立即执行并一直执行到完成或发生某事件而被阻塞放弃占用CPU时再重新调度。</p>
+<p><strong>时间片轮转调度算法</strong>:时间片轮转调度是一种最古老，最简单，最公平且使用最广的算法，又称RR(Round robin)调度。每个进程被分配一个时间段，称作它的时间片，即该进程允许运行的时间。</p>
+<p><strong>多级反馈队列调度算法</strong>︰前面介绍的几种进程调度的算法都有一定的局限性。如短进程优先的调度算法，仅照顾了短进程而忽略了长进程。多级反馈队列调度算法既能使高优先级的作业得到响应又能使短作业(进程)迅速完成。，因而它是目前被公认的一种较好的进程调度算法，UNIX操作系统采取的便是这种调度算法。</p>
+<p><strong>优先级调度</strong>︰为每个流程分配优先级，首先执行具有最高优先级的进程，依此类推。具有相同优先级的进程以FCFS方式执行。可以根据内存要求，时间要求或任何其他资源要求来确定优先级。</p>
+<p>多线程运行，其中一个线程报了数组越界，其他线程会怎么样？</p>
+<p>如果其他线程也会终止，能不能自己实现使他们不受影响，怎么是实现？</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/" data-id="cl0j84jxk00az04vhftl81dxg" data-title="操作系统进程和线程" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Redis缓存穿透" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/24/Redis%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-24T13:35:02.000Z" itemprop="datePublished">2021-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/24/Redis%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F/">Redis缓存穿透</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis缓存穿透"><a href="#Redis缓存穿透" class="headerlink" title="Redis缓存穿透"></a>Redis缓存穿透</h1><h2 id="1-什么是缓存穿透"><a href="#1-什么是缓存穿透" class="headerlink" title="1.什么是缓存穿透?"></a>1.什么是缓存穿透?</h2><p>缓存穿透是指用户查询数据，在数据库没有，自然在缓存中也不会有。这样就导致用户查询的时候，在缓存中找不到，每次都要去数据库再查询一遍，然后返回空（相当于进行了两次无用的查询)。这样请求就绕过缓存直接查数据库，这也是经常提的缓存命中率问题。</p>
+<p>缓存穿透说简单点就是大量请求的key根本不存在于缓存中，导致请求直接到了数据库上，根本没有经过缓存这一层。举个例子:某个黑客故意制造我们缓存中不存在的key 发起大量请求，导致大量请求落到数据库。</p>
+<h2 id="2-缓存穿透情况的处理流程是怎样的"><a href="#2-缓存穿透情况的处理流程是怎样的" class="headerlink" title="2.缓存穿透情况的处理流程是怎样的?"></a>2.缓存穿透情况的处理流程是怎样的?</h2><p>如下图所示,用户的请求最终都要跑到数据库中查询一遍。</p>
+<p><img src="/1.png" alt="1"></p>
+<p><img src="E:\MyBolg\source_posts\Redis缓存穿透\1.png" alt="1"></p>
+<h2 id="3-有哪些解决办法"><a href="#3-有哪些解决办法" class="headerlink" title="3.有哪些解决办法?"></a>3.有哪些解决办法?</h2><p>最基本的就是首先做好参数校验，一些不合法的参数请求直接抛出异常信息返回给客户端。比如查询的数据库id不能小于0、传入的邮箱格式不对的时候直接返回错误消息给客户端等等。</p>
+<h3 id="1-缓存无效key"><a href="#1-缓存无效key" class="headerlink" title="1)缓存无效key"></a>1)缓存无效key</h3><p>如果缓存和数据库都查不到某个key的数据就写一个到Redis 中去并设置过期时间，具体命令如下:SET key value EX 10086。这种方式可以解决请求的key变化不频繁的情况，如果黑客恶意攻击，每次构建不同的请求key，会导致Redis 中缓存大量无效的key。很明显，这种方案并不能从根本上解决此问题。如果非要用这种方式来解决穿透问题的话，尽量将无效的key的过期时间设置短一点比如1分钟。<br>另外，这里多说一嘴，一般情况下我们是这样设计key的:表名:列名:主键名:主键值。<br>如果用Java 代码展示的话，差不多是下面这样的:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">getObjectInclNullById</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">     <span class="comment">// 从缓存中获取数据</span></span><br><span class="line">     <span class="type">Object</span> <span class="variable">cacheValue</span> <span class="operator">=</span> cache.get(id);</span><br><span class="line">     <span class="comment">// 缓存为空</span></span><br><span class="line">     <span class="keyword">if</span> (cacheValue == <span class="literal">null</span>) &#123;</span><br><span class="line">         <span class="comment">// 从数据库中获取</span></span><br><span class="line">         <span class="type">Object</span> <span class="variable">storageValue</span> <span class="operator">=</span> storage.get(key);</span><br><span class="line">         <span class="comment">// 缓存空对象</span></span><br><span class="line">         cache.set(key, storageValue);</span><br><span class="line">         <span class="comment">// 如果存储数据为空，需要设置⼀个过期时间(300秒)</span></span><br><span class="line">         <span class="keyword">if</span> (storageValue == <span class="literal">null</span>) &#123;</span><br><span class="line">             <span class="comment">// 必须设置过期时间，否则有被攻击的⻛险</span></span><br><span class="line">             cache.expire(key, <span class="number">60</span> * <span class="number">5</span>);</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> storageValue;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> cacheValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-布隆过滤器"><a href="#2-布隆过滤器" class="headerlink" title="2)布隆过滤器"></a>2)布隆过滤器</h3><p>布隆过滤器是一个非常神奇的数据结构，通过它我们可以非常方便地判断一个给定数据是否存在于海量数据中。我们需要的就是判断key是否合法，有没有感觉布隆过滤器就是我们想要找的那个“人””。<br>具体是这样做的︰把所有可能存在的请求的值都存放在布隆过滤器中，当用户请求过来，先判断用户发来的请求的值是否存在于布隆过滤器巾。不存在的话，直接返回请求参数错误信息给客户端，存在的话才会走下面的流程。<br>加入布隆过滤器之后的缓存处理流程图如下。</p>
+<p><img src="/2.png" alt="2"></p>
+<p><img src="E:\MyBolg\source_posts\Redis缓存穿透\2.png" alt="2"></p>
+<p>但是，需要注意的是布隆过滤器可能会存在误判的情况。总结来说就是︰布隆过滤器说某个元素存在，小概率会误判。布隆过滤器说某个元素不在，那么这个元素一定不在。</p>
+<p>为什么会出现误判的情况呢?我们还要从布隆过滤器的原理来说!</p>
+<p>我们先来看一下，当一个元素加入布隆过滤器中的时候，会进行哪些操作:</p>
+<p>1.使用布隆过滤器中的哈希函数对元素值进行计算，得到哈希值（有几个哈希函数得到几个哈希值)。</p>
+<p>2.根据得到的哈希值，在位数组中把对应下标的值置为1。</p>
+<p>我们再来看一下，当我们需要判断一个元素是否存在于布隆过滤器的时候，会进行哪些操作:</p>
+<p>1．对给定元素再次进行相同的哈希计算;</p>
+<p>2.得到值之后判断位数组中的每个元素是否都为1，如果值都为1，那么说明这个值在布隆过滤器中，如果存在一个值不为1，说明该元素不在布隆过滤器中。</p>
+<p>然后，一定会出现这样一种情况︰不同的字符串可能哈希出来的位置相同。(可以适当增加位数组大小或者调整我们的哈希函数来降低概率)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/24/Redis%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F/" data-id="cl0j84jwq007o04vh1p1n42e0" data-title="Redis缓存穿透" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

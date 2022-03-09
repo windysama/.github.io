@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MySQL中索引失效的常见场景与规避方法 | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="MySQL中索引失效的常见场景与规避方法1. where语句中包含or时，可能会导致索引失效使用or并不是一定会使索引失效，你需要看or左右两边的查询列是否命中相同的索引。 假设USER表中的user_id列有索引，age列没有索引。 下面这条语句其实是命中索引的（据说是新版本的MySQL才可以，如果你使用的是老版本的MySQL，可以使用explain验证下）。 1select *  from u">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL中索引失效的常见场景与规避方法">
+<meta property="og:url" content="http://example.com/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="MySQL中索引失效的常见场景与规避方法1. where语句中包含or时，可能会导致索引失效使用or并不是一定会使索引失效，你需要看or左右两边的查询列是否命中相同的索引。 假设USER表中的user_id列有索引，age列没有索引。 下面这条语句其实是命中索引的（据说是新版本的MySQL才可以，如果你使用的是老版本的MySQL，可以使用explain验证下）。 1select *  from u">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-04-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-09T12:50:55.996Z">
+<meta property="article:author" content="Lee yunbo">
+<meta property="article:tag" content="MySql">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-MySql索引失效" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T16:00:00.000Z" itemprop="datePublished">2021-04-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      MySQL中索引失效的常见场景与规避方法
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="MySQL中索引失效的常见场景与规避方法"><a href="#MySQL中索引失效的常见场景与规避方法" class="headerlink" title="MySQL中索引失效的常见场景与规避方法"></a>MySQL中索引失效的常见场景与规避方法</h1><h2 id="1-where语句中包含or时，可能会导致索引失效"><a href="#1-where语句中包含or时，可能会导致索引失效" class="headerlink" title="1. where语句中包含or时，可能会导致索引失效"></a>1. where语句中包含or时，可能会导致索引失效</h2><p>使用or并不是一定会使索引失效，你需要看or左右两边的查询列是否命中相同的索引。</p>
+<p>假设USER表中的user_id列有索引，age列没有索引。</p>
+<p>下面这条语句其实是命中索引的（据说是新版本的MySQL才可以，如果你使用的是老版本的MySQL，可以使用explain验证下）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select *  from user where user_id = 1  or user_id = 2;</span><br></pre></td></tr></table></figure>
+
+<p>但是这条语句是无法命中索引的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where user_id = 1  or age = 20;</span><br></pre></td></tr></table></figure>
+
+<p>假设age列也有索引的话，依然是无法命中索引的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select *  from user where user_id = 1  or age = 20;</span><br></pre></td></tr></table></figure>
+
+<p>因此才有建议说，尽量避免使用or语句，可以根据情况尽量使用union all或者in来代替，这两个语句的执行效率也比or好些。</p>
+<h2 id="2-where语句中索引列使用了负向查询，可能会导致索引失效"><a href="#2-where语句中索引列使用了负向查询，可能会导致索引失效" class="headerlink" title="2. where语句中索引列使用了负向查询，可能会导致索引失效"></a><strong>2. where语句中索引列使用了负向查询，可能会导致索引失效</strong></h2><p>负向查询包括：NOT、!&#x3D;、&lt;&gt;、!&lt;、!&gt;、NOT IN、NOT LIKE等。</p>
+<p>某“军规”中说，使用负向查询一定会索引失效，笔者查了些文章，有网友对这点进行了反驳并举证。</p>
+<p>其实负向查询并不绝对会索引失效，这要看MySQL优化器的判断，全表扫描或者走索引哪个成本低了。</p>
+<h2 id="3-索引字段可以为null，使用is-null或is-not-null时，可能会导致索引失效"><a href="#3-索引字段可以为null，使用is-null或is-not-null时，可能会导致索引失效" class="headerlink" title="3. 索引字段可以为null，使用is null或is not null时，可能会导致索引失效"></a>3. 索引字段可以为null，使用is null或is not null时，可能会导致索引失效</h2><p>其实单个索引字段，使用is null或is not null时，是可以命中索引的，但网友在举证时说两个不同索引字段用or连接时，索引就失效了，笔者认为确实索引失效，但这个锅应该由or来背，属于第一种场景~~</p>
+<p>假设USER表中的user_id列有索引且允许null，age列有索引且允许null。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where user_id is not null or age is not null;</span><br></pre></td></tr></table></figure>
+
+<p>不过某些“军规”和规范中都有强调，字段要设为not null并提供默认值，是有原因值得参考的。</p>
+<ul>
+<li>null的列使索引&#x2F;索引统计&#x2F;值比较都更加复杂，对MySQL来说更难优化。</li>
+<li>null 这种类型MySQL内部需要进行特殊处理，增加数据库处理记录的复杂性；同等条件下，表中有较多空字段的时候，数据库的处理性能会降低很多。</li>
+<li>null值需要更多的存储空，无论是表还是索引中每行中的null的列都需要额外的空间来标识。</li>
+<li>对null 的处理时候，只能采用is null或is not null，而不能采用&#x3D;、in、&lt;、&lt;&gt;、!&#x3D;、not in这些操作符号。如：where name!&#x3D;’shenjian’，如果存在name为null值的记录，查询结果就不会包含name为null值的记录。</li>
+</ul>
+<h2 id="4-在索引列上使用内置函数，一定会导致索引失效"><a href="#4-在索引列上使用内置函数，一定会导致索引失效" class="headerlink" title="4. 在索引列上使用内置函数，一定会导致索引失效"></a><strong>4. 在索引列上使用内置函数，一定会导致索引失效</strong></h2><p>比如下面语句中索引列login_time上使用了函数，会索引失效：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where DATE_ADD(login_time, INTERVAL 1 DAY) = 7;</span><br></pre></td></tr></table></figure>
+
+<p>优化建议，尽量在应用程序中进行计算和转换。</p>
+<p><strong>4.1 隐式类型转换导致的索引失效</strong></p>
+<p>比如下面语句中索引列user_id为varchar类型，不会命中索引：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select* from `user` where user_id = 12;</span><br></pre></td></tr></table></figure>
+
+<p>这是因为MySQL做了隐式类型转换，调用函数将user_id做了转换。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select *  from `user` where CAST (user_id  AS signed  int ) = 12;</span><br></pre></td></tr></table></figure>
+
+<p><strong>4.2 隐式字符编码转换导致的索引失效</strong></p>
+<p>当两个表之间做关联查询时，如果两个表中关联的字段字符编码不一致的话，MySQL可能会调用CONVERT函数，将不同的字符编码进行隐式转换从而达到统一。作用到关联的字段时，就会导致索引失效。</p>
+<p>比如下面这个语句，其中d.tradeid字符编码为utf8，而l.tradeid的字符编码为utf8mb4。因为utf8mb4是utf8的超集，所以MySQL在做转换时会用CONVERT将utf8转为utf8mb4。简单来看就是CONVERT作用到了d.tradeid上，因此索引失效。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select l.operator  from tradelog l , trade_detail d  where d.tradeid=l.tradeid  and d.id=4;</span><br></pre></td></tr></table></figure>
+
+<p>这种情况一般有两种解决方案。</p>
+<p>方案1: 将关联字段的字符编码统一。</p>
+<p>方案2: 实在无法统一字符编码时，手动将CONVERT函数作用到关联时&#x3D;的右侧，起到字符编码统一的目的，这里是强制将utf8mb4转为utf8，当然从超集向子集转换是有数据截断风险的.如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select d.* from tradelog l , trade_detail d where d.tradeid=CONVERT(l.tradeid USING utf8) and l.id=2; </span><br></pre></td></tr></table></figure>
+
+<h2 id="5-对索引列进行运算，一定会导致索引失效"><a href="#5-对索引列进行运算，一定会导致索引失效" class="headerlink" title="5. 对索引列进行运算，一定会导致索引失效"></a><strong>5. 对索引列进行运算，一定会导致索引失效</strong></h2><p>运算如+，-，*，&#x2F;等，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where age - 1 = 10;</span><br></pre></td></tr></table></figure>
+
+<p>优化的话，要把运算放在值上，或者在应用程序中直接算好，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where age = 10 - 1;</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-like通配符可能会导致索引失效"><a href="#6-like通配符可能会导致索引失效" class="headerlink" title="6. like通配符可能会导致索引失效"></a><strong>6. like通配符可能会导致索引失效</strong></h2><p>like查询以%开头时，会导致索引失效。解决办法有两种：</p>
+<p>将%移到后面，如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where `name` like &#x27;李%&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>利用覆盖索引来命中索引</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select name from `user` where `name` like &#x27;%李%&#x27;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-联合索引中，where中索引列违背最左匹配原则，一定会导致索引失效"><a href="#7-联合索引中，where中索引列违背最左匹配原则，一定会导致索引失效" class="headerlink" title="7. 联合索引中，where中索引列违背最左匹配原则，一定会导致索引失效"></a><strong>7. 联合索引中，where中索引列违背最左匹配原则，一定会导致索引失效</strong></h2><p>当创建一个联合索引的时候，如(k1,k2,k3)，相当于创建了(k1)、(k1,k2)和(k1,k2,k3)三个索引，这就是最左匹配原则。</p>
+<p>比如下面的语句就不会命中索引：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from t where k2=2;</span><br><span class="line">select * from t where k3=3;</span><br><span class="line">slect * from t where k2=2 and k3=3;</span><br></pre></td></tr></table></figure>
+
+<p>下面的语句只会命中索引(k1):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slect * from t where k1=1 and k3=3;</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-MySQL优化器的最终选择，不走索引"><a href="#8-MySQL优化器的最终选择，不走索引" class="headerlink" title="8. MySQL优化器的最终选择，不走索引"></a><strong>8. MySQL优化器的最终选择，不走索引</strong></h2><p>上面有提到，即使完全符合索引生效的场景，考虑到实际数据量等原因，最终是否使用索引还要看MySQL优化器的判断。当然你也可以在sql语句中写明强制走某个索引。</p>
+<h2 id="优化索引的一些建议"><a href="#优化索引的一些建议" class="headerlink" title="优化索引的一些建议"></a><strong>优化索引的一些建议</strong></h2><ul>
+<li>禁止在更新十分频繁、区分度不高的属性上建立索引。<ul>
+<li>更新会变更B+树，更新频繁的字段建立索引会大大降低数据库性能。</li>
+<li>“性别”这种区分度不大的属性，建立索引是没有什么意义的，不能有效过滤数据，性能与全表扫描类似。</li>
+</ul>
+</li>
+<li>建立组合索引，必须把区分度高的字段放在前面。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" data-id="cl0j84jwb006204vhe0dwa6gs" data-title="MySQL中索引失效的常见场景与规避方法" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MySQL索引如何优化？
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/26/Spring%20%E5%A4%BA%E5%91%BD%E8%BF%9E%E7%8E%AF10%E9%97%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Spring 夺命连环10问</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

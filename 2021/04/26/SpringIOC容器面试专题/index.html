@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>SpringIOC容器面试专题 | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="1. Spring源码环境搭建过程中遇到过什么问题?2. Spring将配置解析成什么后注册到容器的?Spring是通过IoC容器对Bean进行管理的，而Bean的初始化主要分为两个过程：Bean的注册和Bean实例化。Bean的注册主要是指Spring通过读取配置文件获取各个bean的声明信息，并且对这些信息进行注册的过程。Bean的实例化则指的是Spring通过Bean的注册信息对各个Bean">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringIOC容器面试专题">
+<meta property="og:url" content="http://example.com/2021/04/26/SpringIOC%E5%AE%B9%E5%99%A8%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="1. Spring源码环境搭建过程中遇到过什么问题?2. Spring将配置解析成什么后注册到容器的?Spring是通过IoC容器对Bean进行管理的，而Bean的初始化主要分为两个过程：Bean的注册和Bean实例化。Bean的注册主要是指Spring通过读取配置文件获取各个bean的声明信息，并且对这些信息进行注册的过程。Bean的实例化则指的是Spring通过Bean的注册信息对各个Bean">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/1.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/1.png">
+<meta property="og:image" content="http://example.com/2.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/2.png">
+<meta property="og:image" content="http://example.com/3.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/3.png">
+<meta property="og:image" content="http://example.com/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E4%B8%BB%E8%A6%81%E5%9C%BA%E6%99%AF.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/循环依赖的主要场景.png">
+<meta property="og:image" content="http://example.com/4.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/4.png">
+<meta property="og:image" content="http://example.com/5.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/5.png">
+<meta property="og:image" content="http://example.com/6.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/6.png">
+<meta property="og:image" content="http://example.com/7.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/7.png">
+<meta property="og:image" content="http://example.com/8.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/8.png">
+<meta property="og:image" content="http://example.com/9.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/9.png">
+<meta property="og:image" content="http://example.com/10.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/10.png">
+<meta property="og:image" content="http://example.com/11.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/11.png">
+<meta property="og:image" content="http://example.com/12.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/12.png">
+<meta property="og:image" content="http://example.com/13.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/13.png">
+<meta property="og:image" content="http://example.com/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E5%88%92%E5%88%86.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/SpringIOC容器面试专题/循环依赖的划分.png">
+<meta property="article:published_time" content="2021-04-26T07:19:09.000Z">
+<meta property="article:modified_time" content="2021-05-14T12:14:55.879Z">
+<meta property="article:author" content="Lee yunbo">
+<meta property="article:tag" content="Spring Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-SpringIOC容器面试专题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/SpringIOC%E5%AE%B9%E5%99%A8%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T07:19:09.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      SpringIOC容器面试专题
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="1-Spring源码环境搭建过程中遇到过什么问题"><a href="#1-Spring源码环境搭建过程中遇到过什么问题" class="headerlink" title="1. Spring源码环境搭建过程中遇到过什么问题?"></a>1. Spring源码环境搭建过程中遇到过什么问题?</h2><h2 id="2-Spring将配置解析成什么后注册到容器的"><a href="#2-Spring将配置解析成什么后注册到容器的" class="headerlink" title="2. Spring将配置解析成什么后注册到容器的?"></a>2. Spring将配置解析成什么后注册到容器的?</h2><p>Spring是通过IoC容器对Bean进行管理的，而Bean的初始化主要分为两个过程：Bean的注册和Bean实例化。Bean的注册主要是指Spring通过读取配置文件获取各个bean的声明信息，并且对这些信息进行注册的过程。Bean的实例化则指的是Spring通过Bean的注册信息对各个Bean进行实例化的过程。</p>
+<p><strong>向Spring容器中注入Bean对象的四种方式：</strong></p>
+<blockquote>
+<p>1.通过@Component: 你随便用</p>
+<p>@Repository:一般用在Dao实现类上。</p>
+<p>@Service：一般用在Service层中的Service实现类上。</p>
+<p>@Controller+ComponentScan：一般用在试图层的Controller实现类上。</p>
+<p>的方式向Spring容器中注册Bean对象。</p>
+</blockquote>
+<p>在容器启动的时候，spring会将配置文件中定义的信息或则使用注解（如@Componet @Service @Controller等）定义的bean封装成一个个BeanDefinition对象，每个bean对应一个BeanDefinition对象，在对象实例化期间，使用bean对应的BeanDenifition对象通过反射生成实例对象。BeanDefinition接口方法用来管理bean的属性信息，如父类名、类名、作用域、懒加载等。</p>
+<h2 id="3-BeanFactoryPostProcessor可以做哪些事情呢"><a href="#3-BeanFactoryPostProcessor可以做哪些事情呢" class="headerlink" title="3. BeanFactoryPostProcessor可以做哪些事情呢?"></a>3. BeanFactoryPostProcessor可以做哪些事情呢?</h2><h2 id="4-BeanPostProcessor和BeanFactoryPostProcessor有什么区别呢"><a href="#4-BeanPostProcessor和BeanFactoryPostProcessor有什么区别呢" class="headerlink" title="4. BeanPostProcessor和BeanFactoryPostProcessor有什么区别呢?"></a>4. BeanPostProcessor和BeanFactoryPostProcessor有什么区别呢?</h2><h2 id="5-Spring事件传播器有什么作用呢-监听者如何提供给事件传播器"><a href="#5-Spring事件传播器有什么作用呢-监听者如何提供给事件传播器" class="headerlink" title="5. Spring事件传播器有什么作用呢?监听者如何提供给事件传播器?"></a>5. Spring事件传播器有什么作用呢?监听者如何提供给事件传播器?</h2><h2 id="6-预先实例化单实例的流程，简单说一下"><a href="#6-预先实例化单实例的流程，简单说一下" class="headerlink" title="6. 预先实例化单实例的流程，简单说一下?"></a>6. 预先实例化单实例的流程，简单说一下?</h2><h2 id="7-什么是循环依赖问题呢"><a href="#7-什么是循环依赖问题呢" class="headerlink" title="7. 什么是循环依赖问题呢?"></a>7. 什么是循环依赖问题呢?</h2><p>Spring bean循环依赖即循环引用。是指2个或以上bean 互相持有对方，最终形成闭环。比如A依赖于B，B依赖A。</p>
+<h2 id="8-Spring中的循环依赖有几种情况"><a href="#8-Spring中的循环依赖有几种情况" class="headerlink" title="8. Spring中的循环依赖有几种情况?"></a>8. Spring中的循环依赖有几种情况?</h2><p>产生循环依赖的方式有两种，一种是通过构造器注入形成的循环依赖，第二种是通过field属性注入形成的循环依赖。Spring通过特殊的bean生成机制解决了第二种方式产生的循环依赖问题，使得循环链的所有bean对象都能正确创建，而构造器注入方式阐释的循环依赖则会抛出异常。两者之间的差异能在bean创建机制中得到解释。</p>
+<p>第一种情况：自己依赖自己的直接依赖</p>
+<p><img src="/1.png" alt="1"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\1.png" alt="1"></p>
+<p>第二种情况：两个对象之间的直接依赖</p>
+<p><img src="/2.png" alt="2"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\2.png" alt="2"></p>
+<p>第三种情况：多个对象之间的间接依赖</p>
+<p><img src="/3.png" alt="3"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\3.png" alt="3"></p>
+<p>前面两种情况的直接循环依赖比较直观，非常好识别，但是第三种间接循环依赖的情况有时候因为业务代码调用层级很深，不容易识别出来</p>
+<p><img src="/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E4%B8%BB%E8%A6%81%E5%9C%BA%E6%99%AF.png" alt="循环依赖的主要场景"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\循环依赖的主要场景.png" alt="循环依赖的主要场景"></p>
+<h2 id="9-Spring是如何判定目前发生循环依赖的呢"><a href="#9-Spring是如何判定目前发生循环依赖的呢" class="headerlink" title="9. Spring是如何判定目前发生循环依赖的呢?"></a>9. Spring是如何判定目前发生循环依赖的呢?</h2><h2 id="10-Spring-setter注入依赖产生的循环依赖是可以解决的，原理是什么呢"><a href="#10-Spring-setter注入依赖产生的循环依赖是可以解决的，原理是什么呢" class="headerlink" title="10. Spring setter注入依赖产生的循环依赖是可以解决的，原理是什么呢?"></a>10. Spring setter注入依赖产生的循环依赖是可以解决的，原理是什么呢?</h2><h3 id="单例的setter注入"><a href="#单例的setter注入" class="headerlink" title="单例的setter注入"></a><strong>单例的setter注入</strong></h3><p>这种注入方式应该是spring用的最多的，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService2 testService2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个经典的循环依赖，但是它能正常运行，得益于spring的内部机制，让我们根本无法感知它有问题，因为spring默默帮我们解决了。</p>
+<p>spring内部有三级缓存：</p>
+<ul>
+<li>singletonObjects 一级缓存，用于保存实例化、注入、初始化完成的bean实例</li>
+<li>earlySingletonObjects 二级缓存，用于保存实例化完成的bean实例</li>
+<li>singletonFactories 三级缓存，用于保存bean创建工厂，以便于后面扩展有机会创建代理对象。</li>
+</ul>
+<p>下面用一张图告诉你，spring是如何解决循环依赖的：</p>
+<p><img src="/4.png" alt="4"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\4.png" alt="4"></p>
+<p>图1</p>
+<p>细心的朋友可能会发现在这种场景中第二级缓存作用不大。</p>
+<p>那么问题来了，为什么要用第二级缓存呢？</p>
+<p>试想一下，如果出现以下这种情况，我们要如何处理？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService2 testService2;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService3 testService3;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService3</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test3</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>TestService1依赖于TestService2和TestService3，而TestService2依赖于TestService1，同时TestService3也依赖于TestService1。</p>
+<p>按照上图的流程可以把TestService1注入到TestService2，并且TestService1的实例是从第三级缓存中获取的。</p>
+<p>假设不用第二级缓存，TestService1注入到TestService3的流程如图：</p>
+<p><img src="/5.png" alt="5"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\5.png" alt="5"></p>
+<p>图2</p>
+<p>TestService1注入到TestService3又需要从第三级缓存中获取实例，而第三级缓存里保存的并非真正的实例对象，而是<code>ObjectFactory</code>对象。说白了，两次从三级缓存中获取都是<code>ObjectFactory</code>对象，而通过它创建的实例对象每次可能都不一样的。</p>
+<p>这样不是有问题？</p>
+<p>为了解决这个问题，spring引入的第二级缓存。上面图1其实TestService1对象的实例已经被添加到第二级缓存中了，而在TestService1注入到TestService3时，只用从第二级缓存中获取该对象即可。</p>
+<p><img src="/6.png" alt="6"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\6.png" alt="6"></p>
+<p>还有个问题，第三级缓存中为什么要添加<code>ObjectFactory</code>对象，直接保存实例对象不行吗？</p>
+<p>答：不行，因为假如你想对添加到三级缓存中的实例对象进行增强，直接用实例对象是行不通的。</p>
+<p>针对这种场景spring是怎么做的呢？</p>
+<p>答案就在<code>AbstractAutowireCapableBeanFactory</code>类<code>doCreateBean</code>方法的这段代码中：</p>
+<p><img src="/7.png" alt="7"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\7.png" alt="7"></p>
+<p>它定义了一个匿名内部类，通过<code>getEarlyBeanReference</code>方法获取代理对象，其实底层是通过<code>AbstractAutoProxyCreator</code>类的<code>getEarlyBeanReference</code>生成代理对象。</p>
+<h3 id="多例的setter注入"><a href="#多例的setter注入" class="headerlink" title="多例的setter注入"></a><strong>多例的setter注入</strong></h3><p>这种注入方法偶然会有，特别是在多线程的场景下，具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService2 testService2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很多人说这种情况spring容器启动会报错，其实是不对的，我非常负责任的告诉你程序能够正常启动。</p>
+<p>为什么呢？</p>
+<p>其实在<code>AbstractApplicationContext</code>类的<code>refresh</code>方法中告诉了我们答案，它会调用<code>finishBeanFactoryInitialization</code>方法，该方法的作用是为了spring容器启动的时候提前初始化一些bean。该方法的内部又调用了<code>preInstantiateSingletons</code>方法</p>
+<p><img src="/8.png" alt="8"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\8.png" alt="8"></p>
+<p>标红的地方明显能够看出：非抽象、单例 并且非懒加载的类才能被提前初始bean。</p>
+<p>而多例即<code>SCOPE_PROTOTYPE</code>类型的类，非单例，不会被提前初始化bean，所以程序能够正常启动。</p>
+<p>如何让他提前初始化bean呢？</p>
+<p>只需要再定义一个单例的类，在它里面注入TestService1</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService3</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重新启动程序，执行结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Requested bean is currently in creation: Is there an unresolvable circular reference?</span><br></pre></td></tr></table></figure>
+
+<p>果然出现了循环依赖。</p>
+<p>注意：这种循环依赖问题是无法解决的，因为它没有用缓存，每次都会生成一个新对象。</p>
+<h3 id="构造器注入"><a href="#构造器注入" class="headerlink" title="构造器注入"></a><strong>构造器注入</strong></h3><p>这种注入方式现在其实用的已经非常少了，但是我们还是有必要了解一下，看看如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TestService1</span><span class="params">(TestService2 testService2)</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TestService2</span><span class="params">(TestService1 testService1)</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Requested bean is currently in creation: Is there an unresolvable circular reference?</span><br></pre></td></tr></table></figure>
+
+<p>出现了循环依赖，为什么呢？</p>
+<p><img src="/9.png" alt="9"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\9.png" alt="9"></p>
+<p>从图中的流程看出构造器注入没能添加到三级缓存，也没有使用缓存，所以也无法解决循环依赖问题。</p>
+<h3 id="单例的代理对象setter注入"><a href="#单例的代理对象setter注入" class="headerlink" title="单例的代理对象setter注入"></a><strong>单例的代理对象setter注入</strong></h3><p>这种注入方式其实也比较常用，比如平时使用：<code>@Async</code>注解的场景，会通过<code>AOP</code>自动生成代理对象.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService2 testService2;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestService1 testService1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从前面得知程序启动会报错，出现了循环依赖：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.<span class="property">springframework</span>.<span class="property">beans</span>.<span class="property">factory</span>.<span class="property">BeanCurrentlyInCreationException</span>: <span class="title class_">Error</span> creating bean <span class="keyword">with</span> name <span class="string">&#x27;testService1&#x27;</span>: <span class="title class_">Bean</span> <span class="keyword">with</span> name <span class="string">&#x27;testService1&#x27;</span> has been injected into other beans [testService2] <span class="keyword">in</span> its raw version <span class="keyword">as</span> part <span class="keyword">of</span> a circular reference, but has eventually been wrapped. <span class="title class_">This</span> means that said other beans <span class="keyword">do</span> not use the final version <span class="keyword">of</span> the bean. <span class="title class_">This</span> is often the result <span class="keyword">of</span> over-eager type matching - consider using <span class="string">&#x27;getBeanNamesOfType&#x27;</span> <span class="keyword">with</span> the <span class="string">&#x27;allowEagerInit&#x27;</span> flag turned off, <span class="keyword">for</span> example.</span><br></pre></td></tr></table></figure>
+
+<p>为什么会循环依赖呢？</p>
+<p>答案就在下面这张图中：</p>
+<p><img src="/10.png" alt="10"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\10.png" alt="10"></p>
+<p>说白了，bean初始化完成之后，后面还有一步去检查：第二级缓存 和 原始对象 是否相等。由于它对前面流程来说无关紧要，所以前面的流程图中省略了，但是在这里是关键点，我们重点说说：</p>
+<p><img src="/11.png" alt="11"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\11.png" alt="11"></p>
+<p>发现第二级缓存 和 原始对象不相等，所以抛出了循环依赖的异常。</p>
+<p>如果这时候把TestService1改个名字，改成：TestService6，其他的都不变。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">Service</span></span><br><span class="line">public<span class="keyword">class</span> <span class="title class_">TestService6</span> &#123;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Autowired</span></span><br><span class="line">    private <span class="title class_">TestService2</span> testService2;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Async</span></span><br><span class="line">    public <span class="keyword">void</span> <span class="title function_">test1</span>(<span class="params"></span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再重新启动一下程序，神奇般的好了。</p>
+<p>what？ 这又是为什么？</p>
+<p>这就要从spring的bean加载顺序说起了，默认情况下，spring是按照文件完整路径递归查找的，按路径+文件名排序，排在前面的先加载。所以TestService1比TestService2先加载，而改了文件名称之后，TestService2比TestService6先加载。</p>
+<p>为什么TestService2比TestService6先加载就没问题呢？</p>
+<p>答案在下面这张图中：</p>
+<p><img src="/12.png" alt="12"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\12.png" alt="12"></p>
+<p>这种情况testService6中其实第二级缓存是空的，不需要跟原始对象判断，所以不会抛出循环依赖。</p>
+<h3 id="DependsOn循环依赖"><a href="#DependsOn循环依赖" class="headerlink" title="DependsOn循环依赖"></a><strong>DependsOn循环依赖</strong></h3><p>还有一种有些特殊的场景，比如我们需要在实例化Bean A之前，先实例化Bean B，这个时候就可以使用<code>@DependsOn</code>注解。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">DependsOn</span>(value = <span class="string">&quot;testService2&quot;</span>)</span><br><span class="line">@<span class="title class_">Service</span></span><br><span class="line">public <span class="keyword">class</span> <span class="title class_">TestService1</span> &#123;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Autowired</span></span><br><span class="line">    private <span class="title class_">TestService2</span> testService2;</span><br><span class="line"></span><br><span class="line">    public <span class="keyword">void</span> <span class="title function_">test1</span>(<span class="params"></span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">DependsOn</span>(value = <span class="string">&quot;testService1&quot;</span>)</span><br><span class="line">@<span class="title class_">Service</span></span><br><span class="line">public <span class="keyword">class</span> <span class="title class_">TestService2</span> &#123;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Autowired</span></span><br><span class="line">    private <span class="title class_">TestService1</span> testService1;</span><br><span class="line"></span><br><span class="line">    public <span class="keyword">void</span> <span class="title function_">test2</span>(<span class="params"></span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>程序启动之后，执行结果：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Circular</span> depends-on relationship between <span class="string">&#x27;testService2&#x27;</span> and <span class="string">&#x27;testService1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个例子中本来如果TestService1和TestService2都没有加<code>@DependsOn</code>注解是没问题的，反而加了这个注解会出现循环依赖问题。</p>
+<p>这又是为什么？</p>
+<p>答案在<code>AbstractBeanFactory</code>类的<code>doGetBean</code>方法的这段代码中</p>
+<p><img src="/13.png" alt="13"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\13.png" alt="13"></p>
+<p>它会检查dependsOn的实例有没有循环依赖，如果有循环依赖则抛异常。</p>
+<h2 id="11-出现循环依赖如何解决？"><a href="#11-出现循环依赖如何解决？" class="headerlink" title="11. 出现循环依赖如何解决？"></a>11. <strong>出现循环依赖如何解决？</strong></h2><p>项目中如果出现循环依赖问题，说明是spring默认无法解决的循环依赖，要看项目的打印日志，属于哪种循环依赖。目前包含下面几种情况：</p>
+<p><img src="/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E5%88%92%E5%88%86.png" alt="循环依赖的划分"></p>
+<p><img src="E:\MyBolg\source_posts\SpringIOC容器面试专题\循环依赖的划分.png" alt="循环依赖的划分"></p>
+<h3 id="生成代理对象产生的循环依赖"><a href="#生成代理对象产生的循环依赖" class="headerlink" title="生成代理对象产生的循环依赖"></a><strong>生成代理对象产生的循环依赖</strong></h3><p>这类循环依赖问题解决方法很多，主要有：</p>
+<ol>
+<li>使用<code>@Lazy</code>注解，延迟加载</li>
+<li>使用<code>@DependsOn</code>注解，指定加载先后关系</li>
+<li>修改文件名称，改变循环依赖类的加载顺序</li>
+</ol>
+<h3 id="使用-DependsOn产生的循环依赖"><a href="#使用-DependsOn产生的循环依赖" class="headerlink" title="使用@DependsOn产生的循环依赖"></a><strong>使用@DependsOn产生的循环依赖</strong></h3><p>这类循环依赖问题要找到<code>@DependsOn</code>注解循环依赖的地方，迫使它不循环依赖就可以解决问题。</p>
+<h3 id="多例循环依赖"><a href="#多例循环依赖" class="headerlink" title="多例循环依赖"></a><strong>多例循环依赖</strong></h3><p>这类循环依赖问题可以通过把bean改成单例的解决。</p>
+<h3 id="构造器循环依赖"><a href="#构造器循环依赖" class="headerlink" title="构造器循环依赖"></a><strong>构造器循环依赖</strong></h3><p>这类循环依赖问题可以通过使用<code>@Lazy</code>注解解决。</p>
+<h2 id="12-Spring三级缓存的数据，什么时候升级到二级缓存的呢"><a href="#12-Spring三级缓存的数据，什么时候升级到二级缓存的呢" class="headerlink" title="12. Spring三级缓存的数据，什么时候升级到二级缓存的呢?"></a>12. Spring三级缓存的数据，什么时候升级到二级缓存的呢?</h2><h2 id="13-Spring-只要二级缓存不行么-为什么必须要有第三级缓存呢"><a href="#13-Spring-只要二级缓存不行么-为什么必须要有第三级缓存呢" class="headerlink" title="13. Spring 只要二级缓存不行么?为什么必须要有第三级缓存呢?"></a>13. Spring 只要二级缓存不行么?为什么必须要有第三级缓存呢?</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/SpringIOC%E5%AE%B9%E5%99%A8%E9%9D%A2%E8%AF%95%E4%B8%93%E9%A2%98/" data-id="cl0j84jx0008v04vh0zkg6f0d" data-title="SpringIOC容器面试专题" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/04/26/SpringBoot%E8%AF%B7%E4%BB%8B%E7%BB%8D%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E7%9A%84%E5%8E%9F%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          SpringBoot请介绍自动配置的原理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/26/Spring%20%E6%A1%86%E6%9E%B6%E4%B8%AD%E2%BD%A4%E5%88%B0%E4%BA%86%E5%93%AA%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Spring框架中⽤到了哪些设计模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

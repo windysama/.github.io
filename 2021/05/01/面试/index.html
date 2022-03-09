@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>面试题 | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="基础：get和post的区别：1234561、get是拼接在url后面，post是放在请求体里2、get传送的数据量较小，不能大于2KB。post传送的数据量较大，一般被默认为不受限制3、get安全性非常低，post安全性较高4、get请求只能进行url编码，而post支持多种编码方式5、get数会被完整保留在浏览器历史记录里，而post中的参数不会被保留6、对于get方式的请求，浏览器会把htt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题">
+<meta property="og:url" content="http://example.com/2021/05/01/%E9%9D%A2%E8%AF%95/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="基础：get和post的区别：1234561、get是拼接在url后面，post是放在请求体里2、get传送的数据量较小，不能大于2KB。post传送的数据量较大，一般被默认为不受限制3、get安全性非常低，post安全性较高4、get请求只能进行url编码，而post支持多种编码方式5、get数会被完整保留在浏览器历史记录里，而post中的参数不会被保留6、对于get方式的请求，浏览器会把htt">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/Sobremesa_bolg/pic-go_img/raw/master/images/image-20210705163522659.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181120173640764.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3BhbmdlMTk5MQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://gitee.com/Sobremesa_bolg/pic-go_img/raw/master/images/image-20210705191305676.png">
+<meta property="og:image" content="https://gitee.com/Sobremesa_bolg/pic-go_img/raw/master/images/image-20210705164807349.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190819171831432.png">
+<meta property="og:image" content="e:/MyBolg/source_posts/面试必考题垃圾回收机制/垃圾收集器.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/16289066-8ebd318e3a078ba6.jpg">
+<meta property="og:image" content="e:/MyBolg/source_posts/Redis数据类型.png">
+<meta property="og:image" content="https://gitee.com/Sobremesa_bolg/pic-go_img/raw/master/images/image-20210705190836903.png">
+<meta property="article:published_time" content="2021-04-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-28T12:11:00.641Z">
+<meta property="article:author" content="Lee yunbo">
+<meta property="article:tag" content="Java、面试题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Sobremesa_bolg/pic-go_img/raw/master/images/image-20210705163522659.png">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-面试" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/05/01/%E9%9D%A2%E8%AF%95/" class="article-date">
+  <time class="dt-published" datetime="2021-04-30T16:00:00.000Z" itemprop="datePublished">2021-05-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      面试题
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="基础："><a href="#基础：" class="headerlink" title="基础："></a>基础：</h1><h4 id="get和post的区别："><a href="#get和post的区别：" class="headerlink" title="get和post的区别："></a>get和post的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1、get是拼接在url后面，post是放在请求体里</span><br><span class="line">2、get传送的数据量较小，不能大于2KB。post传送的数据量较大，一般被默认为不受限制</span><br><span class="line">3、get安全性非常低，post安全性较高</span><br><span class="line">4、get请求只能进行url编码，而post支持多种编码方式</span><br><span class="line">5、get数会被完整保留在浏览器历史记录里，而post中的参数不会被保留</span><br><span class="line">6、对于get方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；而对于post，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>get</th>
+<th>post</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>拼接在url后面</td>
+<td>请求里面</td>
+</tr>
+<tr>
+<td>传送数据大小&lt;2kb</td>
+<td>无大小限制</td>
+</tr>
+<tr>
+<td>url编码</td>
+<td>各种编码</td>
+</tr>
+<tr>
+<td>不安全</td>
+<td>安全</td>
+</tr>
+<tr>
+<td>参数保留在浏览器中</td>
+<td>不会保留在浏览器中</td>
+</tr>
+<tr>
+<td>heaher、data一并发送，响应200</td>
+<td>先发送header，响应100后发送data，响应200</td>
+</tr>
+</tbody></table>
+<h4 id="String、StringBuffer、StringBuilder的区别："><a href="#String、StringBuffer、StringBuilder的区别：" class="headerlink" title="String、StringBuffer、StringBuilder的区别："></a>String、StringBuffer、StringBuilder的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String的值是不可变</span><br><span class="line">StringBuffer的值是可变的，是线程安全的，是多线程操作字符串</span><br><span class="line">StringBuilder的值是可变的，是线程不安全的，是单线程操作字符串，速度比StringBuffer要快。</span><br></pre></td></tr></table></figure>
+
+<h4 id="抽象类和接口的对比："><a href="#抽象类和接口的对比：" class="headerlink" title="抽象类和接口的对比："></a><strong>抽象类和接口的对比：</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">***************相同点***************</span><br><span class="line">1.接口和抽象类都不能实例化</span><br><span class="line">2.都位于继承的顶端，用于被其他实现或继承</span><br><span class="line">3.都包含抽象方法，其子类都必须覆写这些抽象方法</span><br><span class="line"></span><br><span class="line">***************不同点***************</span><br><span class="line">从设计层面来说，抽象类是对类的抽象，是一种模板设计，接口是行为的抽象，是一种行为的规范。</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>抽象类</th>
+<th>接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>实例化</td>
+<td>不能</td>
+<td>不能</td>
+</tr>
+<tr>
+<td>继承</td>
+<td>抽象类可以继承一个类和多个接口；子类只能继承一个抽象类</td>
+<td>接口可以继承多个接口；子类也可以继承多个接口</td>
+</tr>
+<tr>
+<td>访问修饰符</td>
+<td>抽象方法可以有public、protected、default修饰</td>
+<td>接口只能是public</td>
+</tr>
+<tr>
+<td>实现方法</td>
+<td>可以定义构造方法，可以有抽象方法和具体方法</td>
+<td>只能有抽象方法</td>
+</tr>
+<tr>
+<td>实现方式</td>
+<td>extends</td>
+<td>implement</td>
+</tr>
+<tr>
+<td>作用</td>
+<td>把相同的东西提取出来重用</td>
+<td>为了把程序模块固化，降低耦合</td>
+</tr>
+</tbody></table>
+<h4 id="BIO、NIO、AIO的区别："><a href="#BIO、NIO、AIO的区别：" class="headerlink" title="BIO、NIO、AIO的区别："></a>BIO、NIO、AIO的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">BIO: 同步阻塞I/O模式。阻塞等待直到处理完成</span><br><span class="line">NIO: 同步非阻塞的I/O模型。通过选择器监听多个通道，非阻塞，处理完成之后就返回</span><br><span class="line">AIO：异步非阻塞的I/O模型。通知回调</span><br></pre></td></tr></table></figure>
+
+<p><strong>1.BIO (同步阻塞I&#x2F;O模式)</strong></p>
+<p>数据的读取写入必须阻塞在一个线程内等待其完成。</p>
+<p>这里使用那个经典的烧开水例子，这里假设一个烧开水的场景，有一排水壶在烧开水，BIO的工作模式就是， 叫一个线程停留在一个水壶那，直到这个水壶烧开，才去处理下一个水壶。但是实际上线程在等待水壶烧开的时间段什么都没有做</p>
+<p><strong>2.NIO（同步非阻塞）</strong></p>
+<p>同时支持阻塞与非阻塞模式，但这里我们以其同步非阻塞I&#x2F;O模式来说明，那么什么叫做同步非阻塞？如果还拿烧开水来说，NIO的做法是叫一个线程不断的轮询每个水壶的状态，看看是否有水壶的状态发生了改变，从而进行下一步的操作。</p>
+<p><strong>3.AIO （异步非阻塞I&#x2F;O模型）</strong></p>
+<p>异步非阻塞与同步非阻塞的区别在哪里？异步非阻塞无需一个线程去轮询所有IO操作的状态改变，在相应的状态改变后，系统会通知对应的线程来处理。对应到烧开水中就是，为每个水壶上面装了一个开关，水烧开之后，水壶会自动通知我水烧开了。</p>
+<h4 id="Object类有哪些方法："><a href="#Object类有哪些方法：" class="headerlink" title="Object类有哪些方法："></a>Object类有哪些方法：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.getClass方法</span><br><span class="line">2.hashCode方法</span><br><span class="line">3.equals方法</span><br><span class="line">4.clone方法</span><br><span class="line">6.wait方法</span><br><span class="line">7.notify方法</span><br><span class="line">8.notifyAll方法</span><br><span class="line">9.finalize</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建对象的几种方式："><a href="#创建对象的几种方式：" class="headerlink" title="创建对象的几种方式："></a>创建对象的几种方式：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、用new语句创建对象</span><br><span class="line">2、运用反射手段</span><br><span class="line">3、调用对象的clone()方法</span><br><span class="line">4、运用反序列化手段</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="集合："><a href="#集合：" class="headerlink" title="集合："></a>集合：</h1><h4 id="HashMap的实现："><a href="#HashMap的实现：" class="headerlink" title="HashMap的实现："></a>HashMap的实现：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HashMap是数组和链表的结合体，是基于 Hash 算法实现的</span><br><span class="line"></span><br><span class="line">1.当我们往Hashmap中put元素时，利用key的hashCode重新hash计算出当前对象的元素在数组中的下标</span><br><span class="line">2.存储时，如果出现hash值相同的key，此时有两种情况。(1)如果key相同，则覆盖原始值；(2)如果key不同（出现冲突），则将当前的key-value放入链表中</span><br><span class="line">3.获取时，直接找到hash值对应的下标，在进一步判断key是否相同，从而找到对应值。</span><br><span class="line"></span><br><span class="line">Jdk 1.8中对HashMap的实现做了优化，当链表中的节点数据超过八个之后，该链表会转为红黑树来提高查询效率</span><br></pre></td></tr></table></figure>
+
+<h4 id="HashMap1-7和1-8的区别："><a href="#HashMap1-7和1-8的区别：" class="headerlink" title="HashMap1.7和1.8的区别："></a>HashMap1.7和1.8的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、JDK1.7用的是头插法，而JDK1.8及之后使用的都是尾插法。</span><br><span class="line">2、扩容后数据存储位置的计算方式不一样。</span><br><span class="line">3、JDK1.7的时候使用的是数组+ 链表的数据结构。但是在JDK1.8及之后时，使用的是数组+链表+红黑树的数据结构。</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/Sobremesa_bolg/pic-go_img/raw/master/images/image-20210705163522659.png" alt="image-20210705163522659"></p>
+<h4 id="HashMap和HashTable的区别："><a href="#HashMap和HashTable的区别：" class="headerlink" title="HashMap和HashTable的区别："></a>HashMap和HashTable的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、线程安全： HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过 synchronized 修饰。</span><br><span class="line">2、效率： 因为线程安全的问题，HashMap 要比 HashTable 效率高一点。</span><br><span class="line">3、对Null key 和Null value的支持： HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。但是在 HashTable 中 put 进的键值只要有一个 null，直接抛NullPointerException。</span><br><span class="line">4、初始容量大小和每次扩充容量大小的不同： Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。②创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小，而 HashMap 会将其扩充为2的幂次方大小。</span><br><span class="line">5、底层数据结构： JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。</span><br></pre></td></tr></table></figure>
+
+<h4 id="HashMap-和-ConcurrentHashMap-的区别："><a href="#HashMap-和-ConcurrentHashMap-的区别：" class="headerlink" title="HashMap 和 ConcurrentHashMap 的区别："></a>HashMap 和 ConcurrentHashMap 的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1、ConcurrentHashMap对整个桶数组进行了分割分段(Segment)，然后在每一个分段上都用lock锁进行保护，相对于HashTable的synchronized锁的粒度更精细了一些，并发性能更好，而HashMap没有锁机制，不是线程安全的。（JDK1.8之后ConcurrentHashMap启用了一种全新的方式实现,利用CAS算法。）</span><br><span class="line">2、HashMap的键值对允许有null，但是ConCurrentHashMap都不允许。</span><br></pre></td></tr></table></figure>
+
+<h4 id="ConcurrentHashMap-和-Hashtable-的区别："><a href="#ConcurrentHashMap-和-Hashtable-的区别：" class="headerlink" title="ConcurrentHashMap 和 Hashtable 的区别："></a>ConcurrentHashMap 和 Hashtable 的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1、底层数据结构： JDK1.7的 ConcurrentHashMap 底层采用 分段的数组+链表 实现，JDK1.8 采用的数据结构跟HashMap1.8的结构一样，数组+链表/红黑二叉树。Hashtable的底层数据结构是采用 数组+链表 的形式；</span><br><span class="line">2、实现线程安全的方式： （1）在JDK1.7的时候，ConcurrentHashMap（分段锁） 对整个桶数组进行了分割分段(Segment)，每一把锁只锁容器其中一部分数据，多线程访问容器里不同数据段的数据，就不会存在锁竞争，提高并发访问率。到了 JDK1.8 的时候已经摒弃了Segment的概念，而是直接用数组+链表+红黑树的数据结构来实现，并发控制使用 synchronized 和 CAS 来操作。（2）Hashtable(同一把锁) :使用 synchronized 来保证线程安全，效率非常低下。</span><br></pre></td></tr></table></figure>
+
+<h4 id="ArrayList-和-LinkedList-的区别是什么："><a href="#ArrayList-和-LinkedList-的区别是什么：" class="headerlink" title="ArrayList 和 LinkedList 的区别是什么："></a>ArrayList 和 LinkedList 的区别是什么：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">数据结构实现：ArrayList 是动态数组的数据结构实现，而 LinkedList 是双向链表的数据结构实现。</span><br><span class="line">随机访问效率：ArrayList 比 LinkedList 在随机访问的时候效率要高，因为 LinkedList 是线性的数据存储方式，所以需要移动指针从前往后依次查找。</span><br><span class="line">增加和删除效率：在非首尾的增加和删除操作，LinkedList 要比 ArrayList 效率要高，因为 ArrayList 增删操作要影响数组内的其他数据的下标。</span><br><span class="line">内存空间占用：LinkedList 比 ArrayList 更占内存，因为 LinkedList 的节点除了存储数据，还存储了两个引用，一个指向前一个元素，一个指向后一个元素。</span><br><span class="line">线程安全：ArrayList 和 LinkedList 都是不同步的，也就是不保证线程安全；</span><br></pre></td></tr></table></figure>
+
+<h4 id="ArrayList-和-Vector-的区别："><a href="#ArrayList-和-Vector-的区别：" class="headerlink" title="ArrayList 和 Vector 的区别："></a>ArrayList 和 Vector 的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">线程安全：Vector 使用了 Synchronized 来实现线程同步，是线程安全的，而 ArrayList 是非线程安全的。</span><br><span class="line">性能：ArrayList 在性能方面要优于 Vector。</span><br><span class="line">扩容：ArrayList 和 Vector 初始容量都是10，只不过在 Vector 扩容每次会增加 1 倍，而 ArrayList 只会增加 50%。</span><br></pre></td></tr></table></figure>
+
+<h4 id="解决哈希冲突的办法："><a href="#解决哈希冲突的办法：" class="headerlink" title="解决哈希冲突的办法："></a>解决哈希冲突的办法：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.开放定址法（将key存放到冲突位置的下一个空位置去）</span><br><span class="line">3.拉链法(Java hashmap就是这么做的)</span><br><span class="line">2.再哈希法（再次哈希，直到冲突不再发生）</span><br><span class="line">4.建立一个公共溢出区（建立一个公共溢出区域，就是把冲突的都放在另一个地方，不在表里面）</span><br></pre></td></tr></table></figure>
+
+<h1 id="并发："><a href="#并发：" class="headerlink" title="并发："></a>并发：</h1><h4 id="sleep-和-wait-有什么区别："><a href="#sleep-和-wait-有什么区别：" class="headerlink" title="sleep() 和 wait() 有什么区别："></a>sleep() 和 wait() 有什么区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、类的不同：sleep() 是 Thread线程类的静态方法，wait() 是 Object类的方法。</span><br><span class="line">2、是否释放锁：sleep() 不释放锁；wait() 释放锁。</span><br><span class="line">3、用途不同：Wait 通常被用于线程间交互/通信，sleep 通常被用于暂停执行。</span><br></pre></td></tr></table></figure>
+
+<h4 id="wait-和await-区别："><a href="#wait-和await-区别：" class="headerlink" title="wait()和await()区别："></a>wait()和await()区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wait()是Object类提供的，一般与synchronized联合使用。</span><br><span class="line">await()Condition类是当中的，一般与Lock联合使用。</span><br></pre></td></tr></table></figure>
+
+<h4 id="synchronized-和-Lock-有什么区别："><a href="#synchronized-和-Lock-有什么区别：" class="headerlink" title="synchronized 和 Lock 有什么区别："></a>synchronized 和 Lock 有什么区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、synchronized是Java内置关键字，在JVM层面，Lock是个Java类；</span><br><span class="line">2、synchronized 可以给类、方法、代码块加锁；而 lock 只能给代码块加锁。</span><br><span class="line">3、synchronized 不需要手动获取锁和释放锁，使用简单，发生异常会自动释放锁；而 lock 需要自己加锁和释放锁。</span><br><span class="line">4、通过 Lock 可以知道有没有成功获取锁，而 synchronized 却无法办到</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Synchronized与ReentrantLock的区别："><a href="#Synchronized与ReentrantLock的区别：" class="headerlink" title="Synchronized与ReentrantLock的区别："></a>Synchronized与ReentrantLock的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、底层实现上来说，synchronized 是JVM层面的锁，是Java关键字；ReentrantLock 是从jdk提供的API层面的锁。</span><br><span class="line">2、synchronized 不需要用户去手动获取和释放锁； ReentrantLock则需要用户去手动获取和释放锁。</span><br><span class="line">4、synchronized为非公平锁；ReentrantLock则即可以选公平锁也可以选非公平锁。</span><br><span class="line">5、ReentrantLock通过Condition可以绑定多个条件实现分组唤醒需要唤醒的线程们，而不是像synchronized要么随机唤醒一个线程要么唤醒全部线程。</span><br><span class="line">6、ReentrantLock 只适用于代码块锁，而 synchronized 可以修饰类、方法、变量等。</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>SYCHRONIZED</th>
+<th>REENTRANTlOCK</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是java关键字、jvm层面</td>
+<td>api层面、lock子类</td>
+</tr>
+<tr>
+<td>不需要手动加锁解锁</td>
+<td>需要手动获取和释放锁</td>
+</tr>
+<tr>
+<td>非公平锁</td>
+<td>公平和非公平</td>
+</tr>
+<tr>
+<td>使用类、方法、代码块</td>
+<td>使用代码块</td>
+</tr>
+</tbody></table>
+<h4 id="锁的类型："><a href="#锁的类型：" class="headerlink" title="锁的类型："></a>锁的类型：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">偏向锁/轻量级锁/重量级锁</span><br><span class="line"></span><br><span class="line">可重入锁/非可重入锁</span><br><span class="line"></span><br><span class="line">共享锁/独占锁</span><br><span class="line"></span><br><span class="line">公平锁/非公平锁</span><br><span class="line"></span><br><span class="line">悲观锁/乐观锁</span><br><span class="line"></span><br><span class="line">自旋锁/非自旋锁</span><br><span class="line"></span><br><span class="line">可中断锁/不可中断锁</span><br></pre></td></tr></table></figure>
+
+<h4 id="synchronized-锁升级的原理："><a href="#synchronized-锁升级的原理：" class="headerlink" title="synchronized 锁升级的原理："></a>synchronized 锁升级的原理：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在锁对象的对象头里面有一个 threadid 字段，在第一次访问的时候 threadid 为空，jvm 让其持有偏向锁，并将 threadid 设置为其线程 id，再次进入的时候会先判断 threadid 是否与其线程 id 一致，如果一致则可以直接使用此对象，如果不一致，则升级偏向锁为轻量级锁，通过自旋循环一定次数来获取锁，执行一定次数之后，如果还没有正常获取到要使用的对象，此时就会把锁从轻量级升级为重量级锁，此过程就构成了 synchronized 锁的升级。</span><br></pre></td></tr></table></figure>
+
+<h4 id="ThreadLocal-："><a href="#ThreadLocal-：" class="headerlink" title="ThreadLocal ："></a>ThreadLocal ：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ThreadLocal类主要解决的就是让每个线程绑定自己的值，每个线程拥有自己的专属本地变量。每个Thread中都具备一个ThreadLocalMap，而ThreadLocalMap可以存储以ThreadLocal为 key ，Object 对象为 value 的键值对</span><br><span class="line"></span><br><span class="line">ThreadLocal 内存泄露问题：ThreadLocalMap 中使用的 key 为 ThreadLocal 的弱引用,而 value 是强引用。所以，如果 ThreadLocal 没有被外部强引用的情况下，在垃圾回收的时候，key 会被清理掉，而 value 不会被清理掉。这样一来，ThreadLocalMap 中就会出现 key 为 null 的 Entry。假如我们不做任何措施的话，value 永远无法被 GC 回收，这个时候就可能会产生内存泄露。ThreadLocalMap 实现中已经考虑了这种情况，在调用 set()、get()、remove() 方法的时候，会清理掉 key 为 null 的记录。使用完 ThreadLocal方法后 最好手动调用remove()方法</span><br></pre></td></tr></table></figure>
+
+<h4 id="synchronized的底层实现原理："><a href="#synchronized的底层实现原理：" class="headerlink" title="synchronized的底层实现原理："></a>synchronized的底层实现原理：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">synchronized底层是通过一个monitor的对象来实现的。</span><br><span class="line"></span><br><span class="line">每个对象有一个监视器锁（monitor）。当monitor被占用时就会处于锁定状态，线程执行monitorenter指令时尝试获取monitor的所有权，过程如下：</span><br><span class="line">1、如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为monitor的所有者。</span><br><span class="line">2、如果线程已经占有该monitor，只是重新进入，则进入monitor的进入数加1.</span><br><span class="line">3.如果其他线程已经占用了monitor，则该线程进入阻塞状态，直到monitor的进入数为0，再重新尝试获取monitor的所有权。</span><br><span class="line"></span><br><span class="line">执行monitorexit的线程必须是object所对应的monitor的所有者。</span><br><span class="line">指令执行时，monitor的进入数减1，如果减1后进入数为0，那线程退出monitor，不再是这个monitor的所有者。其他被这个monitor阻塞的线程可以尝试去获取这个 monitor 的所有权。 </span><br></pre></td></tr></table></figure>
+
+<h4 id="ReentrantLock的底层实现原理："><a href="#ReentrantLock的底层实现原理：" class="headerlink" title="ReentrantLock的底层实现原理："></a>ReentrantLock的底层实现原理：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ReentrantLock的底层实现机制是AQS。AQS没有锁之类的概念，它有个state变量，是个int类型，为了好理解，可以把state当成锁，AQS围绕state提供两种基本操作“获取”和“释放”，有条双向队列存放阻塞的等待线程。AQS的功能可以分为独占和共享，ReentrantLock实现了独占功能（每次只能有一个线程能持有锁）。</span><br></pre></td></tr></table></figure>
+
+<h4 id="线程状态："><a href="#线程状态：" class="headerlink" title="线程状态："></a>线程状态：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 初始(NEW)：新创建了一个线程对象，但还没有调用start()方法。</span><br><span class="line">2. 运行(RUNNABLE)：Java线程中将就绪（ready）和运行中（running）两种状态笼统的称为“运行”。线程对象创建后，其他线程(比如main线程）调用了该对象的start()方法。该状态的线程位于可运行线程池中，等待被线程调度选中，获取CPU的使用权，此时处于就绪状态（ready）。就绪状态的线程在获得CPU时间片后变为运行中状态（running）。</span><br><span class="line">3. 阻塞(BLOCKED)：表示线程阻塞于锁。</span><br><span class="line">4. 等待(WAITING)：进入该状态的线程需要等待其他线程做出一些特定动作（通知或中断）。</span><br><span class="line">5. 超时等待(TIMED_WAITING)：该状态不同于WAITING，它可以在指定的时间后自行返回。</span><br><span class="line">6. 终止(TERMINATED)：表示该线程已经执行完毕。</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20181120173640764.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3BhbmdlMTk5MQ==,size_16,color_FFFFFF,t_70" alt="img"></p>
+<h4 id="进程和线程的区别："><a href="#进程和线程的区别：" class="headerlink" title="进程和线程的区别："></a>进程和线程的区别：</h4><pre><code>根本区别：进程是操作系统资源分配的基本单位，而线程是处理器任务调度和执行的基本单位
+
+资源开销：每个进程都有独立的代码和数据空间（程序上下文），程序之间的切换会有较大的开销；线程可以看做轻量级的进程，同一类线程共享代码和数据空间，每个线程都有自己独立的运行栈和程序计数器（PC），线程之间切换的开销小。
+
+包含关系：如果一个进程内有多个线程，则执行过程不是一条线的，而是多条线（线程）共同完成的；线程是进程的一部分，所以线程也被称为轻权进程或者轻量级进程。
+
+内存分配：同一进程的线程共享本进程的地址空间和资源，而进程之间的地址空间和资源是相互独立的
+
+影响关系：一个进程崩溃后，在保护模式下不会对其他进程产生影响，但是一个线程崩溃整个进程都死掉。所以多进程要比多线程健壮。
+
+执行过程：每个独立的进程有程序运行的入口、顺序执行序列和程序出口。但是线程不能独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制，两者均可并发执行
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>区别</th>
+<th>进程</th>
+<th>线程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>根本区别</td>
+<td>操作系统资源分配的基本单位</td>
+<td>处理器任务调度和执行的基本单位</td>
+</tr>
+<tr>
+<td>资源开销</td>
+<td>独立的代码和数据空间，开销大</td>
+<td>独立的运行栈和程序计数器（PC），开销小</td>
+</tr>
+<tr>
+<td>包含关系</td>
+<td>一个进程内有多个线程</td>
+<td>线程是进程的一部分</td>
+</tr>
+<tr>
+<td>内存分配</td>
+<td>进程之间的地址和资源是独立的</td>
+<td>一个进程中的线程之间的地址和资源是共享的</td>
+</tr>
+<tr>
+<td>影响关系</td>
+<td>一个进程崩溃不影响其他进程</td>
+<td>一个线程崩溃整个进程就死掉</td>
+</tr>
+<tr>
+<td>执行过程</td>
+<td>每个独立的进程有程序运行的入口、顺序执行序列和程序出口</td>
+<td>不能独立执行，必须依存在应用程序中，由应用程序提供多线程控制</td>
+</tr>
+</tbody></table>
+<p><img src="https://gitee.com/Sobremesa_bolg/pic-go_img/raw/master/images/image-20210705191305676.png" alt="image-20210705191305676"></p>
+<h4 id="进程间的通信方式：（不熟悉）"><a href="#进程间的通信方式：（不熟悉）" class="headerlink" title="进程间的通信方式：（不熟悉）"></a><strong>进程间的通信方式：</strong>（不熟悉）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">管道/匿名管道(Pipes)：用于具有亲缘关系的父子进程间或者兄弟进程之间的通信。</span><br><span class="line"></span><br><span class="line">有名管道(Names Pipes) : 匿名管道由于没有名字，只能用于亲缘关系的进程间通信。为了克服这个缺点，提出了有名管道。有名管道严格遵循**先进先出(first in first out)**。有名管道以磁盘文件的方式存在，可以实现本机任意两个进程通信。</span><br><span class="line"></span><br><span class="line">信号(Signal) ：信号是一种比较复杂的通信方式，用于通知接收进程某个事件已经发生；</span><br><span class="line"></span><br><span class="line">消息队列(Message Queuing) ：消息队列是消息的链表,具有特定的格式,存放在内存中并由消息队列标识符标识。管道和消息队列的通信数据都是先进先出的原则。与管道（无名管道：只存在于内存中的文件；命名管道：存在于实际的磁盘介质或者文件系统）不同的是消息队列存放在内核中，只有在内核重启(即，操作系统重启)或者显示地删除一个消息队列时，该消息队列才会被真正的删除。消息队列可以实现消息的随机查询,消息不一定要以先进先出的次序读取,也可以按消息的类型读取.比 FIFO 更有优势。消息队列克服了信号承载信息量少，管道只能承载无格式字 节流以及缓冲区大小受限等缺。</span><br><span class="line"></span><br><span class="line">信号量(Semaphores) ：信号量是一个计数器，用于多进程对共享数据的访问，信号量的意图在于进程间同步。这种通信方式主要用于解决与同步相关的问题并避免竞争条件。</span><br><span class="line"></span><br><span class="line">共享内存(Shared memory) ：使得多个进程可以访问同一块内存空间，不同进程可以及时看到对方进程中对共享内存中数据的更新。这种方式需要依靠某种同步操作，如互斥锁和信号量等。可以说这是最有用的进程间通信方式。</span><br><span class="line"></span><br><span class="line">套接字(Sockets) : 此方法主要用于在客户端和服务器之间通过网络进行通信。套接字是支持 TCP/IP 的网络通信的基本操作单元，可以看做是不同主机之间的进程进行双向通信的端点，简单的说就是通信的两方的一种约定，用套接字中的相关函数来完成通信过程。</span><br></pre></td></tr></table></figure>
+
+<h4 id="进程间的调度算法："><a href="#进程间的调度算法：" class="headerlink" title="进程间的调度算法："></a>进程间的调度算法：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">先到先服务(FCFS)调度算法 : 从就绪队列中选择一个最先进入该队列的进程为之分配资源，使它立即执行并一直执行到完成或发生某事件而被阻塞放弃占用 CPU 时再重新调度。</span><br><span class="line"></span><br><span class="line">短作业优先(SJF)的调度算法 : 从就绪队列中选出一个估计运行时间最短的进程为之分配资源，使它立即执行并一直执行到完成或发生某事件而被阻塞放弃占用 CPU 时再重新调度。</span><br><span class="line"></span><br><span class="line">时间片轮转调度算法 : 时间片轮转调度是一种最古老，最简单，最公平且使用最广的算法，又称 RR(Round robin)调度。每个进程被分配一个时间段，称作它的时间片，即该进程允许运行的时间。</span><br><span class="line"></span><br><span class="line">多级反馈队列调度算法 ：前面介绍的几种进程调度的算法都有一定的局限性。如短进程优先的调度算法，仅照顾了短进程而忽略了长进程 。多级反馈队列调度算法既能使高优先级的作业得到响应又能使短作业（进程）迅速完成。，因而它是目前被公认的一种较好的进程调度算法，UNIX 操作系统采取的便是这种调度算法。</span><br><span class="line"></span><br><span class="line">优先级调度 ： 为每个流程分配优先级，首先执行具有最高优先级的进程，依此类推。具有相同优先级的进程以 FCFS 方式执行。可以根据内存要求，时间要求或任何其他资源要求来确定优先级。</span><br></pre></td></tr></table></figure>
+
+<h4 id="线程间的通信方式："><a href="#线程间的通信方式：" class="headerlink" title="线程间的通信方式："></a>线程间的通信方式：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、使用全局变量</span><br><span class="line">	主要由于多个线程可能更改全局变量，因此全局变量最好声明为volatile</span><br><span class="line">2、wait/notify</span><br><span class="line">3、join方式</span><br><span class="line">4、管道</span><br></pre></td></tr></table></figure>
+
+<h4 id="形成死锁的四个必要条件："><a href="#形成死锁的四个必要条件：" class="headerlink" title="形成死锁的四个必要条件："></a>形成死锁的四个必要条件：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">互斥条件：线程(进程)对于所分配到的资源具有排它性，即一个资源只能被一个线程(进程)占用，直到被该线程(进程)释放</span><br><span class="line"></span><br><span class="line">请求与保持条件：一个线程(进程)因请求被占用资源而发生阻塞时，对已获得的资源保持不放。</span><br><span class="line"></span><br><span class="line">不剥夺条件：线程(进程)已获得的资源在末使用完之前不能被其他线程强行剥夺，只有自己使用完毕后才释放资源。</span><br><span class="line"></span><br><span class="line">循环等待条件：当发生死锁时，所等待的线程(进程)必定会形成一个环路（类似于死循环），造成永久阻塞</span><br></pre></td></tr></table></figure>
+
+<p>  <strong>可以通过jdk提供的工具jconsole排查死锁问题</strong></p>
+<h4 id="如何避免线程死锁："><a href="#如何避免线程死锁：" class="headerlink" title="如何避免线程死锁："></a>如何避免线程死锁：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">破坏互斥条件：这个条件我们没有办法破坏，因为我们用锁本来就是想让他们互斥的（临界资源需要互斥访问）。</span><br><span class="line"></span><br><span class="line">破坏请求与保持条件：一次性申请所有的资源。</span><br><span class="line"></span><br><span class="line">破坏不剥夺条件：占用部分资源的线程进一步申请其他资源时，如果申请不到，可以主动释放它占有的资源。</span><br><span class="line"></span><br><span class="line">破坏循环等待条件：靠按序申请资源来预防。按某一顺序申请资源，释放资源则反序释放。破坏循环等待条件。</span><br></pre></td></tr></table></figure>
+
+<h4 id="线程池有哪几种类型："><a href="#线程池有哪几种类型：" class="headerlink" title="线程池有哪几种类型："></a>线程池有哪几种类型：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、newSingleThreadExecutor：创建一个单线程的线程池。</span><br><span class="line">2、newFixedThreadPool：创建固定大小的线程池。</span><br><span class="line">3、newCachedThreadPool：创建一个可缓存的线程池。</span><br><span class="line">4、newScheduledThreadPool：创建一个定时的线程池。</span><br></pre></td></tr></table></figure>
+
+<h4 id="线程池核心参数："><a href="#线程池核心参数：" class="headerlink" title="线程池核心参数："></a>线程池核心参数：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">第1个参数：corePoolSize: 核心线程数</span><br><span class="line">第2个参数：maximumPoolSize：线程池中允许存在的工作线程的最大数量</span><br><span class="line">第3个参数: keepAliveTime：线程池中的线程空闲时间</span><br><span class="line">第4个参数: Unit：时间单位。</span><br><span class="line">第5个参数: workQueue：缓存队列。</span><br></pre></td></tr></table></figure>
+
+<h4 id="为什么要用线程池："><a href="#为什么要用线程池：" class="headerlink" title="为什么要用线程池："></a>为什么要用线程池：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">降低资源消耗：通过重复利用已创建的线程降低线程创建和销毁造成的消耗。</span><br><span class="line"></span><br><span class="line">提高响应速度：当任务到达时，任务可以不需要的等到线程创建就能立即执行。</span><br><span class="line"></span><br><span class="line">提高线程的可管理性：线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。</span><br></pre></td></tr></table></figure>
+
+<h1 id="JVM："><a href="#JVM：" class="headerlink" title="JVM："></a>JVM：</h1><h4 id="JVM运行时数据区域："><a href="#JVM运行时数据区域：" class="headerlink" title="JVM运行时数据区域："></a>JVM运行时数据区域：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、程序计数器是一块较小的内存空间，可以看作是当前线程所执行的字节码的行号指示器。</span><br><span class="line">2、虚拟机栈用于存储局部变量表、操作数栈、动态链接、方法出口等信息。局部变量表主要存放了编译期可知的各种数据类型和对象引用</span><br><span class="line">3、本地方法栈与虚拟机栈作用相似，不过描述的是Native方法执行的内存模型</span><br><span class="line">4、堆用来存放对象实例，几乎所有的对象实例以及数组都在这里分配内存。(从jdk 1.7开始已经默认开启逃逸分析，如果某些方法中的对象引用没有被返回或者未被外面使用(也就是未逃逸出去)，那么对象可以直接在栈上分配内存。)</span><br><span class="line">5、方法区用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</span><br><span class="line">6、运行时常量池。运行时常量池是方法区的一部分</span><br><span class="line">7、直接内存</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/Sobremesa_bolg/pic-go_img/raw/master/images/image-20210705164807349.png" alt="image-20210705164807349"></p>
+<h4 id="堆的内存模型："><a href="#堆的内存模型：" class="headerlink" title="堆的内存模型："></a>堆的内存模型：</h4><p><img src="https://img-blog.csdnimg.cn/20190819171831432.png" alt="img"></p>
+<h4 id="堆和栈的区别："><a href="#堆和栈的区别：" class="headerlink" title="堆和栈的区别："></a>堆和栈的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、堆的物理地址分配对对象是不连续的。因此性能慢些。栈使用的是数据结构中的栈，先进后出的原则，物理地址分配是连续的。所以性能快。</span><br><span class="line">2、堆因为是不连续的，所以分配的内存是在运行期确认的，因此大小不固定。一般堆大小远远大于栈。栈是连续的，所以分配的内存大小要在编译期就确认，大小是固定的。</span><br><span class="line">3、堆存放的是对象的实例和数组。栈存放：局部变量，操作数栈，返回结果。</span><br><span class="line">4、堆是线程共享的。栈是线程私有的。</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>堆</th>
+<th>栈</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>物理地址、不连续、性能慢</td>
+<td>逻辑地址、连续、性能快</td>
+</tr>
+<tr>
+<td>大小不固定、一般堆大小远远大于栈</td>
+<td>大小固定</td>
+</tr>
+<tr>
+<td>存放实例、数组</td>
+<td>存放局部变量、操作数栈、返回结果</td>
+</tr>
+<tr>
+<td>线程共享</td>
+<td>线程私有</td>
+</tr>
+</tbody></table>
+<h4 id="GC触发条件："><a href="#GC触发条件：" class="headerlink" title="GC触发条件："></a>GC触发条件：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MinorGC:</span><br><span class="line">当年轻代空间不足时，就会触发MinorGC，这里的年轻代指的是Eden代满，Survivor满不会触发GC。每次MinorGC会清理年轻代的内存。</span><br><span class="line"></span><br><span class="line">MajorGC:</span><br><span class="line">当老年代空间不足，会先尝试触发MinorGC，如果之后空间还不足，则触发MajorGC。如果MajorGC后，内存还不足，就报OOM了</span><br><span class="line"></span><br><span class="line">FullGC:</span><br><span class="line">1、调用System.gc()时，系统建议执行FullGC，但是不必然执行</span><br><span class="line">2、老年代空间不足、方法区空间不足</span><br><span class="line">3、通过MinorGC后进入老年代的平均大小大于老年代的可用内存</span><br><span class="line">4、由Eden区，Survivor from区向Survivor to区复制时，对象的大小大于to区可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象的大小</span><br></pre></td></tr></table></figure>
+
+<h4 id="垃圾回收器："><a href="#垃圾回收器：" class="headerlink" title="垃圾回收器："></a>垃圾回收器：</h4><p><img src="E:\MyBolg\source_posts\面试必考题垃圾回收机制\垃圾收集器.png" alt="垃圾收集器"></p>
+<h4 id="Serial收集器"><a href="#Serial收集器" class="headerlink" title="Serial收集器"></a>Serial收集器</h4><p>Serial是一类用于新生代的单线程收集器，采用&#x3D;&#x3D;复制算法&#x3D;&#x3D;进行垃圾收集。Serial进行垃圾收集时，不仅只用一条单线程执行垃圾收集工作，它还在收集的同时，所用的用户必须暂停。</p>
+<ul>
+<li>优势：简单高效，由于采用的是单线程的方法，因此与其他类型的收集器相比，对单个cpu来说没有了上下文之间的的切换，效率比较高。</li>
+<li>缺点：会在用户不知道的情况下停止所有工作线程，用户体验感极差，令人难以接受。</li>
+<li>适用场景：Client 模式（桌面应用）；单核服务器。</li>
+<li>参数： 可以使用命令如下开启Serial作为新生代收集器</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UserSerialGC <span class="comment">#选择Serial作为新生代垃圾收集器</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="ParNew收集器"><a href="#ParNew收集器" class="headerlink" title="ParNew收集器"></a>ParNew收集器</h4><p>parNew收集器其实就是Serial的一个多线程版本，其在单核cpu上的表现并不会比Serail收集器更好，在多核机器上，其默认开启的收集线程数与cpu数量相等。可以通过如下命令进行修改</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:ParallelGCThreads <span class="comment">#设置JVM垃圾收集的线程数  </span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>优点：随着cpu的有效利用，对于GC时系统资源的有效利用有好处。</li>
+<li>缺点：和Serial是一样的。</li>
+<li>适用场景：ParNew是许多运行在Server模式下的虚拟机中首选的新生代收集器。因为CMS收集器只能与serial或者parNew联合使用，在当下多核系统环境下，首选的是parNew与CMS配合。ParNew收集器也是使用CMS收集器后默认的新生代收集器。也可以使用如下命令进行强制指定。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:UseParNewGC <span class="comment">#新生代采用ParNew收集器 </span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Parallel-Scavenge收集器"><a href="#Parallel-Scavenge收集器" class="headerlink" title="Parallel Scavenge收集器"></a>Parallel Scavenge收集器</h4><p>Parallel Scavenge也是一款用于新生代的多线程收集器，也是采用&#x3D;&#x3D;复制算法&#x3D;&#x3D;。<em>与ParNew的不同之处在于 Parallel Scavenge收集器的目的是达到一个可控制的吞吐量，而ParNew收集器关注点在于尽可能的缩短垃圾收集时用户线程的停顿时间。</em>所谓吞吐量就是CPU用于运行用户代码的时间与CPU总消耗时间的比值， 即吞吐量&#x3D;运行用户代码时间&#x2F;（运行用户代码时间+垃圾收集时间）。</p>
+<ul>
+<li>优点： 追求高吞吐量，高效利用CPU，是吞吐量优先，且能进行精确控制。</li>
+<li>缺点： “”</li>
+<li>适用场景：注重吞吐量高效利用CPU，需要高效运算，且不需要太多交互。</li>
+<li>参数：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-XX:MaxGCPauseMilis: 控制最大垃圾收集停顿时间，参数值是一个大于0的毫秒数，收集器尽可能保证回收花费时间不超过设定值。但将这个值调小，并不一定会使系统垃圾回收速度更快，GC停顿时间是以牺牲吞吐量和新生代空间换来的。</span><br><span class="line"></span><br><span class="line">-XX:GCTimeRadio:     设置吞吐量大小，参数值是一个(0,100)两侧均为开区间的整数。也是垃圾收集时间占总时间的比率，相当于是吞吐量的倒数。若把参数设置为19，则允许的最大GC时间就占总时间的5%（1/（1+19））。默认值是99，即允许最大1%的垃圾收集时间。</span><br><span class="line"></span><br><span class="line">-XX:+UserAdaptiveSizePolicy:这是一个开关函数，当打开这个函数，就不需要手动指定新生代的大小，Eden与Survivor区的比例(-XX:SurvivorRatio，默认是8:1:1)，晋升老年代的对象年龄(-XX:PretenureSizeThreshold)等参数。JVM会动态调整这些参数，以提供最合适的停顿时间或者最大的吞吐量，这种调节方式称为GC自适应的调节策略.</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Serial-Old-收集器"><a href="#Serial-Old-收集器" class="headerlink" title="Serial Old 收集器"></a>Serial Old 收集器</h4><p>Serial Old是Serial收集器的老年代版本，同样是一个单线程收集器，使用标记-整理算法</p>
+<ul>
+<li>适用场景：Client模式；单核服务器；与Parallel Scavenge收集器搭配；作为CMS收集器的后备方案，在并发收集发生Concurrent Mode Failure时使用</li>
+</ul>
+<h4 id="Parallel-Old收集器"><a href="#Parallel-Old收集器" class="headerlink" title="Parallel Old收集器"></a>Parallel Old收集器</h4><p>Parallel Old是Parallel Scavenge收集器的老年代版本，使用多线程和“标记-整理”算法，可以充分利用多核CPU的计算能力。</p>
+<ul>
+<li>适用场景：注重吞吐量与CPU资源敏感的场合，与Parallel Scavenge 收集器搭配使用，jdk7和jdk8默认使用该收集器作为老年代收集器。使用参数进行指定</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UserParallelOldGC</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CMS-Concurrent-Mark-Sweep-并发标记清除-过程：（不熟悉）"><a href="#CMS-Concurrent-Mark-Sweep-并发标记清除-过程：（不熟悉）" class="headerlink" title="CMS(Concurrent-Mark-Sweep,并发标记清除)过程：（不熟悉）"></a>CMS(Concurrent-Mark-Sweep,并发标记清除)过程：（不熟悉）</h4><p>CMS是老年代垃圾收集器，在收集过程中可以与用户线程并发操作。它可以与Serial收集器和Parallel New收集器搭配使用。CMS牺牲了系统的吞吐量来追求收集速度，适合追求垃圾收集速度的服务器上。可以通过JVM启动参数：<code>-XX:+UseConcMarkSweepGC</code>来开启CMS。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CMS 处理过程有七个步骤：</span><br><span class="line">1、初始标记(CMS-initial-mark) ,会导致stw;</span><br><span class="line">2、并发标记(CMS-concurrent-mark)，与用户线程同时运行；</span><br><span class="line">3、预清理（CMS-concurrent-preclean），与用户线程同时运行；</span><br><span class="line">4、可被终止的预清理（CMS-concurrent-abortable-preclean） 与用户线程同时运行；</span><br><span class="line">5、重新标记(CMS-remark) ，会导致swt；</span><br><span class="line">6、并发清除(CMS-concurrent-sweep)，与用户线程同时运行；</span><br><span class="line">7、并发重置状态等待下次CMS的触发(CMS-concurrent-reset)，与用户线程同时运行；</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>优点：并发收集，低停顿</li>
+<li>缺点：<ul>
+<li>CMS收集器对CPU资源非常敏感，CMS默认启动对回收线程数(CPU数量+3)&#x2F;4，当CPU数量在4个以上时，并发回收时垃圾收集线程不少于25%，并随着CPU数量的增加而下降，但当CPU数量不足4个时，对用户影响较大。</li>
+<li>CMS无法处理浮动垃圾，可能会出现“Concurrent Mode Failure”失败而导致一次FullGC的产生。这时会地洞后备预案，临时用SerialOld来重新进行老年代的垃圾收集。由于CMS并发清理阶段用户线程还在运行，伴随程序运行自然还会有新的垃圾产生，这部分垃圾出现在标记过程之后，CMS无法在当次处理掉，只能等到下一次GC，这部分垃圾就是浮动垃圾。同时也由于在垃圾收集阶段用户线程还需要运行，那也就需要预留足够的内存空间给用户线程使用，因此CMS收集器不能像其他老年代几乎完全填满再进行收集。可以通过参数-XX:CMSInitiatingOccupancyFraction修改CMS触发的百分比。</li>
+<li>因为CMS采用的是标记清除算法，因此垃圾回收后会产生空间碎片。通过参数可以进行优化。</li>
+</ul>
+</li>
+</ul>
+<h4 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h4><ul>
+<li>概念： G1收集器是一款面向服务端应用的垃圾收集器，目前是JDK9的默认垃圾收集器。与其他收集器相比，G1具有如下特点。<ul>
+<li>并行与并发。G1能充分利用多CPU，多核环境下的硬件优势。</li>
+<li>分代收集。能够采用不同的方式去处理新创建的对象和已经存活了一段时间的对象，不需要与其他收集器进行合作。</li>
+<li>空间整合。G1从整体上来看基于“标记-整理”算法实现的收集器，从局部上看是基于复制算法实现的，因此G1运行期间不会产生空间碎片。</li>
+<li>可预测的停顿。G1能建立可预测的时间停顿模型，能让使用者明确指定一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒。</li>
+</ul>
+</li>
+</ul>
+<p>G1收集器将这个Java堆划分为多个大小相等的独立区域(Region)，虽然还保留有新生代和老年代的概念，但两者之间不是物理隔离的。他们都是一部分Region的集合。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/16289066-8ebd318e3a078ba6.jpg" alt="img"></p>
+<p>每一个方块就是一个区域，每个区域可能是 Eden、Survivor、老年代，每种区域的数量也不一定。JVM 启动时会自动设置每个区域的大小（1M ~ 32M，必须是 2 的次幂），最多可以设置 2048 个区域（即支持的最大堆内存为 32M*2048 &#x3D; 64G），假如设置 -Xmx8g -Xms8g，则每个区域大小为 8g&#x2F;2048&#x3D;4M。</p>
+<p>G1收集器可以有计划地避免在整个Java堆全区域的垃圾收集。G1可以跟踪各个Region里面垃圾堆积的价值大小（回收所获得的空间大小及回收所需时间的经验值），在后台维护一个优先列表，每次根据允许的收集时间，收集加载最大的region，这种方式保证了有限时间内可以获取尽可能多高的收集效率。</p>
+<p>为了在 GC Roots Tracing 的时候避免扫描全堆，在每个 Region 中，都有一个 Remembered Set 来实时记录该区域内的引用类型数据与其他区域数据的引用关系（在前面的几款分代收集中，新生代、老年代中也有一个 Remembered Set 来实时记录与其他区域的引用关系），在标记时直接参考这些引用关系就可以知道这些对象是否应该被清除，而不用扫描全堆的数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">步骤：</span><br><span class="line">1 初始标记。标记出GC Roots直接关联的对象，这个阶段速度较快，需要停止用户线程，单线程执行。</span><br><span class="line">2 并发标记。从 GC Root 开始对堆中的对象进行可达新分析，找出存活对象，这个阶段耗时较长，但可以和用户线程并发执行。</span><br><span class="line">3 最终标记。修正在并发标记阶段引用户程序执行而产生变动的标记记录。</span><br><span class="line">4 筛选回收。选回收阶段会对各个 Region 的回收价值和成本进行排序，根据用户所期望的 GC 停顿时间来指定回收计划（用最少的时间来回收包含垃圾最多的区域，这就是 Garbage First ，第一时间清理垃圾最多的区块），这里为了提高回收效率，并没有采用和用户线程并发执行的方式，而是停顿用户线程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>适用场景：要求尽可能可控 GC 停顿时间；内存占用较大的应用。可以用 -XX:+UseG1GC 使用 G1 收集器，jdk9 默认使用 G1 收集器</p>
+<h4 id="垃圾标记算法："><a href="#垃圾标记算法：" class="headerlink" title="垃圾标记算法："></a>垃圾标记算法：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">标记-引用计数算法：对每个对象保存一个整型的引用计数器属性，用于记录被对象引用的情况，被对象引用了就+1，引用失效就-1,0表示不可能再被使用，可进行回收。它有一个缺点不能解决循环引用的问题；</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">可达性分析算法：从 GC Roots 开始向下搜索，搜索所走过的路径称为引用链。当一个对象到 GC Roots 没有任何引用链相连时，则证明此对象是可以被回收的。</span><br><span class="line"></span><br><span class="line">Java中可作为GC Roots 的对象包括：</span><br><span class="line"> 1.虚拟机栈（栈中的本地变量表） 中引用的对象</span><br><span class="line"> 2.方法区中类静态属性引用的对象</span><br><span class="line"> 3.方法区中常量引用的对象</span><br><span class="line"> 4.本地方法栈中JNI（一般说的Native方法）引用的对象</span><br></pre></td></tr></table></figure>
+
+<h4 id="垃圾回收算法："><a href="#垃圾回收算法：" class="headerlink" title="垃圾回收算法："></a>垃圾回收算法：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">标记清除算法：标记无用对象，然后进行清除回收。</span><br><span class="line"></span><br><span class="line">标记-清除算法将垃圾收集分为两个阶段：标记阶段：标记出可以回收的对象。清除阶段：回收被标记的对象所占用的空间。</span><br><span class="line"></span><br><span class="line">优点：实现简单，不需要对象进行移动。</span><br><span class="line"></span><br><span class="line">缺点：标记、清除过程效率低，产生大量不连续的内存碎片，提高了垃圾回收的频率。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">复制算法：它把内存空间划为两个相等的区域，每次只使用其中一个区域。垃圾收集时，遍历当前使用的区域，把存活对象复制到另外一个区域中，最后将当前使用的区域的可回收的对象进行回收。</span><br><span class="line"></span><br><span class="line">优点：按顺序分配内存即可，实现简单、运行高效，不用考虑内存碎片。</span><br><span class="line"></span><br><span class="line">缺点：可用的内存大小缩小为原来的一半，对象存活率高时会频繁进行复制。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">标记-整理算法</span><br><span class="line">与标记-清除算法不同的是，在标记可回收的对象后将所有存活的对象压缩到内存的一端，使他们紧凑的排列在一起，然后对端边界以外的内存进行回收。回收后，已用和未用的内存都各自一边。</span><br><span class="line"></span><br><span class="line">优点：解决了标记-清理算法存在的内存碎片问题。</span><br><span class="line"></span><br><span class="line">缺点：仍需要进行局部对象移动，一定程度上降低了效率。</span><br></pre></td></tr></table></figure>
+
+<h4 id="双亲委派："><a href="#双亲委派：" class="headerlink" title="双亲委派："></a>双亲委派：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">双亲委派模型：如果一个类加载器收到了类加载的请求，它首先不会自己去加载这个类，而是把这个请求委派给父类加载器去完成，每一层的类加载器都是如此，从应用程序类加载器到扩展类加载器到启动类加载器，这样所有的加载请求都会被传送到顶层的启动类加载器中，只有当父加载无法完成加载请求时，子加载器才会尝试去加载类。</span><br><span class="line"></span><br><span class="line">采取这种机制的目的：1.防止重复加载同一个类。2.保证核心类不能被篡改。</span><br></pre></td></tr></table></figure>
+
+<h4 id="沙箱安全机制"><a href="#沙箱安全机制" class="headerlink" title="沙箱安全机制"></a><strong>沙箱安全机制</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Java安全模型的核心就是Java沙箱。沙箱机制就是讲Java代码限定在虚拟机JVM特定的运行范围中，并且严格限制代码对本地资源的访问，通过这样的措施来保证对代码的有效隔离，防止对本地系统造成破坏。</span><br><span class="line"></span><br><span class="line">沙箱主要限制系统资源访问，例如：CPU、内存、文件系统、网络。不同级别的沙箱对这些资源访问的限制也可以不一样</span><br><span class="line"></span><br><span class="line">当前最新的安全机制实现，引入了域（Domain）的概念。虚拟机b所有代码加载到不同的系统域和应用域，系统域部分专门负责与关键资源进行交互。而各个域应用部分则通过系统域的部分代理来对各种需要的资源进行访问。虚拟机中不同的受保护域（Protected Domain），对应不一样的权限（Permission）。存在于不同域中的类文件就具有了当前域的全部权限，</span><br><span class="line"></span><br><span class="line">通俗来说就是虚拟机把代码加载到拥有不同权限的域里，然后代码就拥有了该域的所有权限。这样就能控制不同代码拥有不同调用操作系统和本地资源的权限</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="类加载过程："><a href="#类加载过程：" class="headerlink" title="类加载过程："></a>类加载过程：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">类装载分为以下 5 个步骤：</span><br><span class="line"></span><br><span class="line">加载：根据查找路径找到相应的 class 文件然后导入；</span><br><span class="line">验证：检查加载的 class 文件的正确性；</span><br><span class="line">准备：给类中的静态变量分配内存空间；</span><br><span class="line">解析：虚拟机将常量池中的符号引用替换成直接引用的过程。符号引用就理解为一个标示，而在直接引用直接指向内存中的地址；</span><br><span class="line">初始化：对静态变量和静态代码块执行初始化工作。</span><br></pre></td></tr></table></figure>
+
+<h4 id="为对象分配内存的方式："><a href="#为对象分配内存的方式：" class="headerlink" title="为对象分配内存的方式："></a>为对象分配内存的方式：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">指针碰撞：如果Java堆的内存是规整，即所有用过的内存放在一边，而空闲的的放在另一边。分配内存时将位于中间的指针指示器向空闲的内存移动一段与对象大小相等的距离，这样便完成分配内存工作。</span><br><span class="line">空闲列表：如果Java堆的内存不是规整的，则需要由虚拟机维护一个列表来记录那些内存是可用的，这样在分配的时候可以从列表中查询到足够大的内存分配给对象，并在分配后更新列表记录。</span><br></pre></td></tr></table></figure>
+
+<h4 id="JVM调优："><a href="#JVM调优：" class="headerlink" title="JVM调优："></a>JVM调优：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-Xms2g：初始化推大小为 2g；</span><br><span class="line">-Xmx2g：最大堆内存大小为 2g；</span><br><span class="line">-XX:NewRatio=4：设置年轻的和老年代的内存比例为 1:4；</span><br><span class="line">-XX:SurvivorRatio=8：设置新生代 Eden 和 Survivor 比例为 8:2；</span><br><span class="line">–XX:+UseParNewGC：指定使用 ParNew + Serial Old 垃圾回收器组合；</span><br><span class="line">-XX:+UseParallelOldGC：指定使用 ParNew + ParNew Old 垃圾回收器组合；</span><br><span class="line">-XX:+UseConcMarkSweepGC：指定使用 CMS + Serial Old 垃圾回收器组合；</span><br><span class="line">-XX:+PrintGC：开启打印 gc 信息；</span><br><span class="line">-XX:+PrintGCDetails：打印 gc 详细信息。</span><br></pre></td></tr></table></figure>
+
+<h4 id="重要知识点：（内存泄漏）"><a href="#重要知识点：（内存泄漏）" class="headerlink" title="重要知识点：（内存泄漏）"></a>重要知识点：（内存泄漏）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java中内存泄露的场景：长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收。</span><br></pre></td></tr></table></figure>
+
+<h1 id="MySQL："><a href="#MySQL：" class="headerlink" title="MySQL："></a>MySQL：</h1><h4 id="事物的四大特性-ACID-介绍一下："><a href="#事物的四大特性-ACID-介绍一下：" class="headerlink" title="事物的四大特性(ACID)介绍一下："></a>事物的四大特性(ACID)介绍一下：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">原子性： 事务是最小的执行单位，不允许分割。事务的原子性确保动作要么全部完成，要么完全不起作用；</span><br><span class="line">一致性： 执行事务前后，数据保持一致，多个事务对同一个数据读取的结果是相同的；</span><br><span class="line">隔离性： 并发访问数据库时，一个用户的事务不被其他事务所干扰，各并发事务之间数据库是独立的；</span><br><span class="line">持久性： 一个事务被提交之后。它对数据库中数据的改变是持久的，即使数据库发生故障也不应该对其有任何影响。</span><br></pre></td></tr></table></figure>
+
+<h4 id="数据事务的实现原理："><a href="#数据事务的实现原理：" class="headerlink" title="数据事务的实现原理："></a>数据事务的实现原理：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MySQL InnoDB 引擎使用 redo log(重做日志) 保证事务的持久性，使用 undo log(回滚日志) 来保证事务的原子性。</span><br><span class="line"></span><br><span class="line">MySQL InnoDB 引擎通过 锁机制、MVCC 等手段来保证事务的隔离性。</span><br><span class="line"></span><br><span class="line">保证了事务的持久性、原子性、隔离性之后，一致性才能得到保障。</span><br></pre></td></tr></table></figure>
+
+<h4 id="大表怎么优化："><a href="#大表怎么优化：" class="headerlink" title="大表怎么优化："></a>大表怎么优化：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、限定数据的范围</span><br><span class="line">2、读写分离</span><br><span class="line">3、使用缓存</span><br><span class="line">4、分库分表</span><br></pre></td></tr></table></figure>
+
+<h4 id="索引失效的几种情况："><a href="#索引失效的几种情况：" class="headerlink" title="索引失效的几种情况："></a>索引失效的几种情况：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、使用了or</span><br><span class="line">2、不满足最左匹配原则</span><br><span class="line">3、like以%开头;</span><br><span class="line">4、where中索引列使用了函数;</span><br><span class="line">5、where中索引列使用了运算符</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建索引的原则"><a href="#创建索引的原则" class="headerlink" title="创建索引的原则:"></a>创建索引的原则:</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、满足最左匹配原则</span><br><span class="line">2、较频繁作为查询条件的字段才去创建索引</span><br><span class="line">3、更新频繁字段不适合创建索引</span><br><span class="line">4、若是不能有效区分数据的列不适合做索引列</span><br><span class="line">5、重复值比较多的列不要建立索引</span><br></pre></td></tr></table></figure>
+
+<h4 id="索引的类型："><a href="#索引的类型：" class="headerlink" title="索引的类型："></a>索引的类型：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.普通索引：基本的索引类型，没有唯一性的限制，允许为NULL值。</span><br><span class="line">2.唯一索引：数据列不允许重复，允许为NULL值，一个表允许多个列创建唯一索引。</span><br><span class="line">3.主键索引：数据列不允许重复，不允许为NULL，一个表只能有一个主键。</span><br><span class="line">4.组合索引：指多个字段上创建的索引</span><br><span class="line">5.全文索引</span><br></pre></td></tr></table></figure>
+
+<h4 id="Innodb和Myisam的区别："><a href="#Innodb和Myisam的区别：" class="headerlink" title="Innodb和Myisam的区别："></a>Innodb和Myisam的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1、InnoDB支持事务，MyISAM不支持</span><br><span class="line">2、InnoDB支持外键，而MyISAM不支持</span><br><span class="line">3、InnoDB是聚集索引， MyISAM是非聚集索引</span><br><span class="line">4、InnoDB支持表、行(默认)级锁，而MyISAM支持表级锁</span><br><span class="line">5、Innodb不支持全文索引，而MyISAM支持全文索引</span><br><span class="line">6、Innodb支持哈希索引，而MyISAM不支持哈希索引</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>Innodb</th>
+<th>myisam</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>支持事务</td>
+<td>不支持事务</td>
+</tr>
+<tr>
+<td>支持主键</td>
+<td>不支持主键</td>
+</tr>
+<tr>
+<td>支持聚簇索引</td>
+<td>支持非聚簇索引</td>
+</tr>
+<tr>
+<td>支持表、行锁</td>
+<td>支持表锁</td>
+</tr>
+<tr>
+<td>不支持全文索引</td>
+<td>支持全文索引</td>
+</tr>
+<tr>
+<td>支持哈希 索引</td>
+<td>不支持哈希索引</td>
+</tr>
+</tbody></table>
+<h4 id="日志："><a href="#日志：" class="headerlink" title="日志："></a>日志：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">一、重做日志（redo log）</span><br><span class="line">作用：</span><br><span class="line">确保事务的持久性。防止在发生故障的时间点，尚有脏页未写入磁盘，在重启mysql服务的时候，根据redo log进行重做，从而达到事务的持久性这一特性。</span><br><span class="line"></span><br><span class="line">二、回滚日志（undo log）</span><br><span class="line">作用：</span><br><span class="line">保存了事务发生之前的数据的一个版本，可以用于回滚，同时可以提供多版本并发控制下的读（MVCC），也即非锁定读</span><br><span class="line"></span><br><span class="line">三、二进制日志（binlog）：</span><br><span class="line">作用：</span><br><span class="line">用于复制，在主从复制中，从库利用主库上的binlog进行重播，实现主从同步。用于数据库的基于时间点的还原。</span><br></pre></td></tr></table></figure>
+
+<h4 id="binlog的三种格式："><a href="#binlog的三种格式：" class="headerlink" title="binlog的三种格式："></a>binlog的三种格式：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.Statement：每一条会修改数据的sql都会记录在binlog中。</span><br><span class="line">2.Row:不记录sql语句上下文相关信息，仅保存哪条记录被修改。</span><br><span class="line">3.Mixedlevel: 是以上两种level的混合使用，一般的语句修改使用statment格式保存binlog，如一些函数，statement无法完成主从复制的操作，则采用row格式保存binlog,MySQL会根据执行的每一条具体的sql语句来区分对待记录的日志形式，也就是在Statement和Row之间选择一种</span><br></pre></td></tr></table></figure>
+
+<h4 id="B树和B-树："><a href="#B树和B-树：" class="headerlink" title="B树和B+树："></a>B树和B+树：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">区别：</span><br><span class="line"></span><br><span class="line">B树将键和值存放在内部节点和叶子节点；但在B+树中，内部节点都是键，没有值，叶子节点同时存放键和值。</span><br><span class="line"></span><br><span class="line">B+树的叶子节点有一条链相连，而B树的叶子节点各自独立。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">为什么使用B+树而不是B树：</span><br><span class="line"></span><br><span class="line">1、B树只适合随机检索，而B+树同时支持随机检索和顺序检索</span><br><span class="line">2、B+的磁盘读写代价更低</span><br><span class="line">3、B+树的查询效率更加稳定。</span><br><span class="line">4、解决元素遍历效率低下的问题</span><br><span class="line">5、增删节点时，效率更高。</span><br></pre></td></tr></table></figure>
+
+<h4 id="主从复制："><a href="#主从复制：" class="headerlink" title="主从复制："></a>主从复制：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">***************主从复制的作用***************</span><br><span class="line"></span><br><span class="line">主数据库出现问题，可以切换到从数据库。</span><br><span class="line">可以进行数据库层面的读写分离。</span><br><span class="line">可以在从数据库上进行日常备份。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">***************主从复制解决的问题***************</span><br><span class="line"></span><br><span class="line">数据分布：随意开始或停止复制，并在不同地理位置分布数据备份</span><br><span class="line">负载均衡：降低单个服务器的压力</span><br><span class="line">高可用和故障切换：帮助应用程序避免单点失败</span><br><span class="line">升级测试：可以用更高版本的MySQL作为从库</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">***************主从复制原理***************</span><br><span class="line"></span><br><span class="line">在主库上把数据更新记录到二进制日志</span><br><span class="line">从库将主库的日志复制到自己的中继日志</span><br><span class="line">从库读取中继日志的事件，将其重放到从库数据中</span><br></pre></td></tr></table></figure>
+
+<h4 id="脏读，不可重复读，幻读："><a href="#脏读，不可重复读，幻读：" class="headerlink" title="脏读，不可重复读，幻读："></a>脏读，不可重复读，幻读：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、脏读：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个回滚了操作，则后一个事务所读取的数据就会是不正确的。</span><br><span class="line">2、不可重复读:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新了原有的数据。</span><br><span class="line">3、幻读:在一个事务的两次查询中数据笔数不一致，例如有一个事务查询了几列数据，而另一个事务却在此时插入了新的几列数据，先前的事务在接下来的查询中，就会发现有几列数据是它先前所没有的。</span><br></pre></td></tr></table></figure>
+
+<h4 id="隔离级别："><a href="#隔离级别：" class="headerlink" title="隔离级别："></a>隔离级别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">READ-UNCOMMITTED(读取未提交)： 最低的隔离级别，允许读取尚未提交的数据变更，可能会导致脏读、幻读或不可重复读。</span><br><span class="line">READ-COMMITTED(读取已提交)： 允许读取并发事务已经提交的数据，可以阻止脏读，但是幻读或不可重复读仍有可能发生。</span><br><span class="line">REPEATABLE-READ(可重复读)： 对同一字段的多次读取结果都是一致的，除非数据是被本身事务自己所修改，可以阻止脏读和不可重复读，但幻读仍有可能发生。</span><br><span class="line">SERIALIZABLE(可串行化)： 最高的隔离级别，完全服从ACID的隔离级别。所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。</span><br></pre></td></tr></table></figure>
+
+<p>​       <strong>Mysql 默认采用的可重复读隔离级别</strong></p>
+<p><strong>MySQL 中是如何实现事务隔离的</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">首先说读未提交，它是性能最好，也可以说它是最野蛮的方式，因为它压根儿就不加锁，所以根本谈不上什么隔离效果，可以理解为没有隔离。</span><br><span class="line"></span><br><span class="line">再来说串行化。读的时候加共享锁，也就是其他事务可以并发读，但是不能写。写的时候加排它锁，其他事务不能并发写也不能并发读。</span><br><span class="line"></span><br><span class="line">为了解决不可重复读，或者为了实现可重复读，MySQL 采用了 MVVC (多版本并发控制) 的方式。</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Redis缓存和MySQL数据一致性方案："><a href="#Redis缓存和MySQL数据一致性方案：" class="headerlink" title="Redis缓存和MySQL数据一致性方案："></a>Redis缓存和MySQL数据一致性方案：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">第一种方案：采用延时双删策略：（1）先删除缓存   （2）再写数据库  （3）休眠500毫秒   （4）再次删除缓存</span><br><span class="line">第二种方案：异步更新缓存策略：（1）读Redis：热数据基本都在Redis  （2）写MySQL:增删改都是操作MySQL  （3）更新Redis数据：MySQ的数据操作binlog，来更新到Redis</span><br></pre></td></tr></table></figure>
+
+<h4 id="InnoDB三种行锁算法："><a href="#InnoDB三种行锁算法：" class="headerlink" title="InnoDB三种行锁算法："></a>InnoDB三种行锁算法：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Record lock：单个行记录上的锁</span><br><span class="line">Gap lock：间隙锁，锁定一个范围，不包括记录本身</span><br><span class="line">Next-key lock：record+gap 锁定一个范围，包含记录本身（当查询的索引含有唯一属性的时候，Next-Key Lock会进行优化，将其降级为Record Lock，即仅锁住索引本身，不是范围。）</span><br></pre></td></tr></table></figure>
+
+<h4 id="MVCC如何工作："><a href="#MVCC如何工作：" class="headerlink" title="MVCC如何工作："></a>MVCC如何工作：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">MVCC在每行记录后面都保存着两个隐藏的列：创建版本号和删除版本号。</span><br><span class="line"></span><br><span class="line">1. SELECT</span><br><span class="line">InnoDB会根据以下条件检查每一行记录：</span><br><span class="line">	a. InnoDB只查找版本早于当前事务版本的数据行，这样可以确保事务读取的行要么是在开始事务之前已经存在要么是事务自身插入或者修改过的，在事务开始之后才插入的行，事务不会看到。</span><br><span class="line">	b. 行的删除版本号要么未定义，要么大于当前事务版本号，这样可以确保事务读取到的行在事务开始之前未被删除，在事务开始之前就已经过期的数据行，该事务也不会看到。</span><br><span class="line">只有符合上述两个条件的才会被查询出来</span><br><span class="line"></span><br><span class="line">2. INSERT</span><br><span class="line">将当前系统版本号作为数据行的创建版本号。</span><br><span class="line"></span><br><span class="line">3. DELETE</span><br><span class="line">将当前系统版本号作为数据行的删除版本号。</span><br><span class="line"></span><br><span class="line">4. UPDATE</span><br><span class="line">将当前系统版本号作为更新前的数据行的删除版本号，并将当前系统版本号作为更新后的数据行的创建版本号。 可以理解为先执行 DELETE 后执行 INSERT。</span><br></pre></td></tr></table></figure>
+
+<h4 id="重要知识点："><a href="#重要知识点：" class="headerlink" title="重要知识点："></a>重要知识点：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">悲观锁大多数情况下依靠数据库的锁机制实现；乐观锁大多数基于数据版本（Version）记录机制实现： 具体可通过给表加一个版本号或时间戳字段实现，当读取数据时，将version字段的值一同读出，数据每更新一次，对此version值加一。当我们提交更新的时候，判断当前版本信息与第一次取出来的版本值大小，如果数据库表当前版本号与第一次取出来的version值相等，则予以更新，否则认为是过期数据，拒绝更新，让用户重新操作。</span><br><span class="line"></span><br><span class="line">InnoDB是基于索引来完成行锁</span><br><span class="line"></span><br><span class="line">MVCC在读取已提交和可重复读级别下工作，MVCC+next-key locks解决幻读</span><br><span class="line"></span><br><span class="line">hash索引进行等值查询更快(一般情况下，如果发生了hash碰撞，效率可能更差)，但是却无法进行范围查询。</span><br><span class="line"></span><br><span class="line">数据库分片的两种常见方案：客户端代理和中间件代理</span><br></pre></td></tr></table></figure>
+
+<h1 id="计网："><a href="#计网：" class="headerlink" title="计网："></a>计网：</h1><h4 id="HTTPS的工作原理："><a href="#HTTPS的工作原理：" class="headerlink" title="HTTPS的工作原理："></a>HTTPS的工作原理：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">（1）客户使用https的URL访问Web服务器，要求与Web服务器建立SSL连接。</span><br><span class="line"></span><br><span class="line">（2）Web服务器收到客户端请求后，会将网站的证书信息（证书中包含公钥）传送一份给客户端。</span><br><span class="line"></span><br><span class="line">（3）客户端的浏览器与Web服务器开始协商SSL连接的安全等级，也就是信息加密的等级。</span><br><span class="line"></span><br><span class="line">（4）客户端的浏览器根据双方同意的安全等级，建立会话密钥，然后利用网站的公钥将会话密钥加密，并传送给网站。</span><br><span class="line"></span><br><span class="line">（5）Web服务器利用自己的私钥解密出会话密钥。</span><br><span class="line"></span><br><span class="line">（6）Web服务器利用会话密钥加密与客户端之间的通信。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="从输入URL到页面加载发生了什么："><a href="#从输入URL到页面加载发生了什么：" class="headerlink" title="从输入URL到页面加载发生了什么："></a>从输入URL到页面加载发生了什么：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1、DNS解析</span><br><span class="line">2、TCP连接</span><br><span class="line">3、发送HTTP请求</span><br><span class="line">4、服务器处理请求并返回HTTP报文</span><br><span class="line">5、浏览器解析渲染页面</span><br><span class="line">6、连接结束</span><br></pre></td></tr></table></figure>
+
+<h4 id="拥塞避免："><a href="#拥塞避免：" class="headerlink" title="拥塞避免："></a>拥塞避免：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">慢开始：拥塞窗口cwnd设置为1，接收方收到该数据报文段后，给发送方回复一个确认报文段，发送方收到该确认报文后，将拥塞窗口的值变为2，下一次变成4……………… 当拥塞窗口的值为16等于慢开始门限值，之后改用拥塞避免算法。</span><br><span class="line">拥塞避免：每个传输轮次，拥塞窗口cwnd只能线性加1.当发生超时重传时，将门限值设为发生重传时拥塞窗口的一半，拥塞窗口值设置为1，并开始慢开始算法。</span><br><span class="line">快重传：要求接收方在收到一个失序的报文段后就立即发出重复确认。</span><br><span class="line">快恢复算法：当发送方连续收到三个重复确认时，将门限值和拥塞窗口都设置为当前窗口的一半，开始执行拥塞避免。</span><br></pre></td></tr></table></figure>
+
+<h1 id="Redis："><a href="#Redis：" class="headerlink" title="Redis："></a>Redis：</h1><h4 id="哨兵模式："><a href="#哨兵模式：" class="headerlink" title="哨兵模式："></a>哨兵模式：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">哨兵是 redis 集群机构中非常重要的一个组件，主要有以下功能：</span><br><span class="line"></span><br><span class="line">集群监控：负责监控 redis master 和 slave 进程是否正常工作。</span><br><span class="line">消息通知：如果某个 redis 实例有故障，那么哨兵负责发送消息作为报警通知给管理员。</span><br><span class="line">故障转移：如果 master node 挂掉了，会自动转移到 slave node 上。</span><br><span class="line">配置中心：如果故障转移发生了，通知 client 客户端新的 master 地址。</span><br></pre></td></tr></table></figure>
+
+<h4 id="介绍一下Redis："><a href="#介绍一下Redis：" class="headerlink" title="介绍一下Redis："></a>介绍一下Redis：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Redis是一个使用C语言编写的，开源的高性能非关系型（NoSQL）的键值对数据库。</span><br><span class="line">Redis的数据是存在内存中的，所以读写速度非常快，因此 redis 被广泛应用于缓存方向。</span><br></pre></td></tr></table></figure>
+
+<h4 id="Redis为什么快："><a href="#Redis为什么快：" class="headerlink" title="Redis为什么快："></a>Redis为什么快：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于 HashMap，HashMap 的优势就是查找和操作的时间复杂度都是O(1)；</span><br><span class="line"></span><br><span class="line">2、数据结构简单，对数据操作也简单，Redis 中的数据结构是专门进行设计的；</span><br><span class="line"></span><br><span class="line">3、采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</span><br><span class="line"></span><br><span class="line">4、使用多路 I/O 复用模型，非阻塞 IO；</span><br></pre></td></tr></table></figure>
+
+<h4 id="Redis持久化机制："><a href="#Redis持久化机制：" class="headerlink" title="Redis持久化机制："></a>Redis持久化机制：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Redis 提供两种持久化机制 RDB 和 AOF 两种机制:</span><br><span class="line">RDB是Redis默认的持久化方式。按照一定的时间将内存的数据以快照的形式保存到硬盘中</span><br><span class="line">AOF则是将Redis执行的每次写命令记录到单独的日志文件中</span><br></pre></td></tr></table></figure>
+
+<h4 id="Redis有哪些优缺点："><a href="#Redis有哪些优缺点：" class="headerlink" title="Redis有哪些优缺点："></a>Redis有哪些优缺点：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">***************优点***************</span><br><span class="line"></span><br><span class="line">1、读写性能优异</span><br><span class="line">2、支持数据持久化，支持AOF和RDB两种持久化方式。</span><br><span class="line">3、支持事务</span><br><span class="line">4、数据结构丰富</span><br><span class="line">5、支持主从复制</span><br><span class="line"></span><br><span class="line">***************缺点***************</span><br><span class="line"></span><br><span class="line">1、数据库容量受到物理内存的限制，不能用作海量数据的高性能读写，因此Redis适合的场景主要局限在较小数据量的高性能操作和运算上。</span><br><span class="line">2、Redis 不具备自动容错和恢复功能。</span><br><span class="line">3、主机宕机，宕机前有部分数据未能及时同步到从机，切换IP后还会引入数据不一致的问题，降低了系统的可用性。</span><br><span class="line">4、Redis 较难支持在线扩容。</span><br></pre></td></tr></table></figure>
+
+<h4 id="Redis有哪些数据类型："><a href="#Redis有哪些数据类型：" class="headerlink" title="Redis有哪些数据类型："></a>Redis有哪些数据类型：</h4><p><img src="E:\MyBolg\source_posts\Redis数据类型.png" alt="Redis数据类型"></p>
+<h4 id="Redis底层原理："><a href="#Redis底层原理：" class="headerlink" title="Redis底层原理："></a>Redis底层原理：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">简单动态字符串（SDS）</span><br><span class="line">链表</span><br><span class="line">字典</span><br><span class="line">跳跃表</span><br><span class="line">整数集合</span><br><span class="line">压缩列表</span><br></pre></td></tr></table></figure>
+
+<h4 id="Redis缓存淘汰策略："><a href="#Redis缓存淘汰策略：" class="headerlink" title="Redis缓存淘汰策略："></a>Redis缓存淘汰策略：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LRU（最近最少使用）：首先淘汰最长时间未被使用的。由hashmap+双向链表实现</span><br><span class="line">LFU（最不经常使用）：淘汰一定时期内被访问次数最少的。由两个hashmap实现</span><br></pre></td></tr></table></figure>
+
+<h4 id="缓存雪崩："><a href="#缓存雪崩：" class="headerlink" title="缓存雪崩："></a>缓存雪崩：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">缓存雪崩是指缓存同一时间大面积的失效，所以，后面的请求都会落到数据库上，造成数据库短时间内承受大量请求而崩掉。</span><br><span class="line"></span><br><span class="line">解决方案：</span><br><span class="line"></span><br><span class="line">1、缓存数据的过期时间设置随机，防止同一时间大量数据过期现象发生。</span><br><span class="line">2、分布式</span><br><span class="line">3、限流</span><br></pre></td></tr></table></figure>
+
+<h4 id="缓存穿透："><a href="#缓存穿透：" class="headerlink" title="缓存穿透："></a>缓存穿透：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">缓存穿透是指缓存和数据库中都没有的数据，导致所有的请求都落到数据库上，造成数据库短时间内承受大量请求而崩掉。</span><br><span class="line"></span><br><span class="line">解决方案：</span><br><span class="line"></span><br><span class="line">1、接口层增加校验，如用户鉴权校验，id做基础校验，id&lt;=0的直接拦截；</span><br><span class="line">2、从缓存取不到的数据，在数据库中也没有取到，这时也可以将key-value对写为key-null，缓存有效时间可以设置短点，如30秒（设置太长会导致正常情况也没法使用）。这样可以防止攻击用户反复用同一个id暴力攻击</span><br><span class="line">3、采用布隆过滤器，将所有可能存在的数据哈希到一个足够大的 bitmap 中，一个一定不存在的数据会被这个 bitmap 拦截掉，从而避免了对底层存储系统的查询压力</span><br></pre></td></tr></table></figure>
+
+<h4 id="缓存击穿："><a href="#缓存击穿：" class="headerlink" title="缓存击穿："></a>缓存击穿：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">缓存击穿是指缓存中没有但数据库中有的数据（一般是缓存时间到期），这时由于并发用户特别多，同时读缓存没读到数据，又同时去数据库去取数据，引起数据库压力瞬间增大，造成过大压力。和缓存雪崩不同的是，缓存击穿指并发查同一条数据，缓存雪崩是不同数据都过期了，很多数据都查不到从而查数据库。</span><br><span class="line"></span><br><span class="line">解决方案：</span><br><span class="line"></span><br><span class="line">1、设置热点数据永远不过期。</span><br><span class="line">2、加互斥锁</span><br></pre></td></tr></table></figure>
+
+<h1 id="Spring："><a href="#Spring：" class="headerlink" title="Spring："></a>Spring：</h1><h4 id="JDK动态代理和CGLIB动态代理的区别"><a href="#JDK动态代理和CGLIB动态代理的区别" class="headerlink" title="JDK动态代理和CGLIB动态代理的区别"></a>JDK动态代理和CGLIB动态代理的区别</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Spring AOP中的动态代理主要有两种方式，JDK动态代理和CGLIB动态代理：</span><br><span class="line"></span><br><span class="line">JDK 动态代理只能只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。</span><br><span class="line"></span><br><span class="line">就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</span><br></pre></td></tr></table></figure>
+
+<h4 id="Spring-Bean的生命周期："><a href="#Spring-Bean的生命周期：" class="headerlink" title="Spring Bean的生命周期："></a>Spring Bean的生命周期：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1、实例化 Instantiation</span><br><span class="line">2、属性赋值 Populate</span><br><span class="line">3、初始化 Initialization</span><br><span class="line">4、销毁 Destruction</span><br><span class="line"></span><br><span class="line">1、Spring对bean进行实例化；</span><br><span class="line">2、Spring将值和bean的引用注入到bean对应的属性中；</span><br><span class="line">3、如果bean实现了BeanNameAware接口，Spring将bean的ID传递给setBean-Name()方法；</span><br><span class="line">4、如果bean实现了BeanFactoryAware接口，Spring将调用setBeanFactory()方法，将BeanFactory容器实例传入；</span><br><span class="line">5、如果bean实现了ApplicationContextAware接口，Spring将调用setApplicationContext()方法，将bean所在的应用上下文的引用传入进来；</span><br><span class="line">6、如果bean实现了BeanPostProcessor接口，Spring将调用它们的post-ProcessBeforeInitialization()方法；</span><br><span class="line">7、如果bean实现了InitializingBean接口，Spring将调用它们的after-PropertiesSet()方法。类似地，如果bean使用initmethod声明了初始化方法，该方法也会被调用；</span><br><span class="line">8、如果bean实现了BeanPostProcessor接口，Spring将调用它们的post-ProcessAfterInitialization()方法；</span><br><span class="line">9、此时，bean已经准备就绪，可以被应用程序使用了，它们将一直驻留在应用上下文中，直到该应用上下文被销毁；</span><br><span class="line">10、如果bean实现了DisposableBean接口，Spring将调用它的destroy()接口方法。同样，如果bean使用destroy-method声明了销毁方法，该方法也会被调用。</span><br></pre></td></tr></table></figure>
+
+<h1 id="Springboot"><a href="#Springboot" class="headerlink" title="Springboot:"></a>Springboot:</h1><h4 id="Springboot比Spring好在哪里："><a href="#Springboot比Spring好在哪里：" class="headerlink" title="Springboot比Spring好在哪里："></a>Springboot比Spring好在哪里：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、快速整合第三方框架，比如redis，mybatis等等</span><br><span class="line"></span><br><span class="line">2、全部采用注解方式，没有繁琐的xml配置。</span><br><span class="line"></span><br><span class="line">3、内置http服务器，比如jetty，tomcat。不需要额外的去集成下载tomcat。</span><br></pre></td></tr></table></figure>
+
+<h1 id="Mybatis："><a href="#Mybatis：" class="headerlink" title="Mybatis："></a>Mybatis：</h1><h4 id="和-的区别："><a href="#和-的区别：" class="headerlink" title="#{}和${}的区别："></a>#{}和${}的区别：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、#&#123;&#125;是占位符，预编译处理；$&#123;&#125;是拼接符，字符串替换，没有预编译处理。</span><br><span class="line">2、#&#123;&#125;会在sql中加上&#x27; &#x27;单引号,所以会相对安全,不会有sql注入问题。$&#123;&#125;直接作为SQL本身,不会加单引号,所以有sql注入问题</span><br><span class="line">3、mybatis在处理#&#123;&#125;的时候,会将sql中的#&#123;&#125;替换为?号。mybatis在处理$&#123;&#125;的时候,会将$&#123;&#125;的变量,原原本本的赋值到sql里面</span><br></pre></td></tr></table></figure>
+
+<h1 id="Nginx："><a href="#Nginx：" class="headerlink" title="Nginx："></a>Nginx：</h1><h4 id="Nginx-有哪些负载均衡策略："><a href="#Nginx-有哪些负载均衡策略：" class="headerlink" title="Nginx 有哪些负载均衡策略："></a>Nginx 有哪些负载均衡策略：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、轮询（默认）：每个请求会按时间顺序逐一分配到不同的后端服务器。</span><br><span class="line">2、weight：权重方式，在轮询策略的基础上指定轮询的几率</span><br><span class="line">3、IP 哈希 ip_hash：每个请求按访问 ip 的 hash 结果分配，这样每个访客固定访问一个后端服务器，可以解决 session 共享的问题。</span><br><span class="line">4、最少连接 least_conn：下一个请求将被分派到活动连接数量最少的服务器</span><br><span class="line">5、第三方策略：（1）fair：按照服务器端的响应时间来分配请求，响应时间短的优先分配。（2）url_hash：按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器。</span><br></pre></td></tr></table></figure>
+
+<h1 id="Linux："><a href="#Linux：" class="headerlink" title="Linux："></a>Linux：</h1><h4 id="常用命令："><a href="#常用命令：" class="headerlink" title="常用命令："></a>常用命令：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">pwd 获取当前工作目录的绝对路径。</span><br><span class="line"></span><br><span class="line">ls ls命令用于显示指定工作目录下的内容</span><br><span class="line"></span><br><span class="line">cd 改变所在目录</span><br><span class="line"></span><br><span class="line">cat 显示文件的内容</span><br><span class="line"></span><br><span class="line">grep 在文件中查找某字符</span><br><span class="line"></span><br><span class="line">cp 复制文件</span><br><span class="line"></span><br><span class="line">touch 创建文件</span><br><span class="line"></span><br><span class="line">mv 移动文件</span><br><span class="line"></span><br><span class="line">rm 删除文件</span><br><span class="line"></span><br><span class="line">rmdir 删除目录</span><br><span class="line"></span><br><span class="line">vi 编辑文件</span><br><span class="line"></span><br><span class="line">zip/unzip 扩展名为zip的压缩/解压缩工具</span><br><span class="line"></span><br><span class="line">ps 查看目前程序执行的情况</span><br><span class="line"></span><br><span class="line">top 查看目前程序执行的情景和内存使用的情况</span><br><span class="line"></span><br><span class="line">kill 终止一个进程</span><br><span class="line"></span><br><span class="line">chmod 用来改变权限</span><br><span class="line"></span><br><span class="line">useradd 用来增加用户</span><br><span class="line"></span><br><span class="line">su 用来修改用户</span><br><span class="line"></span><br><span class="line">head 查看文件的开头部分</span><br><span class="line"></span><br><span class="line">tail 查看文件结尾的10行</span><br><span class="line"></span><br><span class="line">less less是一个分页工具，它允许一页一页地(或一个屏幕一个屏幕地)查看信息</span><br><span class="line"></span><br><span class="line">more more是一个分页工具，它允许一页一页地(或一个屏幕一个屏幕地)查看信息</span><br></pre></td></tr></table></figure>
+
+<h1 id="项目："><a href="#项目：" class="headerlink" title="项目："></a>项目：</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、使用模板模式优化审批过程</span><br><span class="line">原来的审批方法比较臃肿，因为每个流程进行审批操作都是进入这个方法，里面有大量的if、else来判断当前是哪个流程，每个流程又分为申请、变更、关闭，还有对应的业务逻辑，维护、扩展和可读性都比较差。所以对这方面进行了一个优化，就是使用了模板方法模式，定义一个抽象类，包括初始化参数（比如任务信息、流程信息）的方法、审批前的操作、审批后的操作、驳回的操作、任务最后一步处理完的操作。然后每个流程定义一个实现类来继承这个抽象类，这样每个流程可以在自己的实现类里面定义自己的业务逻辑，处理方法里面只要根据流程的标识来获取对应的实现类对象，然后调用方法就行。可扩展性、可读性就比较好。</span><br><span class="line"></span><br><span class="line">2、使用注解优化测试环境的返回结果</span><br><span class="line">我们自己也要进行一些本地测试，为了对线上环境和测试环境进行区分不影响，自定义一个注解，在需要返回结果给前端的方法上加上这个注解，就可以自定义测试结果，然后通过aop做一个环绕通知，通过读取区分环境的标志位，就可以决定是直接调用原有的方法逻辑，还是本地测试，本地测试的话ProceedingJoinPoint对象拿到方法对象，然后再通过反射拿到注解里面的信息，就可以返回我们定义的测试结果。</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/Sobremesa_bolg/pic-go_img/raw/master/images/image-20210705190836903.png" alt="image-20210705190836903"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/05/01/%E9%9D%A2%E8%AF%95/" data-id="cl0j84jz100fa04vhggbn90ch" data-title="面试题" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/05/01/%E9%9D%A2%E8%AF%952/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          面试题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/28/Java%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">java深拷贝和浅拷贝</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

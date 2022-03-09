@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>KMP算法 | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="kmp算法(重点：以dp和状态机方式讲解)28.实现 strStr() KMP 算法（Knuth-Morris-Pratt 算法）是一个著名的字符串匹配算法，效率很高，但是确实有点复杂。 先在开头约定，本文用 pat 表示模式串，长度为 M，txt 表示文本串，长度为 N。KMP 算法是在 txt 中查找子串 pat，如果存在，返回这个子串的起始索引，否则返回 -1。 本文则用一个二维的 dp 数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KMP算法">
+<meta property="og:url" content="http://example.com/2022/03/09/KMP%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="kmp算法(重点：以dp和状态机方式讲解)28.实现 strStr() KMP 算法（Knuth-Morris-Pratt 算法）是一个著名的字符串匹配算法，效率很高，但是确实有点复杂。 先在开头约定，本文用 pat 表示模式串，长度为 M，txt 表示文本串，长度为 N。KMP 算法是在 txt 中查找子串 pat，如果存在，返回这个子串的起始索引，否则返回 -1。 本文则用一个二维的 dp 数">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/kmp1.gif">
+<meta property="og:image" content="http://example.com/kmp2.gif">
+<meta property="og:image" content="http://example.com/kmp3.gif">
+<meta property="og:image" content="http://example.com/kmp4.jpg">
+<meta property="og:image" content="http://example.com/kmp5.jpg">
+<meta property="og:image" content="http://example.com/kmp6.jpg">
+<meta property="og:image" content="http://example.com/kmp7.jpg">
+<meta property="og:image" content="http://example.com/kmp8.jpg">
+<meta property="og:image" content="http://example.com/kmp9.jpg">
+<meta property="og:image" content="http://example.com/kmp10.jpg">
+<meta property="og:image" content="http://example.com/kmp11.jpg">
+<meta property="og:image" content="http://example.com/kmp12.jpg">
+<meta property="og:image" content="http://example.com/kmp13.jpg">
+<meta property="og:image" content="http://example.com/kmp14.jpg">
+<meta property="og:image" content="http://example.com/kmp16.jpg">
+<meta property="og:image" content="http://example.com/kmp17.jpg">
+<meta property="og:image" content="http://example.com/kmp18.gif">
+<meta property="og:image" content="http://example.com/kmp19.jpg">
+<meta property="og:image" content="http://example.com/kmp20.jpg">
+<meta property="og:image" content="http://example.com/kmp21.jpg">
+<meta property="og:image" content="http://example.com/kmp22.jpg">
+<meta property="og:image" content="http://example.com/kmp23.gif">
+<meta property="og:image" content="http://example.com/kmp24.jpg">
+<meta property="og:image" content="http://example.com/kmp25.gif">
+<meta property="article:published_time" content="2022-03-09T07:11:57.484Z">
+<meta property="article:modified_time" content="2021-05-15T02:26:07.704Z">
+<meta property="article:author" content="Lee yunbo">
+<meta property="article:tag" content="数据结构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/kmp1.gif">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-KMP算法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/KMP%E7%AE%97%E6%B3%95/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.484Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      KMP算法
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="kmp算法-重点：以dp和状态机方式讲解"><a href="#kmp算法-重点：以dp和状态机方式讲解" class="headerlink" title="kmp算法(重点：以dp和状态机方式讲解)"></a>kmp算法(重点：以dp和状态机方式讲解)</h1><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/implement-strstr">28.实现 strStr()</a></p>
+<p>KMP 算法（Knuth-Morris-Pratt 算法）是一个著名的字符串匹配算法，效率很高，但是确实有点复杂。</p>
+<p><strong>先在开头约定，本文用 <code>pat</code> 表示模式串，长度为 <code>M</code>，<code>txt</code> 表示文本串，长度为 <code>N</code>。KMP 算法是在 <code>txt</code> 中查找子串 <code>pat</code>，如果存在，返回这个子串的起始索引，否则返回 -1</strong>。</p>
+<p><strong>本文则用一个二维的 <code>dp</code> 数组（但空间复杂度还是 O(M)），重新定义其中元素的含义，使得代码长度大大减少，可解释性大大提高</strong>。</p>
+<h3 id="一、KMP-算法概述"><a href="#一、KMP-算法概述" class="headerlink" title="一、KMP 算法概述"></a><strong>一、KMP 算法概述</strong></h3><p>首先还是简单介绍一下 KMP 算法和暴力匹配算法的不同在哪里，难点在哪里，和动态规划有啥关系。</p>
+<p>暴力的字符串匹配算法很容易写，看一下它的运行逻辑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 暴力匹配（伪码）</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">search</span><span class="params">(String pat, String txt)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> pat.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> txt.length;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt;= N - M; i++) &#123;</span><br><span class="line">        <span class="type">int</span> j;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; M; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pat[j] != txt[i+j])</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// pat 全都匹配了</span></span><br><span class="line">        <span class="keyword">if</span> (j == M) <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// txt 中不存在 pat 子串</span></span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于暴力算法，如果出现不匹配字符，同时回退 <code>txt</code> 和 <code>pat</code> 的指针，嵌套 for 循环，时间复杂度 <code>O(MN)</code>，空间复杂度<code>O(1)</code>。最主要的问题是，如果字符串中重复的字符比较多，该算法就显得很蠢。</p>
+<p>比如 txt &#x3D; “aaacaaab” pat &#x3D; “aaab”：</p>
+<p><img src="/kmp1.gif" alt="kmp1"></p>
+<p>很明显，<code>pat</code> 中根本没有字符 c，根本没必要回退指针 <code>i</code>，暴力解法明显多做了很多不必要的操作。</p>
+<p>KMP 算法的不同之处在于，它会花费空间来记录一些信息，在上述情况中就会显得很聪明：</p>
+<p><img src="/kmp2.gif" alt="kmp2"></p>
+<p>再比如类似的 txt &#x3D; “aaaaaaab” pat &#x3D; “aaab”，暴力解法还会和上面那个例子一样蠢蠢地回退指针 <code>i</code>，而 KMP 算法又会耍聪明：</p>
+<p><img src="/kmp3.gif" alt="kmp3"></p>
+<p>因为 KMP 算法知道字符 b 之前的字符 a 都是匹配的，所以每次只需要比较字符 b 是否被匹配就行了。</p>
+<p><strong>KMP 算法永不回退 <code>txt</code> 的指针 <code>i</code>，不走回头路（不会重复扫描 <code>txt</code>），而是借助 <code>dp</code> 数组中储存的信息把 <code>pat</code> 移到正确的位置继续匹配</strong>，时间复杂度只需 O(N)，用空间换时间，所以我认为它是一种动态规划算法。</p>
+<p>KMP 算法的难点在于，如何计算 <code>dp</code> 数组中的信息？如何根据这些信息正确地移动 <code>pat</code> 的指针？这个就需要<strong>确定有限状态自动机</strong>来辅助了，别怕这种高大上的文学词汇，其实和动态规划的 <code>dp</code> 数组如出一辙，等你学会了也可以拿这个词去吓唬别人。</p>
+<p>还有一点需要明确的是：<strong>计算这个 <code>dp</code> 数组，只和 <code>pat</code> 串有关</strong>。意思是说，只要给我个 <code>pat</code>，我就能通过这个模式串计算出 <code>dp</code> 数组，然后你可以给我不同的 <code>txt</code>，我都不怕，利用这个 <code>dp</code> 数组我都能在 O(N) 时间完成字符串匹配。</p>
+<p>具体来说，比如上文举的两个例子：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">txt1 = &quot;aaacaaab&quot; </span><br><span class="line">pat = &quot;aaab&quot;</span><br><span class="line">txt2 = &quot;aaaaaaab&quot; </span><br><span class="line">pat = &quot;aaab&quot;</span><br></pre></td></tr></table></figure>
+
+<p>我们的 <code>txt</code> 不同，但是 <code>pat</code> 是一样的，所以 KMP 算法使用的 <code>dp</code> 数组是同一个。</p>
+<p>只不过对于 <code>txt1</code> 的下面这个即将出现的未匹配情况：</p>
+<p><img src="/kmp4.jpg" alt="kmp4"></p>
+<p><code>dp</code> 数组指示 <code>pat</code> 这样移动：</p>
+<p><img src="/kmp5.jpg" alt="kmp5"></p>
+<p>PS：这个<code>j</code> 不要理解为索引，它的含义更准确地说应该是<strong>状态</strong>（state），所以它会出现这个奇怪的位置，后文会详述。</p>
+<p>而对于 <code>txt2</code> 的下面这个即将出现的未匹配情况：</p>
+<p><img src="/kmp6.jpg" alt="kmp6"></p>
+<p><code>dp</code> 数组指示 <code>pat</code> 这样移动：</p>
+<p><img src="/kmp7.jpg" alt="kmp7"></p>
+<p>明白了 <code>dp</code> 数组只和 <code>pat</code> 有关，那么我们这样设计 KMP 算法就会比较漂亮：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">KMP</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[][] dp;</span><br><span class="line">    <span class="keyword">private</span> String pat;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">KMP</span><span class="params">(String pat)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.pat = pat;</span><br><span class="line">        <span class="comment">// 通过 pat 构建 dp 数组</span></span><br><span class="line">        <span class="comment">// 需要 O(M) 时间</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">search</span><span class="params">(String txt)</span> &#123;</span><br><span class="line">        <span class="comment">// 借助 dp 数组去匹配 txt</span></span><br><span class="line">        <span class="comment">// 需要 O(N) 时间</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，当我们需要用同一 <code>pat</code> 去匹配不同 <code>txt</code> 时，就不需要浪费时间构造 <code>dp</code> 数组了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">KMP</span> <span class="variable">kmp</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">KMP</span>(<span class="string">&quot;aaab&quot;</span>);</span><br><span class="line"><span class="type">int</span> <span class="variable">pos1</span> <span class="operator">=</span> kmp.search(<span class="string">&quot;aaacaaab&quot;</span>); <span class="comment">//4</span></span><br><span class="line"><span class="type">int</span> <span class="variable">pos2</span> <span class="operator">=</span> kmp.search(<span class="string">&quot;aaaaaaab&quot;</span>); <span class="comment">//4</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="二、状态机概述"><a href="#二、状态机概述" class="headerlink" title="二、状态机概述"></a><strong>二、状态机概述</strong></h3><p>为什么说 KMP 算法和状态机有关呢？是这样的，我们可以认为 <code>pat</code> 的匹配就是状态的转移。比如当 pat &#x3D; “ABABC”：</p>
+<p><img src="/kmp8.jpg" alt="kmp8"></p>
+<p>如上图，圆圈内的数字就是状态，状态 0 是起始状态，状态 5（<code>pat.length</code>）是终止状态。开始匹配时 <code>pat</code> 处于起始状态，一旦转移到终止状态，就说明在 <code>txt</code> 中找到了 <code>pat</code>。比如说当前处于状态 2，就说明字符 “AB” 被匹配：</p>
+<p><img src="/kmp9.jpg" alt="kmp9"></p>
+<p>另外，处于不同状态时，<code>pat</code> 状态转移的行为也不同。比如说假设现在匹配到了状态 4，如果遇到字符 A 就应该转移到状态 3，遇到字符 C 就应该转移到状态 5，如果遇到字符 B 就应该转移到状态 0：</p>
+<p><img src="/kmp10.jpg" alt="kmp10"></p>
+<p>具体什么意思呢，我们来一个个举例看看。用变量 <code>j</code> 表示指向当前状态的指针，当前 <code>pat</code> 匹配到了状态 4：</p>
+<p><img src="/kmp11.jpg" alt="kmp11"></p>
+<p>如果遇到了字符 “A”，根据箭头指示，转移到状态 3 是最聪明的：</p>
+<p><img src="/kmp12.jpg" alt="kmp12"></p>
+<p>如果遇到了字符 “B”，根据箭头指示，只能转移到状态 0（一夜回到解放前）：</p>
+<p><img src="/kmp13.jpg" alt="kmp13"></p>
+<p>如果遇到了字符 “C”，根据箭头指示，应该转移到终止状态 5，这也就意味着匹配完成：</p>
+<p><img src="/kmp14.jpg" alt="kmp14"></p>
+<p>当然了，还可能遇到其他字符，比如 Z，但是显然应该转移到起始状态 0，因为 <code>pat</code> 中根本都没有字符 Z：</p>
+<p><img src="/kmp16.jpg" alt="kmp16"></p>
+<p>这里为了清晰起见，我们画状态图时就把其他字符转移到状态 0 的箭头省略，只画 <code>pat</code> 中出现的字符的状态转移：</p>
+<p><img src="/kmp17.jpg" alt="kmp17"></p>
+<p>KMP 算法最关键的步骤就是构造这个状态转移图。<strong>要确定状态转移的行为，得明确两个变量，一个是当前的匹配状态，另一个是遇到的字符</strong>；确定了这两个变量后，就可以知道这个情况下应该转移到哪个状态。</p>
+<p>下面看一下 KMP 算法根据这幅状态转移图匹配字符串 <code>txt</code> 的过程：</p>
+<p><img src="/kmp18.gif" alt="kmp18"></p>
+<p><strong>请记住这个 GIF 的匹配过程，这就是 KMP 算法的核心逻辑</strong>！</p>
+<p>为了描述状态转移图，我们定义一个二维 dp 数组，它的含义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">dp[j][c] = next</span><br><span class="line"><span class="number">0</span> &lt;= j &lt; M，代表当前的状态</span><br><span class="line"><span class="number">0</span> &lt;= c &lt; <span class="number">256</span>，代表遇到的字符（ASCII 码）</span><br><span class="line"><span class="number">0</span> &lt;= next &lt;= M，代表下一个状态</span><br><span class="line"></span><br><span class="line">dp[<span class="number">4</span>][<span class="string">&#x27;A&#x27;</span>] = <span class="number">3</span> 表示：</span><br><span class="line">当前是状态 <span class="number">4</span>，如果遇到字符 A，</span><br><span class="line">pat 应该转移到状态 <span class="number">3</span></span><br><span class="line"></span><br><span class="line">dp[<span class="number">1</span>][<span class="string">&#x27;B&#x27;</span>] = <span class="number">2</span> 表示：</span><br><span class="line">当前是状态 <span class="number">1</span>，如果遇到字符 B，</span><br><span class="line">pat 应该转移到状态 <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>根据我们这个 dp 数组的定义和刚才状态转移的过程，我们可以先写出 KMP 算法的 search 函数代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">search</span><span class="params">(String txt)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> pat.length();</span><br><span class="line">    <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> txt.length();</span><br><span class="line">    <span class="comment">// pat 的初始态为 0</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="comment">// 当前是状态 j，遇到字符 txt[i]，</span></span><br><span class="line">        <span class="comment">// pat 应该转移到哪个状态？</span></span><br><span class="line">        j = dp[j][txt.charAt(i)];</span><br><span class="line">        <span class="comment">// 如果达到终止态，返回匹配开头的索引</span></span><br><span class="line">        <span class="keyword">if</span> (j == M) <span class="keyword">return</span> i - M + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 没到达终止态，匹配失败</span></span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到这里，应该还是很好理解的吧，<code>dp</code> 数组就是我们刚才画的那幅状态转移图，如果不清楚的话回去看下 GIF 的算法演进过程。下面讲解：如何通过 <code>pat</code> 构建这个 <code>dp</code> 数组？</p>
+<h3 id="三、构建状态转移图"><a href="#三、构建状态转移图" class="headerlink" title="三、构建状态转移图"></a><strong>三、构建状态转移图</strong></h3><p>回想刚才说的：<strong>要确定状态转移的行为，必须明确两个变量，一个是当前的匹配状态，另一个是遇到的字符</strong>，而且我们已经根据这个逻辑确定了 <code>dp</code> 数组的含义，那么构造 <code>dp</code> 数组的框架就是这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="number">0</span> &lt;= j &lt; M: # 状态</span><br><span class="line">    <span class="keyword">for</span> <span class="number">0</span> &lt;= c &lt; <span class="number">256</span>: # 字符</span><br><span class="line">        dp[j][c] = next</span><br></pre></td></tr></table></figure>
+
+<p>这个 next 状态应该怎么求呢？显然，<strong>如果遇到的字符 <code>c</code> 和 <code>pat[j]</code> 匹配的话</strong>，状态就应该向前推进一个，也就是说 <code>next = j + 1</code>，我们不妨称这种情况为<strong>状态推进</strong>：</p>
+<p><img src="/kmp19.jpg" alt="kmp19"></p>
+<p><strong>如果字符 <code>c</code> 和 <code>pat[j]</code> 不匹配的话</strong>，状态就要回退（或者原地不动），我们不妨称这种情况为<strong>状态重启</strong>：</p>
+<p><img src="/kmp20.jpg" alt="kmp20"></p>
+<p>那么，如何得知在哪个状态重启呢？解答这个问题之前，我们再定义一个名字：<strong>影子状态</strong>（我编的名字），用变量 <code>X</code> 表示。<strong>所谓影子状态，就是和当前状态具有相同的前缀</strong>。比如下面这种情况：</p>
+<p><img src="/kmp21.jpg" alt="kmp21"></p>
+<p>当前状态 <code>j = 4</code>，其影子状态为 <code>X = 2</code>，它们都有相同的前缀 “AB”。因为状态 <code>X</code> 和状态 <code>j</code> 存在相同的前缀，所以当状态 <code>j</code> 准备进行状态重启的时候（遇到的字符 <code>c</code> 和 <code>pat[j]</code> 不匹配），可以通过 <code>X</code> 的状态转移图来获得<strong>最近的重启位置</strong>。</p>
+<p>比如说刚才的情况，如果状态 <code>j</code> 遇到一个字符 “A”，应该转移到哪里呢？首先只有遇到 “C” 才能推进状态，遇到 “A” 显然只能进行状态重启。**状态 <code>j</code> 会把这个字符委托给状态 <code>X</code> 处理，也就是 <code>dp[j][&#39;A&#39;] = dp[X][&#39;A&#39;]</code>**：</p>
+<p><img src="/kmp22.jpg" alt="kmp22"></p>
+<p>为什么这样可以呢？因为：既然 <code>j</code> 这边已经确定字符 “A” 无法推进状态，<strong>只能回退</strong>，而且 KMP 就是要<strong>尽可能少的回退</strong>，以免多余的计算。那么 <code>j</code> 就可以去问问和自己具有相同前缀的 <code>X</code>，如果 <code>X</code> 遇见 “A” 可以进行「状态推进」，那就转移过去，因为这样回退最少。</p>
+<p><img src="/kmp23.gif" alt="kmp23"></p>
+<p>当然，如果遇到的字符是 “B”，状态 <code>X</code> 也不能进行「状态推进」，只能回退，<code>j</code> 只要跟着 <code>X</code> 指引的方向回退就行了：</p>
+<p><img src="/kmp24.jpg" alt="kmp24"></p>
+<p>你也许会问，这个 <code>X</code> 怎么知道遇到字符 “B” 要回退到状态 0 呢？因为 <code>X</code> 永远跟在 <code>j</code> 的身后，状态 <code>X</code> 如何转移，在之前就已经算出来了。动态规划算法不就是利用过去的结果解决现在的问题吗？</p>
+<p>这样，我们就细化一下刚才的框架代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> X # 影子状态</span><br><span class="line"><span class="keyword">for</span> <span class="number">0</span> &lt;= j &lt; M:</span><br><span class="line">    <span class="keyword">for</span> <span class="number">0</span> &lt;= c &lt; <span class="number">256</span>:</span><br><span class="line">        <span class="type">if</span> <span class="variable">c</span> <span class="operator">=</span>= pat[j]:</span><br><span class="line">            # 状态推进</span><br><span class="line">            dp[j][c] = j + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>: </span><br><span class="line">            # 状态重启</span><br><span class="line">            # 委托 X 计算重启位置</span><br><span class="line">            dp[j][c] = dp[X][c] </span><br></pre></td></tr></table></figure>
+
+<h3 id="四、代码实现"><a href="#四、代码实现" class="headerlink" title="四、代码实现"></a><strong>四、代码实现</strong></h3><p>如果之前的内容你都能理解，恭喜你，现在就剩下一个问题：影子状态 <code>X</code> 是如何得到的呢？下面先直接看完整代码吧。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">KMP</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[][] dp;</span><br><span class="line">    <span class="keyword">private</span> String pat;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">KMP</span><span class="params">(String pat)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.pat = pat;</span><br><span class="line">        <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> pat.length();</span><br><span class="line">        <span class="comment">// dp[状态][字符] = 下个状态</span></span><br><span class="line">        dp = <span class="keyword">new</span> <span class="title class_">int</span>[M][<span class="number">256</span>];</span><br><span class="line">        <span class="comment">// base case</span></span><br><span class="line">        dp[<span class="number">0</span>][pat.charAt(<span class="number">0</span>)] = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 影子状态 X 初始为 0</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">X</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 当前状态 j 从 1 开始</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; M; j++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; <span class="number">256</span>; c++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (pat.charAt(j) == c) </span><br><span class="line">                    dp[j][c] = j + <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">else</span> </span><br><span class="line">                    dp[j][c] = dp[X][c];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 更新影子状态</span></span><br><span class="line">            X = dp[X][pat.charAt(j)];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">search</span><span class="params">(String txt)</span> &#123;...&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先解释一下这一行代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// base case</span></span><br><span class="line">dp[<span class="number">0</span>][pat.charAt(<span class="number">0</span>)] = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这行代码是 base case，只有遇到 pat[0] 这个字符才能使状态从 0 转移到 1，遇到其它字符的话还是停留在状态 0（Java 默认初始化数组全为 0）。</p>
+<p>影子状态 <code>X</code> 是先初始化为 0，然后随着 <code>j</code> 的前进而不断更新的。下面看看到底应该**如何更新影子状态 <code>X</code>**：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">X</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; M; j++) &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 更新影子状态</span></span><br><span class="line">    <span class="comment">// 当前是状态 X，遇到字符 pat[j]，</span></span><br><span class="line">    <span class="comment">// pat 应该转移到哪个状态？</span></span><br><span class="line">    X = dp[X][pat.charAt(j)];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更新 <code>X</code> 其实和 <code>search</code> 函数中更新状态 <code>j</code> 的过程是非常相似的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">    <span class="comment">// 当前是状态 j，遇到字符 txt[i]，</span></span><br><span class="line">    <span class="comment">// pat 应该转移到哪个状态？</span></span><br><span class="line">    j = dp[j][txt.charAt(i)];</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>其中的原理非常微妙</strong>，注意代码中 for 循环的变量初始值，可以这样理解：后者是在 <code>txt</code> 中匹配 <code>pat</code>，前者是在 <code>pat</code> 中匹配 <code>pat[1..end]</code>，状态 <code>X</code> 总是落后状态 <code>j</code> 一个状态，与 <code>j</code> 具有最长的相同前缀。所以我把 <code>X</code> 比喻为影子状态，似乎也有一点贴切。</p>
+<p>另外，构建 dp 数组是根据 base case <code>dp[0][..]</code> 向后推演。这就是我认为 KMP 算法就是一种动态规划算法的原因。</p>
+<p>下面来看一下状态转移图的完整构造过程，你就能理解状态 <code>X</code> 作用之精妙了：</p>
+<p><img src="/kmp25.gif" alt="kmp25"></p>
+<p>至此，KMP 算法的核心终于写完啦啦啦啦！看下 KMP 算法的完整代码吧：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">KMP</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[][] dp;</span><br><span class="line">    <span class="keyword">private</span> String pat;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">KMP</span><span class="params">(String pat)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.pat = pat;</span><br><span class="line">        <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> pat.length();</span><br><span class="line">        <span class="comment">// dp[状态][字符] = 下个状态</span></span><br><span class="line">        dp = <span class="keyword">new</span> <span class="title class_">int</span>[M][<span class="number">256</span>];</span><br><span class="line">        <span class="comment">// base case</span></span><br><span class="line">        dp[<span class="number">0</span>][pat.charAt(<span class="number">0</span>)] = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 影子状态 X 初始为 0</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">X</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 构建状态转移图（稍改的更紧凑了）</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; M; j++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; <span class="number">256</span>; c++)</span><br><span class="line">                dp[j][c] = dp[X][c];</span><br><span class="line">            dp[j][pat.charAt(j)] = j + <span class="number">1</span>;</span><br><span class="line">            <span class="comment">// 更新影子状态</span></span><br><span class="line">            X = dp[X][pat.charAt(j)];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">search</span><span class="params">(String txt)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> pat.length();</span><br><span class="line">        <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> txt.length();</span><br><span class="line">        <span class="comment">// pat 的初始态为 0</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">            <span class="comment">// 计算 pat 的下一个状态</span></span><br><span class="line">            j = dp[j][txt.charAt(i)];</span><br><span class="line">            <span class="comment">// 到达终止态，返回结果</span></span><br><span class="line">            <span class="keyword">if</span> (j == M) <span class="keyword">return</span> i - M + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 没到达终止态，匹配失败</span></span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>经过之前的详细举例讲解，你应该可以理解这段代码的含义了，当然你也可以把 KMP 算法写成一个函数。核心代码也就是两个函数中 for 循环的部分，数一下有超过十行吗？</p>
+<h3 id="五、最后总结"><a href="#五、最后总结" class="headerlink" title="五、最后总结"></a><strong>五、最后总结</strong></h3><p>传统的 KMP 算法是使用一个一维数组 <code>next</code> 记录前缀信息，而本文是使用一个二维数组 <code>dp</code> 以状态转移的角度解决字符匹配问题，但是空间复杂度仍然是 O(256M) &#x3D; O(M)。</p>
+<p>在 <code>pat</code> 匹配 <code>txt</code> 的过程中，只要明确了「当前处在哪个状态」和「遇到的字符是什么」这两个问题，就可以确定应该转移到哪个状态（推进或回退）。</p>
+<p>对于一个模式串 <code>pat</code>，其总共就有 M 个状态，对于 ASCII 字符，总共不会超过 256 种。所以我们就构造一个数组 <code>dp[M][256]</code> 来包含所有情况，并且明确 <code>dp</code> 数组的含义：</p>
+<p><code>dp[j][c] = next</code> 表示，当前是状态 <code>j</code>，遇到了字符 <code>c</code>，应该转移到状态 <code>next</code>。</p>
+<p>明确了其含义，就可以很容易写出 search 函数的代码。</p>
+<p>对于如何构建这个 <code>dp</code> 数组，需要一个辅助状态 <code>X</code>，它永远比当前状态 <code>j</code> 落后一个状态，拥有和 <code>j</code> 最长的相同前缀，我们给它起了个名字叫「影子状态」。</p>
+<p>在构建当前状态 <code>j</code> 的转移方向时，只有字符 <code>pat[j]</code> 才能使状态推进（<code>dp[j][pat[j]] = j+1</code>）；而对于其他字符只能进行状态回退，应该去请教影子状态 <code>X</code> 应该回退到哪里（<code>dp[j][other] = dp[X][other]</code>，其中 <code>other</code> 是除了 <code>pat[j]</code> 之外所有字符）。</p>
+<p>对于影子状态 <code>X</code>，我们把它初始化为 0，并且随着 <code>j</code> 的前进进行更新，更新的方式和 search 过程更新 <code>j</code> 的过程非常相似（<code>X = dp[X][pat[j]]</code>）。</p>
+<p>KMP 算法也就是动态规划那点事，我们的公众号文章目录有一系列专门讲动态规划的，而且都是按照一套框架来的，无非就是描述问题逻辑，明确 <code>dp</code> 数组含义，定义 base case 这点破事。希望这篇文章能让大家对动态规划有更深的理解。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/KMP%E7%AE%97%E6%B3%95/" data-id="cl0j84jyj00dy04vh21n18cri" data-title="KMP算法" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/03/09/JVMJava%E5%BC%95%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java引用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/03/09/KMP%E7%AE%97%E6%B3%952/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">KMP算法2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

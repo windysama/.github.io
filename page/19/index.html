@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="MyHomePage">
+<meta property="og:url" content="http://example.com/page/19/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Lee yunbo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-26. Java异常" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/26.%20Java%E5%BC%82%E5%B8%B8/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/26.%20Java%E5%BC%82%E5%B8%B8/">26. Java 异常</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="26-Java-异常"><a href="#26-Java-异常" class="headerlink" title="26. Java 异常"></a>26. Java 异常</h1><h3 id="java异常分类"><a href="#java异常分类" class="headerlink" title="java异常分类"></a>java异常分类</h3><p>​        编译时异常和运行时异常</p>
+<h3 id="处理异常的机制"><a href="#处理异常的机制" class="headerlink" title="处理异常的机制"></a>处理异常的机制</h3><pre><code>1. 异常捕捉 try...catch..finally
+2. 异常抛出 throws
+</code></pre>
+<h3 id="自定义异常"><a href="#自定义异常" class="headerlink" title="自定义异常"></a>自定义异常</h3><p>​            继承一个异常类，通常是RunntimeExcep或者Exception</p>
+<h2 id="Java可抛出（Throwable）的结构分为三种类型：-被检测异常（CheckedException）、运行时异常（RuntimeException）和错误（Error）"><a href="#Java可抛出（Throwable）的结构分为三种类型：-被检测异常（CheckedException）、运行时异常（RuntimeException）和错误（Error）" class="headerlink" title="Java可抛出（Throwable）的结构分为三种类型： 被检测异常（CheckedException）、运行时异常（RuntimeException）和错误（Error）"></a>Java可抛出（Throwable）的结构分为三种类型： 被检测异常（CheckedException）、运行时异常（RuntimeException）和错误（Error）</h2><p><strong>Error</strong>是虚拟机内部错误</p>
+<p>​            栈内存溢出错误：StackOverflowError(递归，递归层次太多或递归没有结束)</p>
+<p>​            堆内存溢出错误：OutOfMemoryError(堆创建了很多对象)</p>
+<p><strong>Exception</strong>是我们编写的程序错误</p>
+<p>​            RuntimeException：也称为LogicException 逻辑异常 代码写的不严谨 如：数组越界、空指针异常，都是程序员的            锅，不会显示出来 </p>
+<p>​            为什么编译器不会要求你去try catch处理？</p>
+<p>​            本质是逻辑错误，比如空指针异常，这种问题是编程逻辑不严谨造成的</p>
+<p>​            应该通过完善我们的代码编程逻辑，来解决问题</p>
+<p>​            非RuntimeException：</p>
+<p>​                    编译器会要求我们try catch或者throws处理</p>
+<p>​                    本质是客观因素造成的问题，比如FileNotFoundException</p>
+<p>​                    写了一个程序，自动阅卷，需要读取答案的路径（用户录入），用户可能录入是一个错误的路径，所以我们要                    提前预案，写好发生异常之后的处理方式，这也是java程序健壮性的一种体现</p>
+<p><strong>RuntimeException</strong>：</p>
+<p>​            此类异常，编译时没有提示做异常处理，因此通常此类异常的正确理解应该是“逻辑错误”</p>
+<ol>
+<li>算数异常，</li>
+<li>空指针，</li>
+<li>类型转换异常，</li>
+<li>数组越界，</li>
+<li>NumberFormateException（数字格式异常，转换失败，比如“a12”就会转换失败）</li>
+</ol>
+<p><strong>非RuntimeException</strong>：</p>
+<ol>
+<li>IOException 输入输出异常</li>
+<li>SQLExceptoin 数据库异常</li>
+<li>FileNotFoundException 文件不存在异常</li>
+<li>NoSuchFileException没有这样文件异常</li>
+<li>NoSuchMethodeException 没有方法异常</li>
+</ol>
+<p><strong>Error和Exception区别？</strong></p>
+<p>​            Error和Exception都是java错误处理机制的一部分，都继承了Throwable类</p>
+<p>​            Excepttion表示异常，异常可以通过程序来捕捉或者优化程序来避免；</p>
+<p>​            Error表示是系统错误， 不能通过程序来进行错误处理；</p>
+<p>​            Exception表示一种设计或者实现问题，也就是说表示如果程序运行正常，从不一发生的情况；</p>
+<p>​            Error表示恢复不是不可能但是很困难的情况下的一种严重的问题。比如说内存溢出。不可能是指程序能处理这样的            情况。</p>
+<p>​    </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/26.%20Java%E5%BC%82%E5%B8%B8/" data-id="cl0j84juv000t04vh2mub5roi" data-title="26. Java 异常" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-29. Throw和Throws" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/29.%20Throw%E5%92%8CThrows/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/29.%20Throw%E5%92%8CThrows/">29. throw跟throws的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="29-throw跟throws的区别"><a href="#29-throw跟throws的区别" class="headerlink" title="29. throw跟throws的区别"></a>29. throw跟throws的区别</h1><ol>
+<li><p>位置不同</p>
+<p>throws用在函数<strong>上</strong>，后面跟的是异常类，可以跟多个；</p>
+<p>throw用在函数<strong>内</strong>，后面跟的是异常对象</p>
+</li>
+<li><p>功能不同</p>
+<p><strong>throws</strong>是用来声明异常，让调用者只知道该功能可能出现的问题，可以给出预先的处理方式；</p>
+<p><strong>throw</strong>抛出具体的问题对象，执行到throw，功能就已经结束了，跳到调用者，并将具体的问题对象抛给调用者。也就是说throw语句独立存在是，下面不要定义其他语句，因为执行不到</p>
+</li>
+</ol>
+<p>throw：</p>
+<p>表示方法内抛出某种异常对象<br>如果异常对象是非 RuntimeException 则需要在方法申明时加上该异常的抛出 即需要加上 throws 语句 或者 在方法体内 try catch 处理该异常，否则编译报错<br>执行到 throw 语句则后面的语句块不再执行</p>
+<p>throws：</p>
+<p>方法的定义上使用 throws 表示这个方法可能抛出某种异常<br>需要由方法的调用者进行异常处理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> constxiong.interview;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestThrowsThrow</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">		testThrows();		</span><br><span class="line">		<span class="type">Integer</span> <span class="variable">i</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">		testThrow(i);		</span><br><span class="line">		<span class="type">String</span> <span class="variable">filePath</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			testThrow(filePath);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 测试 throws 关键字</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@throws</span> NullPointerException</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">testThrows</span><span class="params">()</span> <span class="keyword">throws</span> NullPointerException &#123;</span><br><span class="line">		<span class="type">Integer</span> <span class="variable">i</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">		System.out.println(i + <span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 测试 throw 关键字抛出 运行时异常</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> i</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">testThrow</span><span class="params">(Integer i)</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> (i == <span class="literal">null</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();<span class="comment">//运行时异常不需要在方法上申明</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 测试 throw 关键字抛出 非运行时异常，需要方法体需要加 throws 异常抛出申明</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> i</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">testThrow</span><span class="params">(String filePath)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">		<span class="keyword">if</span> (filePath == <span class="literal">null</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IOException</span>();<span class="comment">//运行时异常不需要在方法上申明</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/29.%20Throw%E5%92%8CThrows/" data-id="cl0j84juw000w04vhcgcgf0ef" data-title="29. throw跟throws的区别" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-30. try...catch..finally" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/30.%20try...catch..finally/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/30.%20try...catch..finally/">30. try..catch...finally</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="30-try-catch…finally"><a href="#30-try-catch…finally" class="headerlink" title="30. try..catch…finally"></a>30. try..catch…finally</h1><p>try里面有return，finally还执行吗？</p>
+<p>执行，并且finally的执行早于try里面的return</p>
+<p>结论：</p>
+<ol>
+<li><p>不管有没有出现异常，finally块中的代码都会执行</p>
+</li>
+<li><p>当try和catch中return时，finally仍然会执行</p>
+</li>
+<li><p>finally时在return后面的表达式运算后执行（此时并没有返回运算后的值，而是先把要返回的值保存起来，管finally中的代码怎么样，返回的值都不会改变，任然是之前保存的值） ，所以函数返回值时finally执行前确定的；</p>
+</li>
+<li><p>finally中最好不要包含return语句，否者程序会提前退出，返回值不是try或catch中保存的返回值。</p>
+<p>例:</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">finalTest</span><span class="params">()</span>&#123;</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			<span class="type">int</span> i= <span class="number">1</span>/<span class="number">0</span>;</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">			return1;</span><br><span class="line">		&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​                答案是：2，因为finally是无论如何都会执行，除非JVM关闭了</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/30.%20try...catch..finally/" data-id="cl0j84juw000z04vh78d0equ6" data-title="30. try..catch...finally" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-31. 创建线程的方式" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/31.%20%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E5%BC%8F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/31.%20%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E5%BC%8F/">31. 创建线程的方式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="31-创建线程的方式"><a href="#31-创建线程的方式" class="headerlink" title="31. 创建线程的方式"></a>31. 创建线程的方式</h1><p>我们常说的创建线程的方式有以下三种：</p>
+<p>​        1. 继承Thread</p>
+<p>​        2. 实现Runable接口</p>
+<p>​        3. 实现Callable接口（可以获取线程执行之后的返回值）</p>
+<p>但实际后两种，更准确的理解是创建了一个可执行的任务，要采用多线程的方式执行，</p>
+<p>还需要通过创建Thread对象来执行，比如 new Thread(new Runnable(){}).start();这样的方式来执行。</p>
+<p>在实际开发中，我们通常采用线程池的方式来完成Thread的创建，更好管理线程资源。 </p>
+<h3 id="继承Thread"><a href="#继承Thread" class="headerlink" title="继承Thread"></a>继承Thread</h3><p>Thread类本质是实现Runnable接口的一个实例，代表一个线程的实例。启动线程的唯一方法就是通过thread类的start()实例方法。start()实例方法是一个native方法，他将启动一个新线程，并执行run()方法。</p>
+<p>案例1：如何正确启动线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">     System.out.println(Thread.currentThread().getName()+<span class="string">&quot;：running.....&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">     <span class="type">MyThread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyThread</span>();</span><br><span class="line">     <span class="comment">//正确启动线程的方式</span></span><br><span class="line">     <span class="comment">//thread.run();//只是调用方法，并非开启新线程</span></span><br><span class="line">     thread.start();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现Runable接口"><a href="#实现Runable接口" class="headerlink" title="实现Runable接口"></a>实现Runable接口</h3><p>如果自己的类已经extends继承另一个类，就无法直接extends Thread，此时可以实现一个Runnable接口。</p>
+<p>案例2：实现runnable只是创建了一个可执行任务，并不是一个线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyTask</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">  	 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">     	System.out.println(Thread.currentThread().getName()+<span class="string">&quot;:running....&quot;</span>);</span><br><span class="line">   	&#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">     <span class="type">MyTask</span> <span class="variable">task</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyTask</span>();</span><br><span class="line">     <span class="comment">//task.start(); //并不能直接以线程的方式来启动</span></span><br><span class="line">     <span class="comment">//它表达的是一个任务，需要启动一个线程来执行</span></span><br><span class="line">     <span class="keyword">new</span> <span class="title class_">Thread</span>(task).start();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>案例三：runnable vs callable</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyTask2</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&lt;Boolean&gt;&#123;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> Boolean <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">     <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>明确一点：</p>
+<p>​        本质上来说创建线程的方式就是继承Thread，就是线程池，内部也是创建好线程对象来执行任务。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/31.%20%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E5%BC%8F/" data-id="cl0j84jux001204vhhf9x904w" data-title="31. 创建线程的方式" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-32. 一个普通main方法的执行，是单线程模式还是多线程模式？为什么？" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/32.%20%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9Amain%E6%96%B9%E6%B3%95%E7%9A%84%E6%89%A7%E8%A1%8C%EF%BC%8C%E6%98%AF%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%BC%8F%E8%BF%98%E6%98%AF%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%BC%8F%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/32.%20%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9Amain%E6%96%B9%E6%B3%95%E7%9A%84%E6%89%A7%E8%A1%8C%EF%BC%8C%E6%98%AF%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%BC%8F%E8%BF%98%E6%98%AF%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%BC%8F%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F/">32 一个普通main方法的执行，是单线程模式还是多线程模式？为什么？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="32-一个普通main方法的执行，是单线程模式还是多线程模式？为什么？"><a href="#32-一个普通main方法的执行，是单线程模式还是多线程模式？为什么？" class="headerlink" title="32 一个普通main方法的执行，是单线程模式还是多线程模式？为什么？"></a>32 一个普通main方法的执行，是单线程模式还是多线程模式？为什么？</h1><p>​    因为java有个重要的特性，叫垃圾自动回收机制，所以答案是多线程，这里面有两部分，主线程（用户线程），垃圾回收线程GC（守护线程）同时存在。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/32.%20%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9Amain%E6%96%B9%E6%B3%95%E7%9A%84%E6%89%A7%E8%A1%8C%EF%BC%8C%E6%98%AF%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%BC%8F%E8%BF%98%E6%98%AF%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%BC%8F%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F/" data-id="cl0j84juy001504vh10ap5bjo" data-title="32 一个普通main方法的执行，是单线程模式还是多线程模式？为什么？" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-33. 请描述线程的生命周期" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/33.%20%E8%AF%B7%E6%8F%8F%E8%BF%B0%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/33.%20%E8%AF%B7%E6%8F%8F%E8%BF%B0%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">33. 线程生命周期</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="33-线程生命周期"><a href="#33-线程生命周期" class="headerlink" title="33. 线程生命周期"></a>33. 线程生命周期</h1><h2 id="线程生命周期1"><a href="#线程生命周期1" class="headerlink" title="线程生命周期1"></a>线程生命周期1</h2><p><img src="/%E7%BA%BF%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg" alt="线程生命周期"></p>
+<p>![线程生命周期](E:\MyBolg\source_posts\33. 请描述线程的生命周期\线程生命周期.jpg)</p>
+<p>上述的图有些简略，下面详细说明下，线程共有6种状态：</p>
+<p>​    new 、runnable、blocked、waiting、timed waiting、terminated</p>
+<ul>
+<li>1，当进入synchronized同步代码块或同步方法时，且没有获取到锁，线程就进入了blocked(阻塞)状态，直到锁被释放，重新进入runnable状态</li>
+<li>2，当线程调用wait()或者join时，线程都会进入到waiting状态，当调用notify或notifyAll时，或者join的线程执行结束后，会进入runnable状态</li>
+<li>3，当线程调用sleep(time)，或者wait(time)时，进入timed waiting状态，当休眠时间结束后，或者调用notify或notifyAll时会重新runnable状态。</li>
+<li>4，程序执行结束，线程进入terminated状态</li>
+</ul>
+<p>案例篇</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> huangguizhao</span></span><br><span class="line"><span class="comment"> * 测试线程的状态</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadStateTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Task</span>());</span><br><span class="line">        System.out.println(thread.getState());<span class="comment">//NEW新建</span></span><br><span class="line">        thread.start();</span><br><span class="line">        System.out.println(thread.getState());<span class="comment">//RUNNABLE 就绪</span></span><br><span class="line">        <span class="comment">//保险起见，让当前主线程休眠下</span></span><br><span class="line">        Thread.sleep(<span class="number">10</span>);</span><br><span class="line">        System.out.println(thread.getState());<span class="comment">//terminated 已停止</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Task</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">		</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadStateTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">BlockTask</span> <span class="variable">task</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BlockTask</span>();</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(task);</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(task);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        <span class="comment">//从严谨的角度来说，t1线程不一定会先执行，此处是假设t1先执行</span></span><br><span class="line">        System.out.println(t1.getState());<span class="comment">//RUNNABLE</span></span><br><span class="line">        System.out.println(t2.getState());<span class="comment">//BLOCKED</span></span><br><span class="line">        Thread.sleep(<span class="number">10</span>);</span><br><span class="line">        System.out.println(t1.getState());<span class="comment">//TIMED_WAITING</span></span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        System.out.println(t1.getState());<span class="comment">//WAITING</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BlockTask</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="built_in">this</span>)&#123;</span><br><span class="line">            <span class="comment">//另一个线程会进入block状态</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//目的是让线程进入waiting time状态</span></span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                <span class="comment">//进入waiting状态</span></span><br><span class="line">                wait();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<p>blocked，waiting，timed waiting 我们都称为阻塞状态</p>
+<p>上述的就绪状态和运行状态，都表现为runnable状态</p>
+<h2 id="线程生命周期2"><a href="#线程生命周期2" class="headerlink" title="线程生命周期2"></a>线程生命周期2</h2><p>当线程被创建并启动后，它既不是一起动就进入执行状态，也不是一直处于执行状态。在现场的生命周期中，它要进过新建new、就绪runnable、运行running、阻塞blocked和死亡dead 5种状态。尤其是当线程启动以后，它不可能一直霸占cpu独自运行，所以cpu所需在多条线程中切换，于是线程状态也会多次在运行、阻塞之间切换。</p>
+<h2 id="新建状态new"><a href="#新建状态new" class="headerlink" title="新建状态new"></a>新建状态new</h2><p>当线程使用new关键字创建一个i线程之后，该线程就出于新建状态，此时仅有JVM为其分配内存，并初始化其成员变量</p>
+<h2 id="就绪状态runnable"><a href="#就绪状态runnable" class="headerlink" title="就绪状态runnable"></a>就绪状态runnable</h2><p>当线程对象调用start方法之后，该线程出于就绪状态。java虚拟机会为其创建方法调用栈和程序计数器，等待调度运行</p>
+<h2 id="运行状态running"><a href="#运行状态running" class="headerlink" title="运行状态running"></a>运行状态running</h2><p>如果出于就绪状态的线程获得了cpu，开始执行run方法的线程执行体，则线程出于运行状态</p>
+<h2 id="阻塞状态blocked"><a href="#阻塞状态blocked" class="headerlink" title="阻塞状态blocked"></a>阻塞状态blocked</h2><p>阻塞状态是指线程因为某种和原因放弃了cpu使用权，让出了cpu timeslice，暂时停止运行。知道 线程进入可运行runnable状态，才有机会再次获得cpu使用权状态运行running状态。阻塞的情况分为三种：</p>
+<h3 id="1-等待阻塞-wait"><a href="#1-等待阻塞-wait" class="headerlink" title="1.等待阻塞 wait"></a>1.等待阻塞 wait</h3><p>​        运行running的线程执行wait方法，JVM会把线程放入等待队列中</p>
+<h3 id="2-同步阻塞lock"><a href="#2-同步阻塞lock" class="headerlink" title="2.同步阻塞lock"></a>2.同步阻塞lock</h3><p>​        运行running的线程在获取对象的同步锁时，若改同步锁被别的线程占用，则        JVM会把线程放入锁池（lockpool）</p>
+<h3 id="3-其他阻塞sleep、join"><a href="#3-其他阻塞sleep、join" class="headerlink" title="3.其他阻塞sleep、join"></a>3.其他阻塞sleep、join</h3><p>​        运行running的线程执行Thread.sleep或者join方法，或者发出I&#x2F;O请求时，        JVM    会把线程设置为阻塞状态。当sleep方法超时、join方法等待线程终止或        者超时，    或者I&#x2F;O处理完毕，线程会重新转入可运行runnable状态。</p>
+<h2 id="线程死亡dead"><a href="#线程死亡dead" class="headerlink" title="线程死亡dead"></a>线程死亡dead</h2><p>线程会以下面三种方式结束，结束后就是死亡状态</p>
+<ol>
+<li><p>run或者call方法执行完成，线程正常结束</p>
+</li>
+<li><p>线程跑出一个未捕获的excption或者error，调用stop结束</p>
+</li>
+<li><p>直接调用该线程的stop方法结束改线程</p>
+<p>​        该方法通常容易导致死锁，不推荐使用</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/33.%20%E8%AF%B7%E6%8F%8F%E8%BF%B0%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" data-id="cl0j84juy001804vhckmz025j" data-title="33. 线程生命周期" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-34. 谈谈Sleep和wait的区别" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/34.%20%E8%B0%88%E8%B0%88Sleep%E5%92%8Cwait%E7%9A%84%E5%8C%BA%E5%88%AB/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/34.%20%E8%B0%88%E8%B0%88Sleep%E5%92%8Cwait%E7%9A%84%E5%8C%BA%E5%88%AB/">34. 谈谈Sleep和wait的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="34-谈谈Sleep和wait的区别"><a href="#34-谈谈Sleep和wait的区别" class="headerlink" title="34. 谈谈Sleep和wait的区别"></a>34. 谈谈Sleep和wait的区别</h1><p>1，所属的类不同：</p>
+<ul>
+<li>sleep方法是定义在<strong>Thread</strong>上</li>
+<li>wait方法是定义在<strong>Object</strong>上</li>
+</ul>
+<p>2，对于锁资源的处理方式不同</p>
+<ul>
+<li>sleep<strong>不会释放锁</strong></li>
+<li>wait会<strong>释放锁</strong></li>
+</ul>
+<p>3，使用范围：</p>
+<ul>
+<li>sleep可以使用在任何代码块</li>
+<li>wait必须在同步方法或同步代码块执行</li>
+</ul>
+<p> 4，与wait配套使用的方法</p>
+<p>​        sleep时间到了会自动恢复</p>
+<ul>
+<li><p>void notify()</p>
+<p>​    Wakes up a single thread that is waiting on this object’s monitor.</p>
+<p>​    译：唤醒在此对象监视器上等待的单个线程</p>
+</li>
+<li><p>void notifyAll()</p>
+<p>​    Wakes up all threads that are waiting on this object’s monitor.</p>
+<p>​    译：唤醒在此对象监视器上等待的所有线程</p>
+</li>
+<li><p>void wait( )</p>
+<p>​    Causes the current thread to wait until another thread invokes the     notify() method or the notifyAll( ) method for this object.</p>
+<p>​    译：导致当前的线程等待，直到其他线程调用此对象的notify( ) 方法或 notifyAll( ) 方法</p>
+</li>
+</ul>
+<p>生命周期</p>
+<p>1，当线程调用wait()或者join时，线程都会进入到waiting状态，当调用notify或notifyAll时，或者join的线程执行结束后，会进入runnable状态</p>
+<p>2，当线程调用sleep(time)，或者wait(time)时，进入timed waiting状态，</p>
+<p><strong>最后，留下一个思考题，为什么wait要定义在Object中，而不定义在Thread中？</strong></p>
+<p>来解释下，我们回想下，在同步代码块中，我们说需要一个对象锁来实现多线程的互斥效果，也就是说，Java的锁是对象级别的，而不是线程级别的。</p>
+<p><strong>为什么wait必须写在同步代码块中？</strong></p>
+<p>原因是避免CPU切换到其他线程，而其他线程又提前执行了notify方法，那这样就达不到我们的预期（先wait再由其他线程来唤醒），所以需要一个同步锁来保护</p>
+<p>(白话：如果notify先走了，那么永远无法唤醒wait，所以将wait卸载同步代码块中，会上一把锁synchroized(),CPU切换的时候就进不去代码块中，只能再次切换，只有释放锁之后才能进入)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/34.%20%E8%B0%88%E8%B0%88Sleep%E5%92%8Cwait%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cl0j84juz001b04vhgndp66lv" data-title="34. 谈谈Sleep和wait的区别" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-35. JDK线程池" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/35.%20JDK%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/35.%20JDK%E7%BA%BF%E7%A8%8B%E6%B1%A0/">35. JDK线程池</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="35-JDK线程池"><a href="#35-JDK线程池" class="headerlink" title="35. JDK线程池"></a>35. JDK线程池</h1><h2 id="JDK提供的线程池有哪些？实际开发我们该怎么使用"><a href="#JDK提供的线程池有哪些？实际开发我们该怎么使用" class="headerlink" title="JDK提供的线程池有哪些？实际开发我们该怎么使用"></a>JDK提供的线程池有哪些？实际开发我们该怎么使用</h2><p>1，JDK通过接口ExecutorService来表示线程池，通过工具类Executors来创建多种线程池对象</p>
+<p>​        ExcecutorService service1 &#x3D; Exectuors.newSingleThreadExecutor();</p>
+<p>​        ExcecutorService service2 &#x3D; Exectuors.newFixedThreadPool(2);</p>
+<p>​        ExcecutorService service3 &#x3D; Exectuors.newCachedThreadPool();</p>
+<p>​        ExcecutorService service4 &#x3D; Exectuors.newScheduledThreadPool();</p>
+<p>2，各种线程池的特点如下：</p>
+<p>​        newSingleThreadExecutor 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。</p>
+<p>​        newFixedThreadPool 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。</p>
+<p>​        newCachedThreadPool创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。</p>
+<p>​        newScheduledThreadPool 创建一个定长线程池，支持定时及周期性任务执行。</p>
+<p>3，在实际开发中，我们是怎么使用的？（重点）</p>
+<p><strong>实际开发中，线程资源必须通过线程池提供，不允许在应用中自行显式创建线程</strong></p>
+<p>使用线程池的好处是减少在创建和销毁线程上所花的时间以及系统资源的开销，解决资源不足的问题。</p>
+<p>如果不使用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或者“过度切换”的问题</p>
+<p><strong>实际开发中，线程池不允许使用ExcecutorService创建，而是通过 ThreadPoolExecutor 的方式</strong></p>
+<p>FixedThreadPool 和 SingleThreadPool，允许的请求队列长度为 Integer.MAX_VALUE，可能会堆积大量的请求，从而导致 OOM。</p>
+<p>CachedThreadPool 和 ScheduledThreadPool，允许的创建线程数量为 Integer.MAX_VALUE，可能会创建大量的线程，从而导致 OOM</p>
+<p>所以，综上所述，我们都会采用底层的方式来创建线程池，大家自己查阅各种线程池的源代码就可以看到他们都是采用了同一个类来创建。</p>
+<p>自己查看，印象更深刻。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/35.%20JDK%E7%BA%BF%E7%A8%8B%E6%B1%A0/" data-id="cl0j84jv0001e04vhb08hg2tn" data-title="35. JDK线程池" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-38. 线程的run方法和start方法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/38.%20%E7%BA%BF%E7%A8%8B%E7%9A%84run%E6%96%B9%E6%B3%95%E5%92%8Cstart%E6%96%B9%E6%B3%95/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/38.%20%E7%BA%BF%E7%A8%8B%E7%9A%84run%E6%96%B9%E6%B3%95%E5%92%8Cstart%E6%96%B9%E6%B3%95/">38 线程的run方法和start方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="38-线程的run方法和start方法"><a href="#38-线程的run方法和start方法" class="headerlink" title="38 线程的run方法和start方法"></a>38 线程的run方法和start方法</h1><h2 id="run和start"><a href="#run和start" class="headerlink" title="run和start"></a>run和start</h2><p>Start()方法用于启动线程，真正实现了多线程运行。这是无需等待run方法体代码执行完毕，可以直接继续执行下面的代码。</p>
+<p>可以通过Thread类的start()方法来启动一个线程，这时此线程是出于就绪状态，并没有运行。</p>
+<p>run()方法用于执行线程的运行时代码。</p>
+<p>run()方法成为线程体，它包含了要执行的这个线程的内容，线程就进入了运行状态，开始运行run函数中的代码。run方法运行结束，此线程终止。CPU调度其他线程。</p>
+<p>run()可以重复调用，start只能调用一次。</p>
+<p>注：start()方法被用来启动新创建的线程，而且start()内部调用了run()方法，这和直接调用run()方法的效果不一样。当你调用run()方法的时候，只会是在原来的线程中调用，没有新的线程启动，start()方法才会启动新线程 。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/38.%20%E7%BA%BF%E7%A8%8B%E7%9A%84run%E6%96%B9%E6%B3%95%E5%92%8Cstart%E6%96%B9%E6%B3%95/" data-id="cl0j84jv1001k04vhfosq19cz" data-title="38 线程的run方法和start方法" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-36. 谈谈你对线程安全的理解？" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/16/36.%20%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E7%90%86%E8%A7%A3%EF%BC%9F/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T16:00:00.000Z" itemprop="datePublished">2021-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/16/36.%20%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E7%90%86%E8%A7%A3%EF%BC%9F/">36.谈谈你对线程安全的理解？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="36-谈谈你对线程安全的理解？"><a href="#36-谈谈你对线程安全的理解？" class="headerlink" title="36.谈谈你对线程安全的理解？"></a>36.谈谈你对线程安全的理解？</h1><p>谈谈你对线程安全的理解</p>
+<p><strong>如果这个是面试官直接问你的问题，你会怎么回答？</strong></p>
+<p>一个专业的描述是: 当多个线程访问一个对象时，如果不用进行额外的同步控制或其他的协调操作，调用这个对象的行为都可以获得正确的结果，我们就说这个对象是线程安全的</p>
+<p><strong>那么我们如何做到线程安全？</strong></p>
+<p>实现线程安全的方式有多种，其中在源码中常见的方式是，采用synchronized关键字给代码块或方法加锁，比如StringBuffer</p>
+<p>查看StringBuffer的源码，你会看到是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">length</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">capacity</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">super</span>.capacity();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么，我们开发中，如果需要拼接字符串，使用StringBuilder还是StringBuffer？</p>
+<p>场景一：</p>
+<p>如果是多个线程访问同一个资源，那么就需要上锁，才能保证数据的安全性。</p>
+<p>这个时候如果使用的是非线程安全的对象，比如StringBuilder，那么就需要借助外力，给他加synchronized关键字。或者直接使用线程安全的对象StringBuffer</p>
+<p>场景二：</p>
+<p>如果每个线程访问的是各自的资源，那么就不需要考虑线程安全的问题，所以这个时候，我们可以放心使用非线程安全的对象，比如StringBuilder</p>
+<p>比如在方法中，创建对象，来实现字符串的拼接。</p>
+<p>看场景，如果我们是在方法中使用，那么建议在方法中创建StringBuilder，这时候相当是每个线程独立占有一个StringBuilder对象，不存在多线程共享一个资源的情况，所以我们可以安心使用，虽然StringBuilder本身不是线程安全的。</p>
+<p><strong>什么时候需要考虑线程安全？</strong></p>
+<p><strong>1，多个线程访问同一个资源</strong></p>
+<p><strong>2，资源是有状态的，比如我们上述讲的字符串拼接，这个时候数据是会有变化的</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/16/36.%20%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E7%90%86%E8%A7%A3%EF%BC%9F/" data-id="cl0j84jv2001n04vh7hr25ldo" data-title="36.谈谈你对线程安全的理解？" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/18/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/20/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

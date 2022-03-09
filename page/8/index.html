@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="MyHomePage">
+<meta property="og:url" content="http://example.com/page/8/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Lee yunbo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-MySql为什么使用B+树不用红黑树" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/27/MySql%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8B+%E6%A0%91%E4%B8%8D%E7%94%A8%E7%BA%A2%E9%BB%91%E6%A0%91/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T16:00:00.000Z" itemprop="datePublished">2021-04-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/27/MySql%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8B+%E6%A0%91%E4%B8%8D%E7%94%A8%E7%BA%A2%E9%BB%91%E6%A0%91/">为什么Mysql用B+树做索引而不用B-树或红黑树</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="为什么Mysql用B-树做索引而不用B-树或红黑树"><a href="#为什么Mysql用B-树做索引而不用B-树或红黑树" class="headerlink" title="为什么Mysql用B+树做索引而不用B-树或红黑树"></a>为什么Mysql用B+树做索引而不用B-树或红黑树</h1><p><strong>B+树只有叶节点存放数据，其余节点用来索引，而B-树是每个索引节点都会有Data域。</strong>所以从Mysql（Inoodb）的角度来看，B+树是用来充当索引的，一般来说索引非常大，尤其是关系性数据库这种数据量大的索引能达到亿级别，所以为了减少内存的占用，索引也会被存储在磁盘上。<br><strong>那么Mysql如何衡量查询效率呢？– 磁盘IO次数。</strong> B-树&#x2F;B+树 的特点就是每层节点数目非常多，层数很少，目的就是为了就少磁盘IO次数，但是B-树的每个节点都有data域（指针），这无疑增大了节点大小，说白了增加了磁盘IO次数（磁盘IO一次读出的数据量大小是固定的，单个数据变大，每次读出的就少，IO次数增多，一次IO多耗时），而B+树除了叶子节点其它节点并不存储数据，节点小，磁盘IO次数就少。<strong>这是优点之一。</strong><br><strong>另一个优点是：</strong> B+树所有的Data域在叶子节点，一般来说都会进行一个优化，就是<strong>将所有的叶子节点用指针串起来</strong>。这样<strong>遍历</strong>叶子节点就能获得全部数据，这样就能进行区间访问啦。在数据库中基于范围的查询是非常频繁的，而B树不支持这样的遍历操作。</p>
+<h5 id="B树相对于红黑树的区别"><a href="#B树相对于红黑树的区别" class="headerlink" title="B树相对于红黑树的区别"></a>B树相对于红黑树的区别</h5><p><strong>AVL 数和红黑树基本都是存储在内存中才会使用的数据结构</strong>。在大规模数据存储的时候，红黑树往往出现由于<strong>树的深度过大</strong>而造成磁盘IO读写过于频繁，进而导致效率低下的情况。为什么会出现这样的情况，我们知道要获取磁盘上数据，必须先通过磁盘移动臂移动到数据所在的柱面，然后找到指定盘面，接着旋转盘面找到数据所在的磁道，最后对数据进行读写。磁盘IO代价主要花费在查找所需的柱面上，树的深度过大会造成磁盘IO频繁读写。根据<strong>磁盘查找存取的次数往往由树的高度所决定</strong>，所以，只要我们通过某种较好的树结构减少树的结构尽量减少树的高度，B树可以有多个子女，从几十到上千，可以降低树的高度。</p>
+<p><strong>数据库系统的设计者巧妙利用了磁盘预读原理</strong>，将一个节点的大小设为等于一个页，这样每个节点只需要一次I&#x2F;O就可以完全载入。为了达到这个目的，在实际实现B-Tree还需要使用如下技巧：每次新建节点时，直接申请一个页的空间，这样就保证<strong>一个节点物理上也存储在一个页里</strong>，加之计算机存储分配都是按页对齐的，就实现了一个node只需一次I&#x2F;O。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/27/MySql%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8B+%E6%A0%91%E4%B8%8D%E7%94%A8%E7%BA%A2%E9%BB%91%E6%A0%91/" data-id="cl0j84jw1005804vhfc31f1p0" data-title="为什么Mysql用B+树做索引而不用B-树或红黑树" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql哪些列适合建立索引" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/27/MySql%E5%93%AA%E4%BA%9B%E5%88%97%E9%80%82%E5%90%88%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T16:00:00.000Z" itemprop="datePublished">2021-04-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/27/MySql%E5%93%AA%E4%BA%9B%E5%88%97%E9%80%82%E5%90%88%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95/">哪些列适合建立索引</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="哪些列适合建立索引"><a href="#哪些列适合建立索引" class="headerlink" title="哪些列适合建立索引"></a>哪些列适合建立索引</h1><ul>
+<li>在经常需要搜索的列上，建立索引，增加搜索速度。</li>
+<li>在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构。</li>
+<li>在经常用在连接的列上，这些列主要是外键，<strong>可以加快连接速度。</strong></li>
+<li>在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，所以其指定的范围是连续的。</li>
+<li>在经常需要排列的列上创建索引，因为索引已经排序，这样可以利用索引的排序，<strong>加快查询的速度。</strong></li>
+<li>在经常需要使用WHERE子句的列上创建索引，<strong>加快条件的判断速度</strong></li>
+</ul>
+<h1 id="哪些列不利于创建索引"><a href="#哪些列不利于创建索引" class="headerlink" title="哪些列不利于创建索引"></a><strong>哪些列不利于创建索引</strong></h1><ul>
+<li>对于查询中很少使用或者参考列不应该创建索引。这是因为，既然这些列很少使用，那么创建和不创建都没有效果，反而由于增加了索引，降低了系统的维护和增大了空间的需求。</li>
+<li>对于那些是有很少数据值的列不应添加索引。由于这些列的取值很少，例如人事表的性别列，在查询的结果中，结果集的数据行占了表中数据很大比例，即需要在表中搜索的数据行比例很大，增加缩影并不能明显的加快搜索速度。</li>
+<li>对于那些定义为text,image,bit数据类型的列不应添加索引，这是因为这些数据要么太大，要么取值很小。</li>
+<li>当修改性能大于检索性能的时候不应添加索引。这是因为，<strong>修改性能和检索性能是相互矛盾的</strong>，当增加索引时，会提高检索性能，但是会降低修改性能。当减小索引时，会提高修改性能，降低索引性能。因此，当修改性能远远大于检索性能时，不应该添加索引。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/27/MySql%E5%93%AA%E4%BA%9B%E5%88%97%E9%80%82%E5%90%88%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95/" data-id="cl0j84jw3005e04vh45nmdftv" data-title="哪些列适合建立索引" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql索引优化" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T16:00:00.000Z" itemprop="datePublished">2021-04-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/">MySQL索引如何优化？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="MySQL索引如何优化？"><a href="#MySQL索引如何优化？" class="headerlink" title="MySQL索引如何优化？"></a>MySQL索引如何优化？</h1><p><strong>索引优化规则</strong></p>
+<h2 id="1、like语句的前导模糊查询不能使用索引"><a href="#1、like语句的前导模糊查询不能使用索引" class="headerlink" title="1、like语句的前导模糊查询不能使用索引"></a>1、like语句的前导模糊查询不能使用索引</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from doc where title like &#x27;%XX&#x27;；   --不能使用索引 select * from doc where title like &#x27;XX%&#x27;；   --非前导模糊查询，可以使用索引 </span><br></pre></td></tr></table></figure>
+
+<p>因为页面搜索严禁左模糊或者全模糊，如果需要可以使用搜索引擎来解决。</p>
+<h2 id="2、union、in、or-都能够命中索引，建议使用-in"><a href="#2、union、in、or-都能够命中索引，建议使用-in" class="headerlink" title="2、union、in、or 都能够命中索引，建议使用 in"></a><strong>2、union、in、or 都能够命中索引，建议使用 in</strong></h2><p>union能够命中索引，并且MySQL 耗费的 CPU 最少。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from doc where status=1 union all select * from doc where status=2; </span><br></pre></td></tr></table></figure>
+
+<p>in能够命中索引，查询优化耗费的 CPU 比 union all 多，但可以忽略不计，一般情况下建议使用 in。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from doc where status in (1, 2); </span><br></pre></td></tr></table></figure>
+
+<p>or 新版的 MySQL 能够命中索引，查询优化耗费的 CPU 比 in多，不建议频繁用or。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from doc where status = 1 or status = 2 </span><br></pre></td></tr></table></figure>
+
+<p>补充：有些地方说在where条件中使用or，索引会失效，造成全表扫描，这是个误区：</p>
+<ul>
+<li>①要求where子句使用的所有字段，都必须建立索引;</li>
+<li>②如果数据量太少，mysql制定执行计划时发现全表扫描比索引查找更快，所以会不使用索引;</li>
+<li>③确保mysql版本5.0以上，且查询优化器开启了index_merge_union&#x3D;on, 也就是变量optimizer_switch里存在index_merge_union且为on。</li>
+</ul>
+<h2 id="3、负向条件查询不能使用索引"><a href="#3、负向条件查询不能使用索引" class="headerlink" title="3、负向条件查询不能使用索引"></a><strong>3、负向条件查询不能使用索引</strong></h2><ul>
+<li>负向条件有：!&#x3D;、&lt;&gt;、not in、not exists、not like 等。</li>
+<li>例如下面SQL语句：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from doc where status != 1 and status != 2; </span><br></pre></td></tr></table></figure>
+
+<p>可以优化为 in 查询：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from doc where status in (0,3,4); </span><br></pre></td></tr></table></figure>
+
+<h2 id="4、联合索引最左前缀原则"><a href="#4、联合索引最左前缀原则" class="headerlink" title="4、联合索引最左前缀原则"></a><strong>4、联合索引最左前缀原则</strong></h2><ul>
+<li>如果在(a,b,c)三个字段上建立联合索引，那么他会自动建立 a| (a,b) | (a,b,c)组索引。</li>
+<li>登录业务需求，SQL语句如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select uid, login_time from user where login_name=? andpasswd=? </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以建立(login_name, passwd)的联合索引。因为业务上几乎没有passwd 的单条件查询需求，而有很多login_name 的单条件查询需求，所以可以建立(login_name, passwd)的联合索引，而不是(passwd, login_name)。</li>
+</ul>
+<ol>
+<li>建立联合索引的时候，区分度最高的字段在最左边</li>
+<li>存在非等号和等号混合判断条件时，在建立索引时，把等号条件的列前置。如 where a&gt;? and b&#x3D;?，那么即使a 的区分度更高，也必须把 b 放在索引的最前列。</li>
+<li>最左前缀查询时，并不是指SQL语句的where顺序要和联合索引一致。</li>
+</ol>
+<ul>
+<li>下面的 SQL 语句也可以命中 (login_name, passwd) 这个联合索引：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select uid, login_time from user where passwd=? andlogin_name=? </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>但还是建议 where 后的顺序和联合索引一致，养成好习惯。</li>
+</ul>
+<p>假如index(a,b,c), where a&#x3D;3 and b like ‘abc%’ and c&#x3D;4，a能用，b能用，c不能用。</p>
+<h2 id="5、不能使用索引中范围条件右边的列-范围列可以用到索引-，范围列之后列的索引全失效"><a href="#5、不能使用索引中范围条件右边的列-范围列可以用到索引-，范围列之后列的索引全失效" class="headerlink" title="5、不能使用索引中范围条件右边的列(范围列可以用到索引)，范围列之后列的索引全失效"></a><strong>5、不能使用索引中范围条件右边的列(范围列可以用到索引)，范围列之后列的索引全失效</strong></h2><ul>
+<li>范围条件有：&lt;、&lt;&#x3D;、&gt;、&gt;&#x3D;、between等。</li>
+<li>索引最多用于一个范围列，如果查询条件中有两个范围列则无法全用到索引。</li>
+<li>假如有联合索引 (empno、title、fromdate)，那么下面的 SQL 中 emp_no 可以用到索引，而title 和 from_date 则使用不到索引。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from employees.titles where emp_no &lt; 10010&#x27; and title=&#x27;Senior Engineer&#x27;and from_date between &#x27;1986-01-01&#x27; and &#x27;1986-12-31&#x27; </span><br></pre></td></tr></table></figure>
+
+<h2 id="6、不要在索引列上面做任何操作-计算、函数-，否则会导致索引失效而转向全表扫描"><a href="#6、不要在索引列上面做任何操作-计算、函数-，否则会导致索引失效而转向全表扫描" class="headerlink" title="6、不要在索引列上面做任何操作(计算、函数)，否则会导致索引失效而转向全表扫描"></a><strong>6、不要在索引列上面做任何操作(计算、函数)，否则会导致索引失效而转向全表扫描</strong></h2><p>例如下面的 SQL 语句，即使 date 上建立了索引，也会全表扫描：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from doc where YEAR(create_time) &lt;= &#x27;2016&#x27;; </span><br></pre></td></tr></table></figure>
+
+<p>可优化为值计算，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from doc where create_time &lt;= &#x27;2016-01-01&#x27;; </span><br></pre></td></tr></table></figure>
+
+<p>比如下面的 SQL 语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from order where date &lt; = CURDATE()； </span><br></pre></td></tr></table></figure>
+
+<p>可以优化为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from order where date &lt; = &#x27;2018-01-2412:00:00&#x27;; </span><br></pre></td></tr></table></figure>
+
+<h2 id="7、强制类型转换会全表扫描"><a href="#7、强制类型转换会全表扫描" class="headerlink" title="7、强制类型转换会全表扫描"></a><strong>7、强制类型转换会全表扫描</strong></h2><p>字符串类型不加单引号会导致索引失效，因为mysql会自己做类型转换,相当于在索引列上进行了操作。</p>
+<p>如果 phone 字段是 varchar 类型，则下面的 SQL 不能命中索引。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where phone=13800001234 </span><br></pre></td></tr></table></figure>
+
+<p>可以优化为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where phone=&#x27;13800001234&#x27;; </span><br></pre></td></tr></table></figure>
+
+<h2 id="8、更新十分频繁、数据区分度不高的列不宜建立索引"><a href="#8、更新十分频繁、数据区分度不高的列不宜建立索引" class="headerlink" title="8、更新十分频繁、数据区分度不高的列不宜建立索引"></a><strong>8、更新十分频繁、数据区分度不高的列不宜建立索引</strong></h2><ul>
+<li>更新会变更 B+ 树，更新频繁的字段建立索引会大大降低数据库性能。</li>
+<li>“性别”这种区分度不大的属性，建立索引是没有什么意义的，不能有效过滤数据，性能与全表扫描类似。</li>
+<li>一般区分度在80%以上的时候就可以建立索引，区分度可以使用 count(distinct(列名))&#x2F;count(*) 来计算。</li>
+</ul>
+<h2 id="9、利用覆盖索引来进行查询操作，避免回表，减少select-的使用"><a href="#9、利用覆盖索引来进行查询操作，避免回表，减少select-的使用" class="headerlink" title="9、利用覆盖索引来进行查询操作，避免回表，减少select * 的使用"></a><strong>9、利用覆盖索引来进行查询操作，避免回表，减少select * 的使用</strong></h2><ul>
+<li>覆盖索引：查询的列和所建立的索引的列个数相同，字段相同。</li>
+<li>被查询的列，数据能从索引中取得，而不用通过行定位符 row-locator 再到 row 上获取，即“被查询列要被所建的索引覆盖”，这能够加速查询速度。</li>
+<li>例如登录业务需求，SQL语句如下。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Select uid, login_time from user where login_name=? and passwd=? </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以建立(login_name, passwd, login_time)的联合索引，由于 login_time 已经建立在索引中了，被查询的 uid 和 login_time 就不用去 row 上获取数据了，从而加速查询。</li>
+</ul>
+<h2 id="10、索引不会包含有NULL值的列"><a href="#10、索引不会包含有NULL值的列" class="headerlink" title="10、索引不会包含有NULL值的列"></a><strong>10、索引不会包含有NULL值的列</strong></h2><p>只要列中包含有NULL值都将不会被包含在索引中，复合索引中只要有一列含有NULL值，那么这一列对于此复合索引就是无效的。所以我们在数据库设计时，尽量使用not null 约束以及默认值。</p>
+<h2 id="11、is-null-is-not-null无法使用索引"><a href="#11、is-null-is-not-null无法使用索引" class="headerlink" title="11、is null, is not null无法使用索引"></a><strong>11、is null, is not null无法使用索引</strong></h2><h2 id="12、如果有order-by、group-by的场景，请注意利用索引的有序性"><a href="#12、如果有order-by、group-by的场景，请注意利用索引的有序性" class="headerlink" title="12、如果有order by、group by的场景，请注意利用索引的有序性"></a>12、如果有order by、group by的场景，请注意利用索引的有序性</h2><p>order by 最后的字段是组合索引的一部分，并且放在索引组合顺序的最后，避免出现file_sort 的情况，影响查询性能。</p>
+<ul>
+<li>例如对于语句 where a&#x3D;? and b&#x3D;? order by c，可以建立联合索引(a,b,c)。</li>
+</ul>
+<p>如果索引中有范围查找，那么索引有序性无法利用，如 WHERE a&gt;10 ORDER BY b;，索引(a,b)无法排序。</p>
+<h2 id="13、使用短索引-前缀索引"><a href="#13、使用短索引-前缀索引" class="headerlink" title="13、使用短索引(前缀索引)"></a><strong>13、使用短索引(前缀索引)</strong></h2><ul>
+<li>对列进行索引，如果可能应该指定一个前缀长度。例如，如果有一个CHAR(255)的列，如果该列在前10个或20个字符内，可以做到既使得前缀索引的区分度接近全列索引，那么就不要对整个列进行索引。因为短索引不仅可以提高查询速度而且可以节省磁盘空间和I&#x2F;O操作，减少索引文件的维护开销。可以使用count(distinct leftIndex(列名, 索引长度))&#x2F;count(*) 来计算前缀索引的区分度。</li>
+<li>但缺点是不能用于 ORDER BY 和 GROUP BY 操作，也不能用于覆盖索引。</li>
+<li>不过很多时候没必要对全字段建立索引，根据实际文本区分度决定索引长度即可。</li>
+</ul>
+<h2 id="14、利用延迟关联或者子查询优化超多分页场景"><a href="#14、利用延迟关联或者子查询优化超多分页场景" class="headerlink" title="14、利用延迟关联或者子查询优化超多分页场景"></a><strong>14、利用延迟关联或者子查询优化超多分页场景</strong></h2><p>MySQL 并不是跳过 offset 行，而是取 offset+N 行，然后返回放弃前 offset 行，返回 N 行，那当 offset 特别大的时候，效率就非常的低下，要么控制返回的总页数，要么对超过特定阈值的页数进行 SQL 改写。</p>
+<p>示例如下，先快速定位需要获取的id段，然后再关联:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">selecta.* from 表1 a,(select id from 表1 where 条件 limit100000,20 ) b where a.id=b.id； </span><br></pre></td></tr></table></figure>
+
+<h2 id="15、如果明确知道只有一条结果返回，limit-1-能够提高效率"><a href="#15、如果明确知道只有一条结果返回，limit-1-能够提高效率" class="headerlink" title="15、如果明确知道只有一条结果返回，limit 1 能够提高效率"></a><strong>15、如果明确知道只有一条结果返回，limit 1 能够提高效率</strong></h2><ul>
+<li>比如如下 SQL 语句：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where login_name=?; </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以优化为：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where login_name=? limit 1 </span><br></pre></td></tr></table></figure>
+
+<p>自己明确知道只有一条结果，但数据库并不知道，明确告诉它，让它主动停止游标移动。</p>
+<h2 id="16、超过三个表最好不要-join"><a href="#16、超过三个表最好不要-join" class="headerlink" title="16、超过三个表最好不要 join"></a><strong>16、超过三个表最好不要 join</strong></h2><ul>
+<li>需要 join 的字段，数据类型必须一致，多表关联查询时，保证被关联的字段需要有索引。</li>
+<li>例如：left join是由左边决定的，左边的数据一定都有，所以右边是我们的关键点，建立索引要建右边的。当然如果索引在左边，可以用right join。</li>
+</ul>
+<h2 id="17、单表索引建议控制在5个以内"><a href="#17、单表索引建议控制在5个以内" class="headerlink" title="17、单表索引建议控制在5个以内"></a><strong>17、单表索引建议控制在5个以内</strong></h2><h2 id="18、SQL-性能优化-explain-中的-type：至少要达到-range-级别，要求是-ref-级别，如果可以是-consts-最好"><a href="#18、SQL-性能优化-explain-中的-type：至少要达到-range-级别，要求是-ref-级别，如果可以是-consts-最好" class="headerlink" title="18、SQL 性能优化 explain 中的 type：至少要达到 range 级别，要求是 ref 级别，如果可以是 consts 最好"></a><strong>18、SQL 性能优化 explain 中的 type：至少要达到 range 级别，要求是 ref 级别，如果可以是 consts 最好</strong></h2><ul>
+<li>consts：单表中最多只有一个匹配行(主键或者唯一索引)，在优化阶段即可读取到数据。</li>
+<li>ref：使用普通的索引(Normal Index)。</li>
+<li>range：对索引进行范围检索。</li>
+<li>当 type&#x3D;index 时，索引物理文件全扫，速度非常慢。</li>
+</ul>
+<h2 id="19、业务上具有唯一特性的字段，即使是多个字段的组合，也必须建成唯一索引"><a href="#19、业务上具有唯一特性的字段，即使是多个字段的组合，也必须建成唯一索引" class="headerlink" title="19、业务上具有唯一特性的字段，即使是多个字段的组合，也必须建成唯一索引"></a><strong>19、业务上具有唯一特性的字段，即使是多个字段的组合，也必须建成唯一索引</strong></h2><p>不要以为唯一索引影响了 insert 速度，这个速度损耗可以忽略，但提高查找速度是明显的。另外，即使在应用层做了非常完善的校验控制，只要没有唯一索引，根据墨菲定律，必然有脏数据产生。</p>
+<h2 id="20-创建索引时避免以下错误观念"><a href="#20-创建索引时避免以下错误观念" class="headerlink" title="20.创建索引时避免以下错误观念"></a><strong>20.创建索引时避免以下错误观念</strong></h2><p>索引越多越好，认为需要一个查询就建一个索引。</p>
+<p>宁缺勿滥，认为索引会消耗空间、严重拖慢更新和新增速度。</p>
+<p>抵制惟一索引，认为业务的惟一性一律需要在应用层通过“先查后插”方式解决。</p>
+<p>过早优化，在不了解系统的情况下就开始优化。</p>
+<p><strong>索引选择性与前缀索引</strong></p>
+<ul>
+<li>既然索引可以加快查询速度，那么是不是只要是查询语句需要，就建上索引?答案是否定的。因为索引虽然加快了查询速度，但索引也是有代价的：索引文件本身要消耗存储空间，同时索引会加重插入、删除和修改记录时的负担，另外，MySQL在运行时也要消耗资源维护索引，因此索引并不是越多越好。一般两种情况下不建议建索引。</li>
+<li>第一种情况是表记录比较少，例如一两千条甚至只有几百条记录的表，没必要建索引，让查询做全表扫描就好了。至于多少条记录才算多，这个个人有个人的看法，我个人的经验是以2000作为分界线，记录数不超过 2000可以考虑不建索引，超过2000条可以酌情考虑索引。</li>
+<li>另一种不建议建索引的情况是索引的选择性较低。所谓索引的选择性(Selectivity)，是指不重复的索引值(也叫基数，Cardinality)与表记录数(#T)的比值：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Index Selectivity = Cardinality / #T </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>显然选择性的取值范围为(0, 1]&#96;&#96;，选择性越高的索引价值越大，这是由B+Tree的性质决定的。例如，employees.titles表，如果title&#96;字段经常被单独查询，是否需要建索引，我们看一下它的选择性：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT count(DISTINCT(title))/count(*) AS Selectivity FROM employees.titles; </span><br><span class="line">+-------------+ </span><br><span class="line">| Selectivity | </span><br><span class="line">+-------------+ </span><br><span class="line">|      0.0000 | </span><br><span class="line">+-------------+ </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>title的选择性不足0.0001(精确值为0.00001579)，所以实在没有什么必要为其单独建索引。</li>
+<li>有一种与索引选择性有关的索引优化策略叫做前缀索引，就是用列的前缀代替整个列作为索引key，当前缀长度合适时，可以做到既使得前缀索引的选择性接近全列索引，同时因为索引key变短而减少了索引文件的大小和维护开销。下面以employees.employees表为例介绍前缀索引的选择和使用。</li>
+<li>假设employees表只有一个索引，那么如果我们想按名字搜索一个人，就只能全表扫描了：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN SELECT * FROM employees.employees WHERE first_name=&#x27;Eric&#x27; AND last_name=&#x27;Anido&#x27;; </span><br><span class="line">+----+-------------+-----------+------+---------------+------+---------+------+--------+-------------+ </span><br><span class="line">| id | select_type | table     | type | possible_keys | key  | key_len | ref  | rows   | Extra       | </span><br><span class="line">+----+-------------+-----------+------+---------------+------+---------+------+--------+-------------+ </span><br><span class="line">|  1 | SIMPLE      | employees | ALL  | NULL          | NULL | NULL    | NULL | 300024 | Using where </span><br><span class="line">| +----+-------------+-----------+------+---------------+------+---------+------+--------+-------------+ </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果频繁按名字搜索员工，这样显然效率很低，因此我们可以考虑建索引。有两种选择，建或</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">SELECT count(DISTINCT(first_name))/count(*) AS Selectivity FROM employees.employees; </span><br><span class="line">+-------------+ </span><br><span class="line">| Selectivity | </span><br><span class="line">+-------------+ </span><br><span class="line">|      0.0042 | </span><br><span class="line">+-------------+ </span><br><span class="line">SELECT count(DISTINCT(concat(first_name,last_name)))/count(*) AS Selectivity FROM employees.employees; </span><br><span class="line">+-------------+ </span><br><span class="line">| Selectivity | </span><br><span class="line">+-------------+ </span><br><span class="line">|      0.9313 | </span><br><span class="line">+-------------+ </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><first_name>显然选择性太低，&#96;&lt;first_name, last_name&gt;选择性很好，但是first_name和last_name加起来长度为30，有没有兼顾长度和选择性的办法？可以考虑用first_name和last_name的前几个字符建立索引，例如&lt;first_name, left(last_name, 3)&gt;，看看其选择性：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT count(DISTINCT(concat(first_name, left(last_name, 3))))/count(*) AS Selectivity FROM employees.employees; </span><br><span class="line">+-------------+ </span><br><span class="line">| Selectivity | </span><br><span class="line">+-------------+ </span><br><span class="line">|      0.7879 | </span><br><span class="line">+-------------+ </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>选择性还不错，但离0.9313还是有点距离，那么把last_name前缀加到4：</li>
+<li>&#96;&#96;&#96;<br>SELECT count(DISTINCT(concat(first_name, left(last_name, 4))))&#x2F;count(*) AS Selectivity FROM employees.employees;<br>+————-+<br>| Selectivity |<br>+————-+<br>|      0.9007 |<br>+————-+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 这时选择性已经很理想了，而这个索引的长度只有18，比</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+ALTER TABLE employees.employees ADD INDEX <code>first_name_last_name4</code> (first_name, last_name(4)); <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 此时再执行一遍按名字查询，比较分析一下与建索引前的结果：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+SHOW PROFILES;</li>
+</ul>
+<p>+———-+————+———————————————————————————+<br>| Query_ID | Duration   | Query                                                                           |<br>+———-+————+———————————————————————————+<br>|       87 | 0.11941700 |<br>SELECT * FROM employees.employees WHERE first_name&#x3D;’Eric’ AND last_name&#x3D;’Anido’<br>| |       90 | 0.00092400 |<br>SELECT * FROM employees.employees WHERE first_name&#x3D;’Eric’ AND last_name&#x3D;’Anido’ |<br>+———-+————+———————————————————————————+ </p>
+<p>&#96;&#96;&#96;</p>
+<ul>
+<li>性能的提升是显著的，查询速度提高了120多倍。</li>
+<li>前缀索引兼顾索引大小和查询速度，但是其缺点是不能用于ORDER BY和GROUP BY操作，也不能用于Covering index(即当索引本身包含查询所需全部数据时，不再访问数据文件本身)。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/" data-id="cl0j84jwa005z04vhf98f6sq6" data-title="MySQL索引如何优化？" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql索引失效" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T16:00:00.000Z" itemprop="datePublished">2021-04-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/">MySQL中索引失效的常见场景与规避方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="MySQL中索引失效的常见场景与规避方法"><a href="#MySQL中索引失效的常见场景与规避方法" class="headerlink" title="MySQL中索引失效的常见场景与规避方法"></a>MySQL中索引失效的常见场景与规避方法</h1><h2 id="1-where语句中包含or时，可能会导致索引失效"><a href="#1-where语句中包含or时，可能会导致索引失效" class="headerlink" title="1. where语句中包含or时，可能会导致索引失效"></a>1. where语句中包含or时，可能会导致索引失效</h2><p>使用or并不是一定会使索引失效，你需要看or左右两边的查询列是否命中相同的索引。</p>
+<p>假设USER表中的user_id列有索引，age列没有索引。</p>
+<p>下面这条语句其实是命中索引的（据说是新版本的MySQL才可以，如果你使用的是老版本的MySQL，可以使用explain验证下）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select *  from user where user_id = 1  or user_id = 2;</span><br></pre></td></tr></table></figure>
+
+<p>但是这条语句是无法命中索引的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where user_id = 1  or age = 20;</span><br></pre></td></tr></table></figure>
+
+<p>假设age列也有索引的话，依然是无法命中索引的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select *  from user where user_id = 1  or age = 20;</span><br></pre></td></tr></table></figure>
+
+<p>因此才有建议说，尽量避免使用or语句，可以根据情况尽量使用union all或者in来代替，这两个语句的执行效率也比or好些。</p>
+<h2 id="2-where语句中索引列使用了负向查询，可能会导致索引失效"><a href="#2-where语句中索引列使用了负向查询，可能会导致索引失效" class="headerlink" title="2. where语句中索引列使用了负向查询，可能会导致索引失效"></a><strong>2. where语句中索引列使用了负向查询，可能会导致索引失效</strong></h2><p>负向查询包括：NOT、!&#x3D;、&lt;&gt;、!&lt;、!&gt;、NOT IN、NOT LIKE等。</p>
+<p>某“军规”中说，使用负向查询一定会索引失效，笔者查了些文章，有网友对这点进行了反驳并举证。</p>
+<p>其实负向查询并不绝对会索引失效，这要看MySQL优化器的判断，全表扫描或者走索引哪个成本低了。</p>
+<h2 id="3-索引字段可以为null，使用is-null或is-not-null时，可能会导致索引失效"><a href="#3-索引字段可以为null，使用is-null或is-not-null时，可能会导致索引失效" class="headerlink" title="3. 索引字段可以为null，使用is null或is not null时，可能会导致索引失效"></a>3. 索引字段可以为null，使用is null或is not null时，可能会导致索引失效</h2><p>其实单个索引字段，使用is null或is not null时，是可以命中索引的，但网友在举证时说两个不同索引字段用or连接时，索引就失效了，笔者认为确实索引失效，但这个锅应该由or来背，属于第一种场景~~</p>
+<p>假设USER表中的user_id列有索引且允许null，age列有索引且允许null。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where user_id is not null or age is not null;</span><br></pre></td></tr></table></figure>
+
+<p>不过某些“军规”和规范中都有强调，字段要设为not null并提供默认值，是有原因值得参考的。</p>
+<ul>
+<li>null的列使索引&#x2F;索引统计&#x2F;值比较都更加复杂，对MySQL来说更难优化。</li>
+<li>null 这种类型MySQL内部需要进行特殊处理，增加数据库处理记录的复杂性；同等条件下，表中有较多空字段的时候，数据库的处理性能会降低很多。</li>
+<li>null值需要更多的存储空，无论是表还是索引中每行中的null的列都需要额外的空间来标识。</li>
+<li>对null 的处理时候，只能采用is null或is not null，而不能采用&#x3D;、in、&lt;、&lt;&gt;、!&#x3D;、not in这些操作符号。如：where name!&#x3D;’shenjian’，如果存在name为null值的记录，查询结果就不会包含name为null值的记录。</li>
+</ul>
+<h2 id="4-在索引列上使用内置函数，一定会导致索引失效"><a href="#4-在索引列上使用内置函数，一定会导致索引失效" class="headerlink" title="4. 在索引列上使用内置函数，一定会导致索引失效"></a><strong>4. 在索引列上使用内置函数，一定会导致索引失效</strong></h2><p>比如下面语句中索引列login_time上使用了函数，会索引失效：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where DATE_ADD(login_time, INTERVAL 1 DAY) = 7;</span><br></pre></td></tr></table></figure>
+
+<p>优化建议，尽量在应用程序中进行计算和转换。</p>
+<p><strong>4.1 隐式类型转换导致的索引失效</strong></p>
+<p>比如下面语句中索引列user_id为varchar类型，不会命中索引：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select* from `user` where user_id = 12;</span><br></pre></td></tr></table></figure>
+
+<p>这是因为MySQL做了隐式类型转换，调用函数将user_id做了转换。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select *  from `user` where CAST (user_id  AS signed  int ) = 12;</span><br></pre></td></tr></table></figure>
+
+<p><strong>4.2 隐式字符编码转换导致的索引失效</strong></p>
+<p>当两个表之间做关联查询时，如果两个表中关联的字段字符编码不一致的话，MySQL可能会调用CONVERT函数，将不同的字符编码进行隐式转换从而达到统一。作用到关联的字段时，就会导致索引失效。</p>
+<p>比如下面这个语句，其中d.tradeid字符编码为utf8，而l.tradeid的字符编码为utf8mb4。因为utf8mb4是utf8的超集，所以MySQL在做转换时会用CONVERT将utf8转为utf8mb4。简单来看就是CONVERT作用到了d.tradeid上，因此索引失效。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select l.operator  from tradelog l , trade_detail d  where d.tradeid=l.tradeid  and d.id=4;</span><br></pre></td></tr></table></figure>
+
+<p>这种情况一般有两种解决方案。</p>
+<p>方案1: 将关联字段的字符编码统一。</p>
+<p>方案2: 实在无法统一字符编码时，手动将CONVERT函数作用到关联时&#x3D;的右侧，起到字符编码统一的目的，这里是强制将utf8mb4转为utf8，当然从超集向子集转换是有数据截断风险的.如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select d.* from tradelog l , trade_detail d where d.tradeid=CONVERT(l.tradeid USING utf8) and l.id=2; </span><br></pre></td></tr></table></figure>
+
+<h2 id="5-对索引列进行运算，一定会导致索引失效"><a href="#5-对索引列进行运算，一定会导致索引失效" class="headerlink" title="5. 对索引列进行运算，一定会导致索引失效"></a><strong>5. 对索引列进行运算，一定会导致索引失效</strong></h2><p>运算如+，-，*，&#x2F;等，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where age - 1 = 10;</span><br></pre></td></tr></table></figure>
+
+<p>优化的话，要把运算放在值上，或者在应用程序中直接算好，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where age = 10 - 1;</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-like通配符可能会导致索引失效"><a href="#6-like通配符可能会导致索引失效" class="headerlink" title="6. like通配符可能会导致索引失效"></a><strong>6. like通配符可能会导致索引失效</strong></h2><p>like查询以%开头时，会导致索引失效。解决办法有两种：</p>
+<p>将%移到后面，如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from `user` where `name` like &#x27;李%&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>利用覆盖索引来命中索引</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select name from `user` where `name` like &#x27;%李%&#x27;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-联合索引中，where中索引列违背最左匹配原则，一定会导致索引失效"><a href="#7-联合索引中，where中索引列违背最左匹配原则，一定会导致索引失效" class="headerlink" title="7. 联合索引中，where中索引列违背最左匹配原则，一定会导致索引失效"></a><strong>7. 联合索引中，where中索引列违背最左匹配原则，一定会导致索引失效</strong></h2><p>当创建一个联合索引的时候，如(k1,k2,k3)，相当于创建了(k1)、(k1,k2)和(k1,k2,k3)三个索引，这就是最左匹配原则。</p>
+<p>比如下面的语句就不会命中索引：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from t where k2=2;</span><br><span class="line">select * from t where k3=3;</span><br><span class="line">slect * from t where k2=2 and k3=3;</span><br></pre></td></tr></table></figure>
+
+<p>下面的语句只会命中索引(k1):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slect * from t where k1=1 and k3=3;</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-MySQL优化器的最终选择，不走索引"><a href="#8-MySQL优化器的最终选择，不走索引" class="headerlink" title="8. MySQL优化器的最终选择，不走索引"></a><strong>8. MySQL优化器的最终选择，不走索引</strong></h2><p>上面有提到，即使完全符合索引生效的场景，考虑到实际数据量等原因，最终是否使用索引还要看MySQL优化器的判断。当然你也可以在sql语句中写明强制走某个索引。</p>
+<h2 id="优化索引的一些建议"><a href="#优化索引的一些建议" class="headerlink" title="优化索引的一些建议"></a><strong>优化索引的一些建议</strong></h2><ul>
+<li>禁止在更新十分频繁、区分度不高的属性上建立索引。<ul>
+<li>更新会变更B+树，更新频繁的字段建立索引会大大降低数据库性能。</li>
+<li>“性别”这种区分度不大的属性，建立索引是没有什么意义的，不能有效过滤数据，性能与全表扫描类似。</li>
+</ul>
+</li>
+<li>建立组合索引，必须把区分度高的字段放在前面。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/27/MySql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" data-id="cl0j84jwb006204vhe0dwa6gs" data-title="MySQL中索引失效的常见场景与规避方法" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Spring 夺命连环10问" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/Spring%20%E5%A4%BA%E5%91%BD%E8%BF%9E%E7%8E%AF10%E9%97%AE/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T08:07:58.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/Spring%20%E5%A4%BA%E5%91%BD%E8%BF%9E%E7%8E%AF10%E9%97%AE/">Spring 夺命连环10问</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="1-说说Spring-里用到了哪些设计模式"><a href="#1-说说Spring-里用到了哪些设计模式" class="headerlink" title="1.说说Spring 里用到了哪些设计模式?"></a>1.说说Spring 里用到了哪些设计模式?</h3><p><code>单例模式</code>：Spring 中的 Bean 默认情况下都是单例的。无需多说。</p>
+<p><code>工厂模式</code>：工厂模式主要是通过 BeanFactory 和 ApplicationContext 来生产 Bean 对象。</p>
+<p><code>代理模式</code>：最常见的 AOP 的实现方式就是通过代理来实现，Spring主要是使用 JDK 动态代理和 CGLIB 代理。</p>
+<p><code>模板方法模式</code>：主要是一些对数据库操作的类用到，比如 JdbcTemplate、JpaTemplate，因为查询数据库的建立连接、执行查询、关闭连接几个过程，非常适用于模板方法。</p>
+<h3 id="2-谈谈你对IOC-和-AOP-的理解？他们的实现原理是什么？"><a href="#2-谈谈你对IOC-和-AOP-的理解？他们的实现原理是什么？" class="headerlink" title="2.谈谈你对IOC 和 AOP 的理解？他们的实现原理是什么？"></a>2.谈谈你对IOC 和 AOP 的理解？他们的实现原理是什么？</h3><p>IOC 叫做控制反转，指的是通过Spring来管理对象的创建、配置和生命周期，这样相当于把控制权交给了Spring，不需要人工来管理对象之间复杂的依赖关系，这样做的好处就是解耦。在Spring里面，主要提供了 BeanFactory 和 ApplicationContext 两种 IOC 容器，通过他们来实现对 Bean 的管理。</p>
+<p>AOP 叫做面向切面编程，他是一个编程范式，目的就是提高代码的模块性。Spring AOP 基于动态代理的方式实现，如果是实现了接口的话就会使用 JDK 动态代理，反之则使用 CGLIB 代理，Spring中 AOP 的应用主要体现在 事务、日志、异常处理等方面，通过在代码的前后做一些增强处理，可以实现对业务逻辑的隔离，提高代码的模块化能力，同时也是解耦。Spring主要提供了 Aspect 切面、JoinPoint 连接点、PointCut 切入点、Advice 增强等实现方式。</p>
+<h3 id="3-JDK-动态代理和-CGLIB-代理有什么区别？"><a href="#3-JDK-动态代理和-CGLIB-代理有什么区别？" class="headerlink" title="3. JDK 动态代理和 CGLIB 代理有什么区别？"></a>3. JDK 动态代理和 CGLIB 代理有什么区别？</h3><p>JDK 动态代理主要是针对类实现了某个接口，AOP 则会使用 JDK 动态代理。他基于反射的机制实现，生成一个实现同样接口的一个代理类，然后通过重写方法的方式，实现对代码的增强。</p>
+<p>而如果某个类没有实现接口，AOP 则会使用 CGLIB 代理。他的底层原理是基于 asm 第三方框架，通过修改字节码生成成成一个子类，然后重写父类的方法，实现对代码的增强。</p>
+<h3 id="4-Spring-AOP-和-AspectJ-AOP-有什么区别？"><a href="#4-Spring-AOP-和-AspectJ-AOP-有什么区别？" class="headerlink" title="4. Spring AOP 和 AspectJ AOP 有什么区别？"></a>4. Spring AOP 和 AspectJ AOP 有什么区别？</h3><p>Spring AOP 基于动态代理实现，属于运行时增强。</p>
+<p>AspectJ 则属于编译时增强，主要有3种方式：</p>
+<ol>
+<li>编译时织入：指的是增强的代码和源代码我们都有，直接使用 AspectJ 编译器编译就行了，编译之后生成一个新的类，他也会作为一个正常的 Java 类装载到JVM。</li>
+<li>编译后织入：指的是代码已经被编译成 class 文件或者已经打成 jar 包，这时候要增强的话，就是编译后织入，比如你依赖了第三方的类库，又想对他增强的话，就可以通过这种方式。</li>
+</ol>
+<p><img src="https://pic2.zhimg.com/80/v2-815aa5c4c855c23901924d0d4ced5ccd_720w.jpg" alt="img"></p>
+<p>3.加载时织入：指的是在 JVM 加载类的时候进行织入。</p>
+<p>总结下来的话，就是 Spring AOP 只能在运行时织入，不需要单独编译，性能相比 AspectJ 编译织入的方式慢，而 AspectJ 只支持编译前后和类加载时织入，性能更好，功能更加强大。</p>
+<h3 id="5-FactoryBean-和-BeanFactory有什么区别？"><a href="#5-FactoryBean-和-BeanFactory有什么区别？" class="headerlink" title="5. FactoryBean 和 BeanFactory有什么区别？"></a>5. FactoryBean 和 BeanFactory有什么区别？</h3><p>BeanFactory 是 Bean 的工厂， ApplicationContext 的父类，IOC 容器的核心，负责生产和管理 Bean 对象。</p>
+<p>FactoryBean 是 Bean，可以通过实现 FactoryBean 接口定制实例化 Bean 的逻辑，通过代理一个Bean对象，对方法前后做一些操作。</p>
+<h3 id="6-SpringBean的生命周期说说？"><a href="#6-SpringBean的生命周期说说？" class="headerlink" title="6.SpringBean的生命周期说说？"></a>6.SpringBean的生命周期说说？</h3><p>SpringBean 生命周期简单概括为4个阶段：</p>
+<ol>
+<li>实例化，创建一个Bean对象</li>
+<li>填充属性，为属性赋值</li>
+<li>初始化</li>
+</ol>
+<ul>
+<li>如果实现了<code>xxxAware</code>接口，通过不同类型的Aware接口拿到Spring容器的资源</li>
+<li>如果实现了BeanPostProcessor接口，则会回调该接口的<code>postProcessBeforeInitialzation</code>和<code>postProcessAfterInitialization</code>方法</li>
+<li>如果配置了<code>init-method</code>方法，则会执行<code>init-method</code>配置的方法</li>
+</ul>
+<p>4.销毁</p>
+<ul>
+<li><ul>
+<li>容器关闭后，如果Bean实现了<code>DisposableBean</code>接口，则会回调该接口的<code>destroy</code>方法</li>
+<li>如果配置了<code>destroy-method</code>方法，则会执行<code>destroy-method</code>配置的方法</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://pic1.zhimg.com/80/v2-570c6d2e3e902bf809e22f809955586c_720w.jpg" alt="img"></p>
+<h3 id="7-Spring是怎么解决循环依赖的？"><a href="#7-Spring是怎么解决循环依赖的？" class="headerlink" title="7.Spring是怎么解决循环依赖的？"></a>7.Spring是怎么解决循环依赖的？</h3><p>首先，Spring 解决循环依赖有两个前提条件：</p>
+<ol>
+<li>不全是构造器方式的循环依赖</li>
+<li>必须是单例</li>
+</ol>
+<p>基于上面的问题，我们知道Bean的生命周期，本质上解决循环依赖的问题就是三级缓存，通过三级缓存提前拿到未初始化完全的对象。</p>
+<p>第一级缓存：用来保存实例化、初始化都完成的对象</p>
+<p>第二级缓存：用来保存实例化完成，但是未初始化完成的对象</p>
+<p>第三级缓存：用来保存一个对象工厂，提供一个匿名内部类，用于创建二级缓存中的对象</p>
+<p><img src="https://pic3.zhimg.com/80/v2-dbda6a103e41cde4a54548386d6c1cc2_720w.jpg" alt="img"></p>
+<p>假设一个简单的循环依赖场景，A、B互相依赖。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-f20f1e81c8011fd99f723127cacf7430_720w.jpg" alt="img"></p>
+<p>A对象的创建过程：</p>
+<ol>
+<li>创建对象A，实例化的时候把A对象工厂放入三级缓存</li>
+</ol>
+<p><img src="https://pic4.zhimg.com/80/v2-b295374aff4235ee9c0538bf03856217_720w.jpg" alt="img"></p>
+<p>2.A注入属性时，发现依赖B，转而去实例化B</p>
+<p>3.同样创建对象B，注入属性时发现依赖A，一次从一级到三级缓存查询A，从三级缓存通过对象工厂拿到A，把A放入二级缓存，同时删除三级缓存中的A，此时，B已经实例化并且初始化完成，把B放入一级缓存。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-51cb735fc6c02c2225d2f38b9b5b6da9_720w.jpg" alt="img"></p>
+<p>4.接着继续创建A，顺利从一级缓存拿到实例化且初始化完成的B对象，A对象创建也完成，删除二级缓存中的A，同时把A放入一级缓存</p>
+<p>5.最后，一级缓存中保存着实例化、初始化都完成的A、B对象</p>
+<p><img src="https://pic2.zhimg.com/80/v2-a1eaa5d9f8bec23e373dc1b9f86ddb25_720w.jpg" alt="img"></p>
+<p>因此，由于把实例化和初始化的流程分开了，所以如果都是用构造器的话，就没法分离这个操作，所以都是构造器的话就无法解决循环依赖的问题了。</p>
+<h3 id="8-为什么要三级缓存？二级不行吗？"><a href="#8-为什么要三级缓存？二级不行吗？" class="headerlink" title="8. 为什么要三级缓存？二级不行吗？"></a>8. 为什么要三级缓存？二级不行吗？</h3><p>不可以，主要是为了生成代理对象。</p>
+<p>因为三级缓存中放的是生成具体对象的匿名内部类，他可以生成代理对象，也可以是普通的实例对象。</p>
+<p>使用三级缓存主要是为了保证不管什么时候使用的都是一个对象。</p>
+<p>假设只有二级缓存的情况，往二级缓存中放的显示一个普通的Bean对象，<code>BeanPostProcessor</code>去生成代理对象之后，覆盖掉二级缓存中的普通Bean对象，那么多线程环境下可能取到的对象就不一致了。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-e4e9050787017c7272dc313f88af9382_720w.jpg" alt="img"></p>
+<h3 id="9-Spring事务传播机制有哪些？"><a href="#9-Spring事务传播机制有哪些？" class="headerlink" title="9.Spring事务传播机制有哪些？"></a>9.Spring事务传播机制有哪些？</h3><ol>
+<li><strong>PROPAGATION_REQUIRED</strong>：如果当前没有事务，就创建一个新事务，如果当前存在事务，就加入该事务，这也是通常我们的默认选择。</li>
+<li><strong>PROPAGATION_REQUIRES_NEW</strong>：创建新事务，无论当前存不存在事务，都创建新事务。</li>
+<li><strong>PROPAGATION_NESTED</strong>：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则按REQUIRED属性执行。</li>
+<li><strong>PROPAGATION_NOT_SUPPORTED</strong>：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。</li>
+<li><strong>PROPAGATION_NEVER</strong>：以非事务方式执行，如果当前存在事务，则抛出异常。</li>
+<li><strong>PROPAGATION_MANDATORY</strong>：支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就抛出异常。</li>
+<li>*<strong>PROPAGATION_SUPPORTS</strong>：支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就以非事务执行。‘</li>
+</ol>
+<h3 id="10-最后，说说Spring-Boot-启动流程吧？"><a href="#10-最后，说说Spring-Boot-启动流程吧？" class="headerlink" title="10.最后，说说Spring Boot 启动流程吧？"></a>10.最后，说说Spring Boot 启动流程吧？</h3><p>这个流程，网上一搜基本都是这张图了，我也不想再画一遍了。那其实主要的流程就几个步骤：</p>
+<ol>
+<li>准备环境，根据不同的环境创建不同的Environment</li>
+<li>准备、加载上下文，为不同的环境选择不同的Spring Context，然后加载资源，配置Bean</li>
+<li>初始化，这个阶段刷新Spring Context，启动应用</li>
+<li>最后结束流程</li>
+</ol>
+<p><img src="https://pic3.zhimg.com/80/v2-08bc2946bc28d3d29c02a1205291ad3e_720w.jpg" alt="img"></p>
+<p><strong><a href="https://link.zhihu.com/?target=https://developer.aliyun.com/article/782407?utm_content=g_1000268381">原文链接</a></strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/Spring%20%E5%A4%BA%E5%91%BD%E8%BF%9E%E7%8E%AF10%E9%97%AE/" data-id="cl0j84jwu008c04vh0mswg3x4" data-title="Spring 夺命连环10问" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Spring 框架简单介绍" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/Spring%20%E6%A1%86%E6%9E%B6%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T08:07:58.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/Spring%20%E6%A1%86%E6%9E%B6%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/">什么是 Spring 框架?</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="什么是-Spring-框架"><a href="#什么是-Spring-框架" class="headerlink" title="什么是 Spring 框架?"></a>什么是 Spring 框架?</h1><p>Spring 是⼀种轻量级开发框架，旨在提⾼开发⼈员的开发效率以及系统的可维护性。Spring 官 ⽹：<a target="_blank" rel="noopener" href="https://spring.io/%E3%80%82">https://spring.io/。</a></p>
+<p> 我们⼀般说 Spring 框架指的都是 Spring Framework，它是很多模块的集合，使⽤这些模块可以 很⽅便地协助我们进⾏开发。这些模块是：核⼼容器、数据访问&#x2F;集成,、Web、AOP（⾯向切⾯ 编程）、⼯具、消息和测试模块。⽐如：Core Container 中的 Core 组件是Spring 所有组件的核 ⼼，Beans 组件和 Context 组件是实现IOC和依赖注⼊的基础，AOP组件⽤来实现⾯向切⾯编程</p>
+<p>Spring官网列出的 Spring的6个特征:</p>
+<p>1、核心技术︰依赖注入(DI)，面向切面编程(AOP)，事件(events)，资源，i18n，验证，数据绑定，类型转换，SpEL。</p>
+<p>2、测试︰模拟对象，TestContext框架，Spring MVC测试， WebTestClient,</p>
+<p>3、数据访问︰事务DAO支持,JDBC，ORM，编组XML。</p>
+<p>4、Web支持:Spring MVC和Spring WebFlux Web框架。</p>
+<p>5、集成︰远程处理，JMS，JCA，JMX，电子邮件，任务，调度，缓存。</p>
+<p>6、语言: Kotlin，Groovy，动态语言。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/Spring%20%E6%A1%86%E6%9E%B6%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/" data-id="cl0j84jww008h04vh2opl4ogv" data-title="什么是 Spring 框架?" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-SpringMVC" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/SpringMVC/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T08:07:58.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/SpringMVC/">SpringMVC</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Spring-MVC"><a href="#Spring-MVC" class="headerlink" title="Spring MVC"></a>Spring MVC</h1><ul>
+<li>Model1时代:很多学Java后端比较晚的朋友可能并没有接触过Model1模式下的JavaWeb应用开发。在 Model1模式下，整个Web应用几乎全部用JSP页面组成，只用少量的JavaBean来处理数据库连接、访问等操作。这个模式下JSP即是控制层又是表现层。显而易见，这种模式存在很多问题。比如①将控制逻辑和表现逻辑混杂在一起，导致代码重用率极低;②前端和后端相互依赖，难以进行测试并且开发效率极低;</li>
+<li>Model2时代︰学过Servlet并做过相关Demo的朋友应该了解”Java Bean(Model)+JSP (View,)+Servlet (Controller)“这种开发模式,这就是早期的JavaWeb MVC开发模式。Model:系统涉及的数据，也就是 dao和bean。View︰展示模型中的数据，只是用来展示。Controller:处理用户请求都发送给，返回数据给JSP并展示给用户。</li>
+</ul>
+<p>Model2模式下还存在很多问题，Model2的抽象和封装程度还远远不够，使用Model2进行开发时不可避免地会重复造轮子，这就大大降低了程序的可维护性和复用性。于是很多JavaWeb开发相关的MVC框架应运而生比如Struts2，但是Struts2比较笨重。随着Spring轻量级开发框架的流行，Spring生态圈出现了Spring MVC框架, Spring MVC是当前最优秀的MVC框架。相比于Struts2 ，Spring MVC使用更加简单和方便，开发效率更高，并且 Spring MVC运行速度更快。</p>
+<p>MVC是一种设计模式,Spring MVC是一款很优秀的MVC框架。Spring MVC可以帮助我们进行更简洁的Web层的开发，并且它天生与Spring框架集成。Spring MVC下我们一般把后端项目分为Service层(处理业务)、Dao层(数据库操作)、Entity层(实体类)、Controller层(控制层，返回数据给前台页面)。</p>
+<p><img src="/%E7%AE%80%E5%8D%95%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt="简单原理图"></p>
+<p><img src="E:\MyBolg\source_posts\SpringMVC\简单原理图.png" alt="简单原理图"></p>
+<h2 id="SpringMVC-⼯作原理了解吗"><a href="#SpringMVC-⼯作原理了解吗" class="headerlink" title="SpringMVC ⼯作原理了解吗?"></a>SpringMVC ⼯作原理了解吗?</h2><p><img src="/%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt="原理图"></p>
+<p><img src="E:\MyBolg\source_posts\SpringMVC\原理图.png" alt="原理图"></p>
+<p><strong>流程说明（重要）</strong>： </p>
+<ol>
+<li>客户端（浏览器）发送请求，直接请求到 DispatcherServlet 。 </li>
+<li>DispatcherServlet 根据请求信息调⽤ HandlerMapping ，解析请求对应的 Handler 。 </li>
+<li>解析到对应的 Handler （也就是我们平常说的 Controller 控制器）后，开始由 HandlerAdapter 适配器处理。 </li>
+<li>HandlerAdapter 会根据 Handler 来调⽤真正的处理器开处理请求，并处理相应的业务逻 辑。</li>
+<li>处理器处理完业务后，会返回⼀个 ModelAndView 对象， Model 是返回的数据对 象， View 是个逻辑上的 View 。</li>
+<li>ViewResolver 会根据逻辑 View 查找实际的 View 。 </li>
+<li>DispaterServlet 把返回的 Model 传给 View （视图渲染）。 </li>
+<li>把 View 返回给请求者（浏览器)</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/SpringMVC/" data-id="cl0j84jx1008y04vh4gi1dy4j" data-title="SpringMVC" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Spring事务" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/Spring%E4%BA%8B%E5%8A%A1/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T08:07:58.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/Spring%E4%BA%8B%E5%8A%A1/">Spring事务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Spring事务"><a href="#Spring事务" class="headerlink" title="Spring事务"></a>Spring事务</h1><h2 id="Spring管理事务的方式有几种"><a href="#Spring管理事务的方式有几种" class="headerlink" title="Spring管理事务的方式有几种?"></a>Spring管理事务的方式有几种?</h2><ol>
+<li><p>编程式事务，在代码中硬编码。(不推荐使用)</p>
+</li>
+<li><p>声明式事务，在配置文件中配置(推荐使用)</p>
+</li>
+</ol>
+<p>​             <strong>声明式事务又分为两种:</strong></p>
+<ol>
+<li><p>基于XML的声明式事务</p>
+</li>
+<li><p>基于注解的声明式事务</p>
+</li>
+</ol>
+<h2 id="Spring-事务中的隔离级别有哪几种"><a href="#Spring-事务中的隔离级别有哪几种" class="headerlink" title="Spring 事务中的隔离级别有哪几种?"></a>Spring 事务中的隔离级别有哪几种?</h2><p><strong>TransactionDefinition接口中定义了五个表示隔离级别的常量:</strong></p>
+<ul>
+<li>TransactionDefinition.ISOLATION_DEFAULT:  使用后端数据库默认的隔离级别，Mysql默认采用的REPEATABLE_READ隔离级别，Oracle默认采用的READ_COMMITTED隔离级别.</li>
+<li>TransactionDefinition.ISOLATION_READ_UNCOMMITTED:  最低的隔离级别，允许<strong>读取尚未提交的数据变更</strong>，可能会导致脏读、幻读或不可重复读</li>
+<li>TransactionDefinition.IlSOLATION_READ_COMMITTED:  允许<strong>读取并发事务已经提交的数据</strong>，可以阻止脏读，但是幻读或不可重复读仍有可能发生</li>
+<li>TransactionDefinition.IlSOLATION_REPEATABLE_READ:  对同一字段的多次读取结果都是一致的，除非数据是被本身事务自己所修改，可以阻止脏读和不可重复读，但幻读仍有可能发生。</li>
+<li>TransactionDefinition.ISOLATION_SERIALIZABLE:  最高的隔离级别，完全服从ACID的隔离级别。所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。但是这将严重影响程序的性能。通常情况下也不会用到该级别。</li>
+</ul>
+<h2 id="Spring事务中哪几种事务传播行为"><a href="#Spring事务中哪几种事务传播行为" class="headerlink" title="Spring事务中哪几种事务传播行为?"></a>Spring事务中哪几种事务传播行为?</h2><h3 id="支持当前事务的情况"><a href="#支持当前事务的情况" class="headerlink" title="支持当前事务的情况:"></a>支持当前事务的情况:</h3><p>TransactionDefinition.PROPAGATION_REQUIRED:如果当前存在事务，则加入该事务;如果当前没有事务，则创建一个新的事务。</p>
+<p> TransactionDefinition.PROPAGATION_SUPPORTS:如果当前存在事务，则加入该事务;如果当前没有事务，则以非事务的方式继续运行。</p>
+<p>TransactionDefinition.PROPAGATION_MANDATORY:如果当前存在事务，则加入该事务;如果当前没有事务，则抛出异常。(mandatory:强制性)</p>
+<h3 id="不支持当前事务的情况"><a href="#不支持当前事务的情况" class="headerlink" title="不支持当前事务的情况:"></a>不支持当前事务的情况:</h3><p>TransactionDefinition.PROPAGATION_REQUIRES_NEW︰创建一个新的事务，如果当前存在事务，则把当前事务挂起。</p>
+<p>TransactionDefinition.PROPAGATION_NOT_SUPPORTED:以非事务方式运行，如果当前存在事务，则把当前事务挂起。</p>
+<p>TransactionDefinition.PROPAGATION_NEVER:以非事务方式运行，如果当前存在事务，则抛出异常。</p>
+<h3 id="其他情况"><a href="#其他情况" class="headerlink" title="其他情况:"></a>其他情况:</h3><p>TransactionDefinition.PROPAGATION_NESTED:如果当前存在事务，则创建一个事务作为当前事务的嵌套事务来运行﹔如果当前没有事务，则该取值等价于<br>TransactionDefinition.PROPAGATION_REQUIRED。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/Spring%E4%BA%8B%E5%8A%A1/" data-id="cl0j84jx4009604vhdvz75ryz" data-title="Spring事务" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Reids最常问面试题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/Reids%E6%9C%80%E5%B8%B8%E9%97%AE%E9%9D%A2%E8%AF%95%E9%A2%98/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T08:07:58.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/Reids%E6%9C%80%E5%B8%B8%E9%97%AE%E9%9D%A2%E8%AF%95%E9%A2%98/">Reids最常问面试题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="1、什么是redis"><a href="#1、什么是redis" class="headerlink" title="1、什么是redis?"></a>1、什么是redis?</h2><p>redis是一个高性能的key-value数据库，它是完全开源免费的，而且redis是一个NOSQL类型数据库，是为了解决高并发、高扩展，大数据存储等一系列的问题而产生的数据库解决方案，是一个非关系型的数据库</p>
+<h2 id="2、Reids的特点"><a href="#2、Reids的特点" class="headerlink" title="2、Reids的特点"></a>2、Reids的特点</h2><p>Redis本质上是一个Key-Value类型的内存数据库，很像memcached，整个数据库统统加载在内存当中进行操作，定期通过异步操作把数据库数据flush到硬盘上进行保存。因为是纯内存操作，Redis的性能非常出色，每秒可以处理超过 10万次读写操作，是已知性能最快的Key-Value DB。</p>
+<p>Redis的出色之处不仅仅是性能，Redis最大的魅力是支持保存多种数据结构，此外单个value的最大限制是1GB，不像 memcached只能保存1MB的数据，因此Redis可以用来实现很多有用的功能，比方说用他的List来做FIFO双向链表，实现一个轻量级的高性 能消息队列服务，用他的Set可以做高性能的tag系统等等。另外Redis也可以对存入的Key-Value设置expire时间，因此也可以被当作一 个功能加强版的memcached来用。</p>
+<p>Redis的主要缺点是数据库容量受到物理内存的限制，不能用作海量数据的高性能读写，因此Redis适合的场景主要局限在较小数据量的高性能操作和运算上。</p>
+<h2 id="3、使用redis有哪些好处？"><a href="#3、使用redis有哪些好处？" class="headerlink" title="3、使用redis有哪些好处？"></a>3、使用redis有哪些好处？</h2><p><strong>3.1</strong> 速度快，因为数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)</p>
+<p><strong>3.2</strong> 支持丰富数据类型，支持string，list，set，sorted set，hash</p>
+<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p><strong>常用命令</strong> ：set&#x2F;get&#x2F;decr&#x2F;incr&#x2F;mget等；</p>
+<p><strong>应用场景</strong> ：String是最常用的一种数据类型，普通的key&#x2F;value存储都可以归为此类；</p>
+<p>实现方式：String在redis内部存储默认就是一个字符串，被redisObject所引用，当遇到incr、decr等操作时会转成数值型进行计算，此时redisObject的encoding字段为int。</p>
+<h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><p><strong>常用命令</strong> ：hget&#x2F;hset&#x2F;hgetall等</p>
+<p><strong>应用场景</strong> ：我们要存储一个用户信息对象数据，其中包括用户ID、用户姓名、年龄和生日，通过用户ID我们希望获取该用户的姓名或者年龄或者生日；</p>
+<p>实现方式：Redis的Hash实际是内部存储的Value为一个HashMap，并提供了直接存取这个Map成员的接口。如图所示，Key是用户ID, value是一个Map。这个Map的key是成员的属性名，value是属性值。这样对数据的修改和存取都可以直接通过其内部Map的Key(Redis里称内部Map的key为field)，也就是通过 key(用户ID) + field(属性标签) 就可以操作对应属性数据。当前HashMap的实现有两种方式：当HashMap的成员比较少时Redis为了节省内存会采用类似一维数组的方式来紧凑存储，而不会采用真正的HashMap结构，这时对应的value的redisObject的encoding为zipmap，当成员数量增大时会自动转成真正的HashMap,此时redisObject的encoding字段为int。</p>
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><p><strong>常用命令</strong> ：lpush&#x2F;rpush&#x2F;lpop&#x2F;rpop&#x2F;lrange等；</p>
+<p><strong>应用场景</strong> ：Redis list的<strong>应用场景</strong> 非常多，也是Redis最重要的数据结构之一，比如twitter的关注列表，粉丝列表等都可以用Redis的list结构来实现；</p>
+<p>实现方式：Redis list的实现为一个双向链表，即可以支持反向查找和遍历，更方便操作，不过带来了部分额外的内存开销，Redis内部的很多实现，包括发送缓冲队列等也都是用的这个数据结构。</p>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p><strong>常用命令</strong> ：sadd&#x2F;spop&#x2F;smembers&#x2F;sunion等；</p>
+<p><strong>应用场景</strong> ：Redis set对外提供的功能与list类似是一个列表的功能，特殊之处在于set是可以自动排重的，当你需要存储一个列表数据，又不希望出现重复数据时，set是一个很好的选择，并且set提供了判断某个成员是否在一个set集合内的重要接口，这个也是list所不能提供的；</p>
+<p>实现方式：set 的内部实现是一个 value永远为null的HashMap，实际就是通过计算hash的方式来快速排重的，这也是set能提供判断一个成员是否在集合内的原因。</p>
+<h3 id="Sorted-Set"><a href="#Sorted-Set" class="headerlink" title="Sorted Set"></a>Sorted Set</h3><p><strong>常用命令</strong> ：zadd&#x2F;zrange&#x2F;zrem&#x2F;zcard等；</p>
+<p><strong>应用场景</strong> ：Redis sorted set的使用场景与set类似，区别是set不是自动有序的，而sorted set可以通过用户额外提供一个优先级(score)的参数来为成员排序，并且是插入有序的，即自动排序。当你需要一个有序的并且不重复的集合列表，那么可以选择sorted set数据结构，比如twitter 的public timeline可以以发表时间作为score来存储，这样获取时就是自动按时间排好序的。</p>
+<p>实现方式：Redis sorted set的内部使用HashMap和跳跃表(SkipList)来保证数据的存储和有序，HashMap里放的是成员到score的映射，而跳跃表里存放的是所有的成员，排序依据是HashMap里存的score,使用跳跃表的结构可以获得比较高的查找效率，并且在实现上比较简单。</p>
+<h2 id="4、redis相比memcached有哪些优势？"><a href="#4、redis相比memcached有哪些优势？" class="headerlink" title="4、redis相比memcached有哪些优势？"></a>4、redis相比memcached有哪些优势？</h2><p><strong>4.1</strong> memcached所有的值均是简单的字符串，redis作为其替代者，支持更为丰富的数据类型</p>
+<p><strong>4.2</strong> redis的速度比memcached快很多 </p>
+<p>4.3 redis可以持久化其数据</p>
+<h2 id="5、Memcache与Redis的区别都有哪些？"><a href="#5、Memcache与Redis的区别都有哪些？" class="headerlink" title="5、Memcache与Redis的区别都有哪些？"></a>5、Memcache与Redis的区别都有哪些？</h2><p><strong>5.1</strong> 存储方式 Memecache把数据全部存在内存之中，断电后会挂掉，数据不能超过内存大小。Redis有部份存在硬盘上，这样能保证数据的持久性。</p>
+<p><strong>5.2</strong> 数据支持类型 Memcache对数据类型支持相对简单。Redis有复杂的数据类型。</p>
+<p><strong>5.3</strong> 使用底层模型不同 它们之间底层实现方式 以及与客户端之间通信的应用协议不一样。Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求。</p>
+<h2 id="6、redis适用于的场景"><a href="#6、redis适用于的场景" class="headerlink" title="6、redis适用于的场景?"></a>6、redis适用于的场景?</h2><p>Redis最适合所有数据in-momory的场景，如：</p>
+<p><strong>6.1 会话缓存（Session Cache）</strong></p>
+<p>最常用的一种使用Redis的情景是会话缓存（session cache）。用Redis缓存会话比其他存储（如Memcached）的优势在于：Redis提供持久化。</p>
+<p><strong>6.2 全页缓存（FPC）</strong></p>
+<p>除基本的会话token之外，Redis还提供很简便的FPC平台。回到一致性问题，即使重启了Redis实例，因为有磁盘的持久化，用户也不会看到页面加载速度的下降，这是一个极大改进，类似PHP本地FPC。</p>
+<p><strong>6.3 队列</strong></p>
+<p>Reids在内存存储引擎领域的一大优点是提供 list 和 set 操作，这使得Redis能作为一个很好的消息队列平台来使用。Redis作为队列使用的操作，就类似于本地程序语言（如Python）对 list 的 push&#x2F;pop 操作。</p>
+<p>如果你快速的在Google中搜索“Redis queues”，你马上就能找到大量的开源项目，这些项目的目的就是利用Redis创建非常好的后端工具，以满足各种队列需求。例如，Celery有一个后台就是使用Redis作为broker，你可以从这里去查看。</p>
+<p><strong>6.4 排行榜&#x2F;计数器</strong></p>
+<p>Redis在内存中对数字进行递增或递减的操作实现的非常好。集合（Set）和有序集合（Sorted Set）也使得我们在执行这些操作的时候变的非常简单，Redis只是正好提供了这两种数据结构。所以，我们要从排序集合中获取到排名最靠前的10个用户–我们称之为“user_scores”，我们只需要像下面一样执行即可：</p>
+<p>当然，这是假定你是根据你用户的分数做递增的排序。如果你想返回用户及用户的分数，你需要这样执行：</p>
+<p>ZRANGE user_scores 0 10 WITHSCORES</p>
+<p>Agora Games就是一个很好的例子，用Ruby实现的，它的排行榜就是使用Redis来存储数据的，你可以在这里看到。</p>
+<p><strong>6.5 发布&#x2F;订阅</strong></p>
+<p>最后（但肯定不是最不重要的）是Redis的发布&#x2F;订阅功能。发布&#x2F;订阅的使用场景确实非常多。</p>
+<h2 id="7、redis的缓存失效策略和主键失效机制"><a href="#7、redis的缓存失效策略和主键失效机制" class="headerlink" title="7、redis的缓存失效策略和主键失效机制"></a>7、redis的缓存失效策略和主键失效机制</h2><p>作为缓存系统都要定期清理无效数据，就需要一个主键失效和淘汰策略.</p>
+<p>在Redis当中，有生存期的key被称为volatile。在创建缓存时，要为给定的key设置生存期，当key过期的时候（生存期为0），它可能会被删除。</p>
+<p><strong>1、影响生存时间的一些操作</strong></p>
+<p>生存时间可以通过使用 DEL 命令来删除整个 key 来移除，或者被 SET 和 GETSET 命令覆盖原来的数据，也就是说，修改key对应的value和使用另外相同的key和value来覆盖以后，当前数据的生存时间不同。</p>
+<p>比如说，对一个 key 执行INCR命令，对一个列表进行LPUSH命令，或者对一个哈希表执行HSET命令，这类操作都不会修改 key 本身的生存时间。另一方面，如果使用RENAME对一个 key 进行改名，那么改名后的 key的生存时间和改名前一样。</p>
+<p>RENAME命令的另一种可能是，尝试将一个带生存时间的 key 改名成另一个带生存时间的 another_key ，这时旧的 another_key (以及它的生存时间)会被删除，然后旧的 key 会改名为 another_key ，因此，新的 another_key 的生存时间也和原本的 key 一样。使用PERSIST命令可以在不删除 key 的情况下，移除 key 的生存时间，让 key 重新成为一个persistent key 。</p>
+<p><strong>2、如何更新生存时间</strong></p>
+<p>可以对一个已经带有生存时间的 key 执行EXPIRE命令，新指定的生存时间会取代旧的生存时间。过期时间的精度已经被控制在1ms之内，主键失效的时间复杂度是O（1），</p>
+<p>EXPIRE和TTL命令搭配使用，TTL可以查看key的当前生存时间。设置成功返回 1；当 key 不存在或者不能为 key 设置生存时间时，返回 0 。</p>
+<p>最大缓存配置 在 redis 中，允许用户设置最大使用内存大小 server.maxmemory 默认为0，没有指定最大缓存，如果有新的数据添加，超过最大内存，则会使redis崩溃，所以一定要设置。redis 内存数据集大小上升到一定大小的时候，就会实行数据淘汰策略。redis 提供 6种数据淘汰策略：</p>
+<p><strong>volatile-lru：</strong> 从已设置过期时间的数据集（ <code>server.db\[i\].expires</code>）中挑选最近最少使用的数据淘汰</p>
+<p><strong>volatile-ttl：</strong> 从已设置过期时间的数据集（ <code>server.db\[i\].expires</code>）中挑选将要过期的数据淘汰</p>
+<p><strong>volatile-random：</strong> 从已设置过期时间的数据集（ <code>server.db\[i\].expires</code>）中任意选择数据淘汰</p>
+<p><strong>allkeys-lru：</strong> 从数据集（ <code>server.db\[i\].dict</code>）中挑选最近最少使用的数据淘汰</p>
+<p><strong>allkeys-random：</strong> 从数据集（ <code>server.db\[i\].dict</code>）中任意选择数据淘汰</p>
+<p><strong>no-enviction（驱逐）：</strong> 禁止驱逐数据</p>
+<p>注意这里的6种机制，volatile和allkeys规定了是对已设置过期时间的数据集淘汰数据还是从全部数据集淘汰数据，后面的lru、ttl以及random是三种不同的淘汰策略，再加上一种no-enviction永不回收的策略。</p>
+<p>使用策略规则：</p>
+<p><strong>1、</strong> 如果数据呈现幂律分布，也就是一部分数据访问频率高，一部分数据访问频率低，则使用allkeys-lru<strong>2、</strong> 如果数据呈现平等分布，也就是所有的数据访问频率都相同，则使用allkeys-random</p>
+<p>三种数据淘汰策略：</p>
+<p>ttl和random比较容易理解，实现也会比较简单。主要是Lru最近最少使用淘汰策略，设计上会对key 按失效时间排序，然后取最先失效的key进行淘汰</p>
+<h2 id="8、为什么redis需要把所有数据放到内存中"><a href="#8、为什么redis需要把所有数据放到内存中" class="headerlink" title="8、为什么redis需要把所有数据放到内存中?"></a>8、为什么redis需要把所有数据放到内存中?</h2><p>Redis为了达到最快的读写速度将数据都读到内存中，并通过异步的方式将数据写入磁盘。所以redis具有快速和数据持久化的特征。如果不将数据放在内存中，磁盘I&#x2F;O速度为严重影响redis的性能。在内存越来越便宜的今天，redis将会越来越受欢迎。</p>
+<p>如果设置了最大使用的内存，则数据已有记录数达到内存限值后不能继续插入新值。</p>
+<h2 id="9、Redis是单进程单线程的"><a href="#9、Redis是单进程单线程的" class="headerlink" title="9、Redis是单进程单线程的"></a>9、Redis是单进程单线程的</h2><p>redis利用队列技术将并发访问变为串行访问，消除了传统数据库串行控制的开销</p>
+<h2 id="10、redis的并发竞争问题如何解决"><a href="#10、redis的并发竞争问题如何解决" class="headerlink" title="10、redis的并发竞争问题如何解决?"></a>10、redis的并发竞争问题如何解决?</h2><p>Redis为单进程单线程模式，采用队列模式将并发访问变为串行访问。Redis本身没有锁的概念，Redis对于多个客户端连接并不存在竞争，但是在Jedis客户端对Redis进行并发访问时会发生连接超时、数据转换错误、阻塞、客户端关闭连接等问题，这些问题均是由于客户端连接混乱造成。对此有2种解决方法：</p>
+<p><strong>10.1</strong> 客户端角度，为保证每个客户端间正常有序与Redis进行通信，对连接进行池化，同时对客户端读写Redis操作采用内部锁synchronized。</p>
+<p><strong>10.2</strong> 服务器角度，利用setnx实现锁。</p>
+<p>注：对于第一种，需要应用程序自己处理资源的同步，可以使用的方法比较通俗，可以使用synchronized也可以使用lock；第二种需要用到Redis的setnx命令，但是需要注意一些问题。</p>
+<h2 id="11、redis常见性能问题和解决方案"><a href="#11、redis常见性能问题和解决方案" class="headerlink" title="11、redis常见性能问题和解决方案"></a>11、redis常见性能问题和解决方案</h2><p><strong>11.1</strong> Master写内存快照，save命令调度rdbSave函数，会阻塞主线程的工作，当快照比较大时对性能影响是非常大的，会间断性暂停服务，所以Master最好不要写内存快照。</p>
+<p><strong>11.2</strong> Master AOF持久化，如果不重写AOF文件，这个持久化方式对性能的影响是最小的，但是AOF文件会不断增大，AOF文件过大会影响Master重启的恢复速度。Master最好不要做任何持久化工作，包括内存快照和AOF日志文件，特别是不要启用内存快照做持久化,如果数据比较关键，某个Slave开启AOF备份数据，策略为每秒同步一次。</p>
+<p><strong>11.3</strong> Master调用BGREWRITEAOF重写AOF文件，AOF在重写的时候会占大量的CPU和内存资源，导致服务load过高，出现短暂服务暂停现象。</p>
+<p><strong>11.4</strong> Redis主从复制的性能问题，为了主从复制的速度和连接的稳定性，Slave和Master最好在同一个局域网内。</p>
+<h2 id="12、redis事物的了解CAS-check-and-set-操作实现乐观锁"><a href="#12、redis事物的了解CAS-check-and-set-操作实现乐观锁" class="headerlink" title="12、redis事物的了解CAS(check-and-set 操作实现乐观锁 )?"></a>12、redis事物的了解CAS(check-and-set 操作实现乐观锁 )?</h2><p>和众多其它数据库一样，Redis作为NoSQL数据库也同样提供了事务机制。在Redis中，MULTI&#x2F;EXEC&#x2F;DISCARD&#x2F;WATCH这四个命令是我们实现事务的基石。相信对有关系型数据库开发经验的开发者而言这一概念并不陌生，即便如此，我们还是会简要的列出</p>
+<p>Redis中</p>
+<p><strong>事务的实现特征：</strong></p>
+<p><strong>12.1</strong> 在事务中的所有命令都将会被串行化的顺序执行，事务执行期间，Redis不会再为其它客户端的请求提供任何服务，从而保证了事物中的所有命令被原子的执行。</p>
+<p><strong>12.2</strong> 和关系型数据库中的事务相比，在Redis事务中如果有某一条命令执行失败，其后的命令仍然会被继续执行。</p>
+<p>12.3 我们可以通过MULTI命令开启一个事务，有关系型数据库开发经验的人可以将其理解为”BEGIN TRANSACTION”语句。在该语句之后执行的命令都将被视为事务之内的操作，最后我们可以通过执行EXEC&#x2F;DISCARD命令来提交&#x2F;回滚该事务内的所有操作。这两个Redis命令可被视为等同于关系型数据库中的COMMIT&#x2F;ROLLBACK语句。</p>
+<p><strong>12.4</strong> 在事务开启之前，如果客户端与服务器之间出现通讯故障并导致网络断开，其后所有待执行的语句都将不会被服务器执行。然而如果网络中断事件是发生在客户端执行EXEC命令之后，那么该事务中的所有命令都会被服务器执行。</p>
+<p><strong>12.5</strong> 当使用Append-Only模式时，Redis会通过调用系统函数write将该事务内的所有写操作在本次调用中全部写入磁盘。然而如果在写入的过程中出现系统崩溃，如电源故障导致的宕机，那么此时也许只有部分数据被写入到磁盘，而另外一部分数据却已经丢失。Redis服务器会在重新启动时执行一系列必要的一致性检测，一旦发现类似问题，就会立即退出并给出相应的错误提示。此时，我们就要充分利用Redis工具包中提供的redis-check-aof工具，该工具可以帮助我们定位到数据不一致的错误，并将已经写入的部分数据进行回滚。修复之后我们就可以再次重新启动Redis服务器了。</p>
+<h2 id="13、WATCH命令和基于CAS的乐观锁"><a href="#13、WATCH命令和基于CAS的乐观锁" class="headerlink" title="13、WATCH命令和基于CAS的乐观锁?"></a>13、WATCH命令和基于CAS的乐观锁?</h2><p>在Redis的事务中，WATCH命令可用于提供CAS(check-and-set)功能。假设我们通过WATCH命令在事务执行之前监控了多个Keys，倘若在WATCH之后有任何Key的值发生了变化，EXEC命令执行的事务都将被放弃，同时返回Null multi-bulk应答以通知调用者事务</p>
+<p>执行失败。例如，我们再次假设Redis中并未提供incr命令来完成键值的原子性递增，如果要实现该功能，我们只能自行编写相应的代码。其伪码如下：</p>
+<p>val &#x3D; GET mykey val &#x3D; val + 1 SET mykey $val</p>
+<p>以上代码只有在单连接的情况下才可以保证执行结果是正确的，因为如果在同一时刻有多个客户端在同时执行该段代码，那么就会出现多线程程序中经常出现的一种错误场景–竞态争用(race condition)。比如，客户端A和B都在同一时刻读取了mykey的原有值，假设该值为10，此后两个客户端又均将该值加一后set回Redis服务器，这样就会导致mykey的结果为11，而不是我们认为的12。为了解决类似的问题，我们需要借助WATCH命令的帮助，见如下代码：</p>
+<p>WATCH mykey val &#x3D; GET mykey val &#x3D; val + 1 MULTI SET mykey $val EXEC</p>
+<p>和此前代码不同的是，新代码在获取mykey的值之前先通过WATCH命令监控了该键，此后又将set命令包围在事务中，这样就可以有效的保证每个连接在执行EXEC之前，如果当前连接获取的mykey的值被其它连接的客户端修改，那么当前连接的EXEC命令将执行失败。这样调用者在判断返回值后就可以获悉val是否被重新设置成功。</p>
+<h2 id="14、使用过Redis分布式锁么，它是什么回事？"><a href="#14、使用过Redis分布式锁么，它是什么回事？" class="headerlink" title="14、使用过Redis分布式锁么，它是什么回事？"></a>14、使用过Redis分布式锁么，它是什么回事？</h2><p>先拿setnx来争抢锁，抢到之后，再用expire给锁加一个过期时间防止锁忘记了释放。</p>
+<p>这时候对方会告诉你说你回答得不错，然后接着问如果在setnx之后执行expire之前进程意外crash或者要重启维护了，那会怎么样？</p>
+<p>这时候你要给予惊讶的反馈：唉，是喔，这个锁就永远得不到释放了。紧接着你需要抓一抓自己得脑袋，故作思考片刻，好像接下来的结果是你主动思考出来的，然后回答：我记得set指令有非常复杂的参数，这个应该是可以同时把setnx和expire合成一条指令来用的！对方这时会显露笑容，心里开始默念：摁，这小子还不错。</p>
+<h2 id="15、假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？"><a href="#15、假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？" class="headerlink" title="15、假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？"></a>15、假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？</h2><p>使用keys指令可以扫出指定模式的key列表。</p>
+<p>对方接着追问：如果这个redis正在给线上的业务提供服务，那使用keys指令会有什么问题？</p>
+<p>这个时候你要回答redis关键的一个特性：redis的单线程的。keys指令会导致线程阻塞一段时间，线上服务会停顿，直到指令执行完毕，服务才能恢复。这个时候可以使用scan指令，scan指令可以无阻塞的提取出指定模式的key列表，但是会有一定的重复概率，在客户端做一次去重就可以了，但是整体所花费的时间会比直接用keys指令长。</p>
+<h2 id="16、使用过Redis做异步队列么，你是怎么用的？"><a href="#16、使用过Redis做异步队列么，你是怎么用的？" class="headerlink" title="16、使用过Redis做异步队列么，你是怎么用的？"></a>16、使用过Redis做异步队列么，你是怎么用的？</h2><p>一般使用list结构作为队列，rpush生产消息，lpop消费消息。当lpop没有消息的时候，要适当sleep一会再重试。</p>
+<p>如果对方追问可不可以不用sleep呢？list还有个指令叫blpop，在没有消息的时候，它会阻塞住直到消息到来。</p>
+<p>如果对方追问能不能生产一次消费多次呢？使用pub&#x2F;sub主题订阅者模式，可以实现1:N的消息队列。</p>
+<p>如果对方追问pub&#x2F;sub有什么缺点？在消费者下线的情况下，生产的消息会丢失，得使用专业的消息队列如rabbitmq等。</p>
+<p>如果对方追问redis如何实现延时队列？我估计现在你很想把面试官一棒打死如果你手上有一根棒球棍的话，怎么问的这么详细。但是你很克制，然后神态自若的回答道：使用sortedset，拿时间戳作为score，消息内容作为key调用zadd来生产消息，消费者用zrangebyscore指令获取N秒之前的数据轮询进行处理。</p>
+<p>到这里，面试官暗地里已经对你竖起了大拇指。但是他不知道的是此刻你却竖起了中指，在椅子背后。</p>
+<h2 id="17、如果有大量的key需要设置同一时间过期，一般需要注意什么？"><a href="#17、如果有大量的key需要设置同一时间过期，一般需要注意什么？" class="headerlink" title="17、如果有大量的key需要设置同一时间过期，一般需要注意什么？"></a>17、如果有大量的key需要设置同一时间过期，一般需要注意什么？</h2><p>如果大量的key过期时间设置的过于集中，到过期的那个时间点，redis可能会出现短暂的卡顿现象。一般需要在时间上加一个随机值，使得过期时间分散一些。</p>
+<h2 id="18、Redis如何做持久化的？"><a href="#18、Redis如何做持久化的？" class="headerlink" title="18、Redis如何做持久化的？"></a>18、Redis如何做持久化的？</h2><p>bgsave做镜像全量持久化，aof做增量持久化。因为bgsave会耗费较长时间，不够实时，在停机的时候会导致大量丢失数据，所以需要aof来配合使用。在redis实例重启时，会使用bgsave持久化文件重新构建内存，再使用aof重放近期的操作指令来实现完整恢复重启之前的状态。</p>
+<p>对方追问那如果突然机器掉电会怎样？取决于aof日志sync属性的配置，如果不要求性能，在每条写指令时都sync一下磁盘，就不会丢失数据。但是在高性能的要求下每次都sync是不现实的，一般都使用定时sync，比如1s1次，这个时候最多就会丢失1s的数据。</p>
+<p>对方追问bgsave的原理是什么？你给出两个词汇就可以了，fork和cow。fork是指redis通过创建子进程来进行bgsave操作，cow指的是copy on write，子进程创建后，父子进程共享数据段，父进程继续提供读写服务，写脏的页面数据会逐渐和子进程分离开来。</p>
+<h2 id="19、Pipeline有什么好处，为什么要用pipeline？"><a href="#19、Pipeline有什么好处，为什么要用pipeline？" class="headerlink" title="19、Pipeline有什么好处，为什么要用pipeline？"></a>19、Pipeline有什么好处，为什么要用pipeline？</h2><p>可以将多次IO往返的时间缩减为一次，前提是pipeline执行的指令之间没有因果相关性。使用redis-benchmark进行压测的时候可以发现影响redis的QPS峰值的一个重要因素是pipeline批次指令的数目。</p>
+<h2 id="20、Redis的同步机制了解么？"><a href="#20、Redis的同步机制了解么？" class="headerlink" title="20、Redis的同步机制了解么？"></a>20、Redis的同步机制了解么？</h2><p>Redis可以使用主从同步，从从同步。第一次同步时，主节点做一次bgsave，并同时将后续修改操作记录到内存buffer，待完成后将rdb文件全量同步到复制节点，复制节点接受完成后将rdb镜像加载到内存。加载完成后，再通知主节点将期间修改的操作记录同步到复制节点进行重放就完成了同步过程。</p>
+<h2 id="21、是否使用过Redis集群，集群的原理是什么？"><a href="#21、是否使用过Redis集群，集群的原理是什么？" class="headerlink" title="21、是否使用过Redis集群，集群的原理是什么？"></a>21、是否使用过Redis集群，集群的原理是什么？</h2><p>Redis Sentinal着眼于高可用，在master宕机时会自动将slave提升为master，继续提供服务。</p>
+<p>Redis Cluster着眼于扩展性，在单个redis内存不足时，使用Cluster进行分片存储。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/Reids%E6%9C%80%E5%B8%B8%E9%97%AE%E9%9D%A2%E8%AF%95%E9%A2%98/" data-id="cl0j84jyj00dz04vh7odk933b" data-title="Reids最常问面试题" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Spring bean" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/Spring%20bean/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T07:19:09.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Spring/">Spring</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/Spring%20bean/">Spring bean</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Spring-bean"><a href="#Spring-bean" class="headerlink" title="Spring bean"></a>Spring bean</h1><h2 id="Spring中的-bean的作用域有哪些"><a href="#Spring中的-bean的作用域有哪些" class="headerlink" title="Spring中的 bean的作用域有哪些?"></a>Spring中的 bean的作用域有哪些?</h2><ul>
+<li>**singleton **:唯一 bean 实例,Spring 中的bean 默认都是单例的。</li>
+<li><strong>prototype</strong> :每次请求都会创建一个新的bean实例。</li>
+<li><strong>request</strong> :每一次HTTP请求都会产生一个新的bean，该bean仅在当前HTTP request内有效。</li>
+<li><strong>session</strong>:每一次HTTP请求都会产生一个新的bean，该bean仅在当前HTTP session内有效。</li>
+<li><strong>global-session</strong>:全局session作用域，仅仅在基于portlet的web应用中才有意义，Spring5已经没有了。Portlet是能够生成语义代码(例如:HTML)片段的小型Java Web插件。它们基于portlet容器，可以像servlet一样处理HTTP请求。但是，与servlet 不同，每个portlet都有不同的会话</li>
+</ul>
+<h2 id="Spring-中的单例-bean-的线程安全问题了解吗？"><a href="#Spring-中的单例-bean-的线程安全问题了解吗？" class="headerlink" title="Spring 中的单例 bean 的线程安全问题了解吗？"></a>Spring 中的单例 bean 的线程安全问题了解吗？</h2><p> ⼤部分时候我们并没有在系统中使⽤多线程，所以很少有⼈会关注这个问题。单例 bean 存在线 程问题，主要是因为当多个线程操作同⼀个对象的时候，对这个对象的⾮静态成员变量的写操作 会存在线程安全问题。 </p>
+<p>常⻅的有两种解决办法：</p>
+<ol>
+<li>在Bean对象中尽量避免定义可变的成员变量（不太现实）。 </li>
+<li>在类中定义⼀个ThreadLocal成员变量，将需要的可变成员变量保存在 ThreadLocal 中（推 荐的⼀种⽅式）。</li>
+</ol>
+<h2 id="Component-和-Bean-的区别是什么？"><a href="#Component-和-Bean-的区别是什么？" class="headerlink" title="@Component 和 @Bean 的区别是什么？"></a>@Component 和 @Bean 的区别是什么？</h2><ol>
+<li><p>作用对象不同: <code>@Component</code>注解作用于类，而<code>@Bean</code>注解作用于方法。</p>
+</li>
+<li><p><code>@Component</code>通常是通过类路径扫描来自动侦测以及自动装配到Spring容器中（我们可以使用@ComponentScan注解定义要扫描的路径从中找出标识了需要装配的类自动装配到Spring 的bean容器中)。<code>@Bean</code>注解通常是我们在标有该注解的方法中定义产生这个bean，<code>@Bean</code>告诉了Spring这是某个类的示例，当我需要用它的时候还给我。</p>
+</li>
+<li><p><code>@Bean</code>注解比<code>@Component</code>注解的自定义性更强，而且很多地方我们只能通过<code>@Bean</code>注解来注册bean。比如当我们引用第三方库中的类需要装配到Spring容器时，则只能通过<code>@Bean</code>来实现。</p>
+</li>
+</ol>
+<p><code>@Bean</code> 注解使⽤示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig</span> &#123;</span><br><span class="line">     <span class="meta">@Bean</span></span><br><span class="line">     <span class="keyword">public</span> TransferService <span class="title function_">transferService</span><span class="params">()</span> &#123;</span><br><span class="line">     		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">TransferServiceImpl</span>();</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上⾯的代码相当于下⾯的 xml 配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;beans&gt;</span><br><span class="line"> 	&lt;bean id=<span class="string">&quot;transferService&quot;</span> class=<span class="string">&quot;com.acme.TransferServiceImpl&quot;</span>/&gt;</span><br><span class="line">&lt;/beans</span><br></pre></td></tr></table></figure>
+
+<p>下⾯这个例⼦是通过 <code>@Component </code>⽆法实现的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> OneService <span class="title function_">getService</span><span class="params">(status)</span> &#123;</span><br><span class="line">     <span class="keyword">case</span> (status) &#123;</span><br><span class="line">         when <span class="number">1</span>:</span><br><span class="line">         	<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">serviceImpl1</span>();</span><br><span class="line">         when <span class="number">2</span>:</span><br><span class="line">         	<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">serviceImpl2</span>();</span><br><span class="line">         when <span class="number">3</span>:</span><br><span class="line">         	<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">serviceImpl3</span>();</span><br><span class="line"> 	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="将一个类声明为Spring的bean的注解有哪些"><a href="#将一个类声明为Spring的bean的注解有哪些" class="headerlink" title="将一个类声明为Spring的bean的注解有哪些?"></a>将一个类声明为Spring的bean的注解有哪些?</h2><p>一般使用@Autowired 注解自动装配 bean，要想把类标识成可用于@Autowired注解自动装配的bean 的类,采用以下注解可实现:</p>
+<ul>
+<li>@Component︰通用的注解，可标注任意类为Spring组件。如果一个Bean不知道属于哪个层，可以使用@Component注解标注。</li>
+<li>@Repository :对应持久层即Dao层，主要用于数据库相关操作。</li>
+<li>@Service :对应服务层，主要涉及一些复杂的逻辑，需要用到Dao层。</li>
+<li>@Controller :对应Spring MVC 控制层，主要用户接受用户请求并调用Service层返回数据给前端页面。</li>
+</ul>
+<h2 id="Spring-中的-bean-⽣命周期"><a href="#Spring-中的-bean-⽣命周期" class="headerlink" title="Spring 中的 bean ⽣命周期?"></a>Spring 中的 bean ⽣命周期?</h2><ul>
+<li>Bean容器找到配置文件中Spring Bean的定义。</li>
+<li>Bean容器利用Java Reflection API创建一个Bean的实例。如果涉及到一些属性值利用set(方法设置—些属性值。</li>
+<li>如果Bean 实现了BeanNameAware接口，调用setBeanName()方法，传入Bean的名字。如果Bean实现了BeanClassLoaderAware接口，调用setBeanClassLoader()方法，传入ClassLoader对象的实例。</li>
+<li>与上面的类似，如果实现了其他*.Aware接口，就调用相应的方法。</li>
+<li>如果有和加载这个Bean的 Spring容器相关的ReanPostProcessor对象，执行postProcessBeforeInitialization)方法</li>
+<li>如果Bean实现了InitializingBean接口，执行afterPropertiesSet(方法。·如果 Bean在配置文件中的定义包含init-method 属性，执行指定的方法。</li>
+<li>如果有和加载这个Bean的 Spring容器相关的 BeanPostProcessor对象，执行postProcessAfterInitialization()方法</li>
+<li>当要销毁Bean 的时候，如果Bean实现了DisposableBean接口，执行destroy()方法。当要销毁Bean的时候，如果Bean在配置文件中的定义包含destroy-method 属性，执行指定的方法。</li>
+</ul>
+<p><img src="/bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="bean生命周期"></p>
+<p>![bean生命周期](Spring bean\bean生命周期.png)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/Spring%20bean/" data-id="cl0j84jwu008904vhamun1wtq" data-title="Spring bean" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

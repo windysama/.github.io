@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="MyHomePage">
+<meta property="og:url" content="http://example.com/page/15/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Lee yunbo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-MySql_index" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql_index/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T16:00:00.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql_index/">mysql索引</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><h3 id="常用规则"><a href="#常用规则" class="headerlink" title="常用规则"></a>常用规则</h3><p>1、表的主键、外键必须有索引；<br>2、数据量超过300的表应该有索引；<br>3、经常与其他表进行连接的表，在连接字段上应该建立索引；<br>4、经常出现在Where子句中的字段，特别是大表的字段，应该建立索引；<br>5、索引应该建在选择性高的字段上；<br>6、索引应该建在小字段上，对于大的文本字段甚至超长字段，不要建索引；<br>7、复合索引的建立需要进行仔细分析；尽量考虑用单字段索引代替： </p>
+<ul>
+<li>正确选择复合索引中的主列字段，一般是选择性较好的字段； </li>
+<li>复合索引的几个字段是否经常同时以AND方式出现在Where子句中？单字段查询是否  极少甚至没有？如果是，则可以建立复合索引；否则考虑单字段索引； </li>
+<li>如果复合索引中包含的字段经常单独出现在Where子句中，则分解为多个单字段索引； </li>
+<li>如果复合索引所包含的字段超过3个，那么仔细考虑其必要性，考虑减少复合的字段； </li>
+<li>如果既有单字段索引，又有这几个字段上的复合索引，一般可以删除复合索引；<br>8、频繁进行数据操作的表，不要建立太多的索引；<br>9、删除无用的索引，避免对执行计划造成负面影响；</li>
+</ul>
+<p>以上是一些普遍的建立索引时的判断依据。索引的建立必须慎重，对每个索引的必要性都应该经过仔细分析，要有建立的依据。</p>
+<p> 因为太多的索引与不充分、不正确的索引对性能都毫无益处：在表上建立的每个索引都会增加存储开销，索引对于插入、删除、更新操作也会增加处理上的开销。 另外，过多的复合索引，在有单字段索引的情况下，一般都是没有存在价值的；相反，还会降低数据增加删除时的性能，特别是对频繁更新的表来说，负面影响更大。 </p>
+<p>总的来说，小型表肯定不建索引，或者数据库记录在亿条数据级以上，还是建议使用非关系型数据库。 还有些特殊字段的数据库，比如BLOB，CLOB字段肯定也不适合建索引。</p>
+<h3 id="对千万级MySQL数据库建立索引的事项及提高性能的手段"><a href="#对千万级MySQL数据库建立索引的事项及提高性能的手段" class="headerlink" title="对千万级MySQL数据库建立索引的事项及提高性能的手段"></a>对千万级MySQL数据库建立索引的事项及提高性能的手段</h3><h4 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h4><p>首先，应当考虑表空间和磁盘空间是否足够。我们知道索引也是一种数据，在建立索引的时候势必也会占用大量表空间。因此在对一大表建立索引的时候首先应当考虑的是空间容量问题。<br>其次，在对建立索引的时候要对表进行加锁，因此应当注意操作在业务空闲的时候进行。</p>
+<h4 id="性能调整方面"><a href="#性能调整方面" class="headerlink" title="性能调整方面"></a>性能调整方面</h4><p>首当其冲的考虑因素便是磁盘I&#x2F;O。物理上，应当尽量把索引与数据分散到不同的磁盘上（不考虑阵列的情况）。逻辑上，数据表空间与索引表空间分开。这是在建索引时应当遵守的基本准则。<br>其次，我们知道，在建立索引的时候要对表进行全表的扫描工作，因此，应当考虑调大初始化参数db_file_multiblock_read_count的值。一般设置为32或更大。</p>
+<p>再次，建立索引除了要进行全表扫描外同时还要对数据进行大量的排序操作，因此，应当调整排序区的大小。<br>    9i之前，可以在session级别上加大sort_area_size的大小，比如设置为100m或者更大。<br>    9i以后，如果初始化参数workarea_size_policy的值为TRUE，则排序区从pga_aggregate_target里自动分配获得。<br>最后，建立索引的时候，可以加上nologging选项。以减少在建立索引过程中产生的大量redo，从而提高执行的速度。</p>
+<h3 id="MySql在建立索引优化时需要注意的问题"><a href="#MySql在建立索引优化时需要注意的问题" class="headerlink" title="MySql在建立索引优化时需要注意的问题"></a>MySql在建立索引优化时需要注意的问题</h3><p>设计好MySql的索引可以让你的数据库飞起来，大大的提高数据库效率。设计MySql索引的时候有一下几点注意：</p>
+<h4 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h4><p>对于查询占主要的应用来说，索引显得尤为重要。很多时候性能问题很简单的就是因为我们忘了添加索引而造成的，或者说没有添加更为有效的索引导致。如果不加索引的话，那么查找任何哪怕只是一条特定的数据都会进行一次全表扫描，如果一张表的数据量很大而符合条件的结果又很少，那么不加索引会引起致命的性能下降。但是也不是什么情况都非得建索引不可，比如性别可能就只有两个值，建索引不仅没什么优势，还会影响到更新速度，这被称为过度索引。</p>
+<h4 id="复合索引"><a href="#复合索引" class="headerlink" title="复合索引"></a>复合索引</h4><p>比如有一条语句是这样的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where area=’beijing’ and age=22;</span><br></pre></td></tr></table></figure>
+<p>如果我们是在area和age上分别创建单个索引的话，由于mysql查询每次只能使用一个索引，所以虽然这样已经相对不做索引时全表扫描提高了很多效率，但是如果在area、age两列上创建复合索引的话将带来更高的效率。如果我们创建了(area, age,salary)的复合索引，那么其实相当于创建了(area,age,salary)、(area,age)、(area)三个索引，这被称为最佳左前缀特性。因此我们在创建复合索引时应该将最常用作限制条件的列放在最左边，依次递减。</p>
+<h4 id="索引不会包含有NULL值的列"><a href="#索引不会包含有NULL值的列" class="headerlink" title="索引不会包含有NULL值的列"></a>索引不会包含有NULL值的列</h4><p>只要列中包含有NULL值都将不会被包含在索引中，复合索引中只要有一列含有NULL值，那么这一列对于此复合索引就是无效的。所以我们在数据库设计时不要让字段的默认值为NULL。</p>
+<h4 id="使用短索引"><a href="#使用短索引" class="headerlink" title="使用短索引"></a>使用短索引</h4><p>对串列进行索引，如果可能应该指定一个前缀长度。例如，如果有一个CHAR(255)的 列，如果在前10 个或20 个字符内，多数值是惟一的，那么就不要对整个列进行索引。短索引不仅可以提高查询速度而且可以节省磁盘空间和I&#x2F;O操作。</p>
+<h4 id="排序的索引问题"><a href="#排序的索引问题" class="headerlink" title="排序的索引问题"></a>排序的索引问题</h4><p>mysql查询只使用一个索引，因此如果where子句中已经使用了索引的话，那么order by中的列是不会使用索引的。因此数据库默认排序可以符合要求的情况下不要使用排序操作；尽量不要包含多个列的排序，如果需要最好给这些列创建复合索引。</p>
+<h4 id="like语句操作"><a href="#like语句操作" class="headerlink" title="like语句操作"></a>like语句操作</h4><p>一般情况下不鼓励使用like操作，如果非使用不可，如何使用也是一个问题。like “%a%” 不会使用索引而like “aaa%”可以使用索引。</p>
+<h4 id="不要在列上进行运算"><a href="#不要在列上进行运算" class="headerlink" title="不要在列上进行运算"></a>不要在列上进行运算</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where YEAR(adddate)</span><br></pre></td></tr></table></figure>
+<h4 id="不使用NOT-IN和操作"><a href="#不使用NOT-IN和操作" class="headerlink" title="不使用NOT IN和操作"></a>不使用NOT IN和操作</h4><p>NOT IN和操作都不会使用索引将进行全表扫描。NOT IN可以NOT EXISTS代替，id3则可使用id&gt;3 or id</p>
+<h2 id="参考阅读"><a href="#参考阅读" class="headerlink" title="参考阅读"></a>参考阅读</h2><p><a target="_blank" rel="noopener" href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html">MySQL索引背后的数据结构及算法原理</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql_index/" data-id="cl0j84jvw004t04vhhgqs8g97" data-title="mysql索引" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql_lock" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql_lock/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T16:00:00.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql_lock/">数据库锁</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="数据库锁"><a href="#数据库锁" class="headerlink" title="数据库锁"></a>数据库锁</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>相对其他数据库而言，MySQL的锁机制比较简单，其最显著的特点是不同的存储引擎支持不同的锁机制。比如，MyISAM和MEMORY存储引擎采用的是表级锁（table-level locking）；InnoDB存储引擎既支持行级锁（ row-level locking），也支持表级锁，但默认情况下是采用行级锁。</p>
+<p>MySQL主要的两种锁的特性可大致归纳如下:</p>
+<ul>
+<li>表级锁： 开销小，加锁快；不会出现死锁(因为MyISAM会一次性获得SQL所需的全部锁)；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
+<li>行级锁： 开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
+</ul>
+<p>考虑上述特点，表级锁使用与并发性不高，以查询为主，少量更新的应用，比如小型的web应用；而行级锁适用于高并发环境下，对事务完整性要求较高的系统，如在线事务处理系统。</p>
+<h3 id="MyISAM锁细述"><a href="#MyISAM锁细述" class="headerlink" title="MyISAM锁细述"></a>MyISAM锁细述</h3><p>(1). 锁模式</p>
+<p>MySQL的表级锁有两种模式： 表共享读锁（Table Read Lock）和表独占写锁（Table Write Lock）。</p>
+<p>(2).  如何加锁</p>
+<p>当MyISAM在执行查询语句时，会自动给涉及到表加读锁，在执行更新操作时，会加写锁。当然用户也可以用LOCK TABLE 去显式的加锁。显式的加锁一般是应用于：需要在一个时间点实现多个表的一致性读取，不然的话，可能读第一个表时，其他表由于还没进行读操作，没有自动加锁，可能数据会发生改变。并且显示加锁后只能访问加锁的表，不能访问其他表。</p>
+<p>(3). 并发插入</p>
+<p>MyISAM存储引擎有个系统变量 concurrent_insert，专门用来控制并发插入的行为，可以取 0 ， 1 ， 2。</p>
+<p>0表示不允许并发插入，1表示表中间没有删除的行时可以在表末尾插入，2表示总是可以插入。</p>
+<p>一般如果对并发要求比较高的情况下，可以设置为2，总是可以插入，然后定期在数据库空闲时间对表进行optimize。</p>
+<p>(4). 锁的调度</p>
+<p>需要注意的是，其中读操作不会阻塞其他用户对同一表的读请求，但会阻塞对同一表的写请求；并且当写锁和读锁同时被申请时，优先获得写锁，这也这正是表级锁发生锁冲突概率最高的原因，因为写锁可能会一直阻塞读锁，所以不适合有大量写操作的环境下工作。这一问题可以通过设置low-priority-updates这一启动参数来降低写的优先级。<br>虽然写锁优先于读锁获取，但是长时间的查询操作也可能会让写操作饿死，所以尽量避免一条SQL语句执行所有的查询，应该进行必要的分解。</p>
+<h3 id="InnoDB锁细述"><a href="#InnoDB锁细述" class="headerlink" title="InnoDB锁细述"></a>InnoDB锁细述</h3><p>由于InnoDB支持事务，并默认是使用行级锁，所以InnoDB的锁问题和MyISAM锁问题还是有蛮大差别的。</p>
+<p>(1). 锁模式</p>
+<p>共享锁(S)和排他锁(X)，分别类似于MyISAM的读锁和写锁。对于 UPDATE、 DELETE 和 INSERT 语句，InnoDB会自动给涉及数据集加排他锁（X)；对于普通 SELECT 语句，InnoDB不会加任何锁。</p>
+<p>(2). 如何加锁</p>
+<p>可以显式的加锁，用lock in share mode 显式的加共享锁，用 for update 显式的加排他锁。</p>
+<p>需要注意的是，如果线程A加了共享锁后，线程B对同一个表加了共享锁，那么两个线程需要进行更新操作时会产生死锁。所以，进行更新操作时最好加排他锁。</p>
+<p>(3). InnoDB行锁的实现方式——索引加锁</p>
+<p>这一点与Oracle不同，所以这也意味着(重要)：1. 只有通过索引条件检索数据时，InnoDB才会使用行级锁，否则会使用表级锁。 2. 即使是访问不同行的记录，如果使用的是相同的索引键，会发生锁冲突。 3. 如果数据表建有多个索引时，可以通过不同的索引锁定不同的行。</p>
+<p>(4). 间隙锁</p>
+<p>InnoDB支持事务，为了满足隔离级别的要求，InnoDB有个间隙锁，当使用范围查找时，InnoDB会给满足key范围要求，但实际并不存在的记录加锁。例如：select * from user where id &gt; 100 for updata 会给ID&gt;100的记录加排他锁，满足这个范围，但不存在的记录，会加间隙锁，这样可以避免幻读，避免读取的时候插入满足条件的记录。</p>
+<p>(5). 隔离级别与锁</p>
+<p>一般来说，隔离级别越高，加锁就越严格。这样，产生锁冲突的概率就越大，一般实际应用中，通过优化应用逻辑，选用 可提交读 级别就够了。对于一些确实需要更高隔离级别的事务，再通过set session transaction isolation level+”级别” 来动态改变满足需求。</p>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>MyISAM是没有死锁问题的，因为他会一次性获得所有的锁。InnoDB发生死锁后一般能自动检测到，并使一个事务释放锁并回退，另一个事务获得锁，继续完成事务。</p>
+<p>在应用中，可以通过如下方式来尽可能的避免死锁：</p>
+<p>(1) 如果不同的程序会并发的存取多个表，应尽量约定以相同的顺序来访问表，这样可以大大降低产生死锁的机会。</p>
+<p>(2) 在程序以批量方式处理数据时，如果事先对数据排序，保证每个线程按固定的顺序来处理记录，也可以大大的降低出现死锁的可能。</p>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><h4 id="秒杀一"><a href="#秒杀一" class="headerlink" title="秒杀一"></a>秒杀一</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">## 查询库存，由于是主键查询使用到了索引，所以是行级锁</span><br><span class="line">SELECT number FROM seckill WHERE seckill_id=? FOR UPDATE</span><br><span class="line">## 如果库存大于秒杀数则更新，UPDATE 操作也是行级锁</span><br><span class="line">UPDATE seckill  SET number=number-1 WHERE seckill_id=?</span><br></pre></td></tr></table></figure>
+
+<h4 id="秒杀二"><a href="#秒杀二" class="headerlink" title="秒杀二"></a>秒杀二</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//直接更新数据，如果count为1秒杀成功否则失败</span><br><span class="line">UPDATE seckill  SET number=number-1 WHERE seckill_id=? AND number&gt;0</span><br></pre></td></tr></table></figure>
+
+<h4 id="秒杀三"><a href="#秒杀三" class="headerlink" title="秒杀三"></a>秒杀三</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//获取商品版本号以及剩余数量</span><br><span class="line">SELECT version,number  FROM seckill WHERE seckill_id=?</span><br><span class="line">//判断剩余数量是否充足并更新</span><br><span class="line">UPDATE seckill  SET number=number-?,version=version+1 WHERE seckill_id=? AND version = ? </span><br><span class="line">//如果更新数量等于1秒杀成功否则失败</span><br></pre></td></tr></table></figure>
+
+<p>Mysql innodb虽是锁行的，但是如果没有索引，或者索引唯一性不是特别强，那就要锁表了。</p>
+<p>加锁对并发访问的影响体现在锁的粒度上，可见行锁粒度最小，并发访问最好，页锁粒度最大，表锁介于2者之间。</p>
+<p>锁有两种：悲观锁和乐观锁。悲观锁假定其他用户企图访问或者改变你正在访问、更改的对象的概率是很高的，因此在悲观锁的环境中，在你开始改变此对象之前就将该对象锁住，并且直到你提交了所作的更改之后才释放锁。悲观的缺陷是不论是页锁还是行锁，加锁的时间可能会很长，这样可能会长时间的限制其他用户的访问，也就是说悲观锁的并发访问性不好。</p>
+<p>与悲观锁相反，乐观锁则认为其他用户企图改变你正在更改的对象的概率是很小的，因此乐观锁直到你准备提交所作的更改时才将对象锁住，当你读取以及改变该对象时并不加锁。可见乐观锁加锁的时间要比悲观锁短，乐观锁可以用较大的锁粒度获得较好的并发访问性能。但是如果第二个用户恰好在第一个用户提交更改之前读取了该对象，那么当他完成了自己的更改进行提交时，数据库就会发现该对象已经变化了，这样，第二个用户不得不重新读取该对象并作出更改。这说明在乐观锁环境中，会增加并发用户读取对象的次数。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhanht/p/5431273.html">https://www.cnblogs.com/zhanht/p/5431273.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/liujiacai/p/7605612.html">https://www.cnblogs.com/liujiacai/p/7605612.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/claireyuancy/p/7258314.html">https://www.cnblogs.com/claireyuancy/p/7258314.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql_lock/" data-id="cl0j84jvx004v04vhfgusf5mo" data-title="数据库锁" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql_optimization" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql_optimization/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T16:00:00.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql_optimization/">索引优化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><h4 id="负向查询不能使用索引"><a href="#负向查询不能使用索引" class="headerlink" title="负向查询不能使用索引"></a>负向查询不能使用索引</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">order</span> <span class="keyword">where</span> status<span class="operator">!=</span><span class="number">0</span> <span class="keyword">and</span> stauts<span class="operator">!=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>还有 not in&#x2F;not exists都不是好习惯</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name <span class="keyword">from</span> <span class="keyword">order</span> <span class="keyword">where</span> status <span class="keyword">not</span> <span class="keyword">in</span> (<span class="number">0</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+
+<p>可以优化为in查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">order</span> <span class="keyword">where</span> status <span class="keyword">in</span>(<span class="number">2</span>,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="前导模糊查询不能使用索引"><a href="#前导模糊查询不能使用索引" class="headerlink" title="前导模糊查询不能使用索引"></a>前导模糊查询不能使用索引</h4><p>如:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> name <span class="keyword">like</span> <span class="string">&#x27;%xxx&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>非前导则可以:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> name <span class="keyword">like</span> <span class="string">&#x27;xxx%&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>MyISAM 存储引擎也可以做全文检索，不过只支持英文，相信现在应该也没人使用它了。建议使用<code> solr</code> 、<code> es</code> 等第三方开始工具实现全文检索功能。</p>
+<h4 id="数据区分不明显的不建议创建索引"><a href="#数据区分不明显的不建议创建索引" class="headerlink" title="数据区分不明显的不建议创建索引"></a>数据区分不明显的不建议创建索引</h4><p>如 user 表中的性别字段，可以明显区分的才建议创建索引，如身份证等字段。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> sex<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>原因：性别只有男，女，每次过滤掉的数据很少，不宜使用索引。</p>
+<p>经验上，能过滤80%数据时就可以使用索引。对于订单状态，如果状态值很少，不宜使用索引，如果状态值很多，能够过滤大量数据，则应该建立索引。</p>
+<h4 id="字段的默认值不要为-null"><a href="#字段的默认值不要为-null" class="headerlink" title="字段的默认值不要为 null"></a>字段的默认值不要为 null</h4><p>这样会带来和预期不一致的查询结果，建议参考注意事项。</p>
+<h4 id="在属性上进行计算不能命中索引"><a href="#在属性上进行计算不能命中索引" class="headerlink" title="在属性上进行计算不能命中索引"></a>在属性上进行计算不能命中索引</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">order</span> <span class="keyword">where</span> <span class="keyword">YEAR</span>(<span class="type">date</span>) <span class="operator">&lt;</span> <span class="operator">=</span> <span class="string">&#x27;2017&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>即使date上建立了索引，也会全表扫描，可优化为值计算：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">order</span> <span class="keyword">where</span> <span class="type">date</span> <span class="operator">&lt;</span> <span class="operator">=</span> CURDATE()</span><br></pre></td></tr></table></figure>
+
+<h4 id="复合索引最左前缀"><a href="#复合索引最左前缀" class="headerlink" title="复合索引最左前缀"></a>复合索引最左前缀</h4><p>用户中心建立了(login_name, passwd)的复合索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> login_name<span class="operator">=</span>? <span class="keyword">and</span> passwd<span class="operator">=</span>?</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> passwd<span class="operator">=</span>? <span class="keyword">and</span> login_name<span class="operator">=</span>?</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>但是使用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> passwd<span class="operator">=</span>?</span><br></pre></td></tr></table></figure>
+<p>不能命中索引，不满足复合索引最左前缀</p>
+<h4 id="如果明确知道只有一条记录返回"><a href="#如果明确知道只有一条记录返回" class="headerlink" title="如果明确知道只有一条记录返回"></a>如果明确知道只有一条记录返回</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> username<span class="operator">=</span><span class="string">&#x27;xxxx&#x27;</span> limit <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>提高效率，可以让数据库停止游标移动，停止全表扫描。</p>
+<h4 id="强制类型转换会全表扫描"><a href="#强制类型转换会全表扫描" class="headerlink" title="强制类型转换会全表扫描"></a>强制类型转换会全表扫描</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> phone<span class="operator">=</span><span class="number">13800001234</span></span><br></pre></td></tr></table></figure>
+<p>这样虽然可以查出数据，但会导致索引失效。</p>
+<p>需要修改为</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> phone<span class="operator">=</span><span class="string">&#x27;13800001234&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="把计算放到业务层而不是数据库层，除了节省数据的CPU，还有意想不到的查询缓存优化效果"><a href="#把计算放到业务层而不是数据库层，除了节省数据的CPU，还有意想不到的查询缓存优化效果" class="headerlink" title="把计算放到业务层而不是数据库层，除了节省数据的CPU，还有意想不到的查询缓存优化效果"></a>把计算放到业务层而不是数据库层，除了节省数据的CPU，还有意想不到的查询缓存优化效果</h4><h2 id="参考引用"><a href="#参考引用" class="headerlink" title="参考引用"></a>参考引用</h2><p>58沈剑 架构师之路</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql_optimization/" data-id="cl0j84jvz005004vh6kidextv" data-title="索引优化" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql_skill" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql_skill/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T16:00:00.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql_skill/">MySql 小技巧</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="MySql-小技巧"><a href="#MySql-小技巧" class="headerlink" title="MySql 小技巧"></a>MySql 小技巧</h2><h4 id="1）修改默认时区"><a href="#1）修改默认时区" class="headerlink" title="1）修改默认时区"></a>1）修改默认时区</h4><p>select now(); 查看 MySql 系统时间。和当前时间做对比</p>
+<p>set global time_zone &#x3D; ‘+8:00’;设置时区更改为东八区</p>
+<p>flush privileges; 刷新权限</p>
+<h4 id="2）批量删除以字段开头的表"><a href="#2）批量删除以字段开头的表" class="headerlink" title="2）批量删除以字段开头的表"></a>2）批量删除以字段开头的表</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 先查询</span><br><span class="line">SELECT GROUP_CONCAT(table_name) FROM information_schema.tables WHERE table_schema=&#x27;itstyle&#x27; AND table_name LIKE &#x27;add%&#x27;</span><br><span class="line"># 拷贝出来</span><br><span class="line">DROP TABLE  add_student,add_teacher</span><br></pre></td></tr></table></figure>
+
+<h4 id="3）查看所有连接进程"><a href="#3）查看所有连接进程" class="headerlink" title="3）查看所有连接进程"></a>3）查看所有连接进程</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show full processlist </span><br></pre></td></tr></table></figure>
+
+<p>看一下所有连接进程，注意查看进程等待时间以及所处状态 是否locked</p>
+<p>如果进程过多，就把进程打印下来，然后查看</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -e &#x27;show full processlist;&#x27; &gt; list.txt</span><br></pre></td></tr></table></figure>
+
+<h4 id="4）创建一个只读权限的用户"><a href="#4）创建一个只读权限的用户" class="headerlink" title="4）创建一个只读权限的用户"></a>4）创建一个只读权限的用户</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 创建查询用户、允许外网访问</span><br><span class="line">CREATE USER &#x27;select&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;123456&#x27;;</span><br><span class="line"># 给新用户赋予查询权限</span><br><span class="line">GRANT SELECT ON * . * TO &#x27;select&#x27;@&#x27;%&#x27;;</span><br><span class="line"># 刷新权限</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql_skill/" data-id="cl0j84jw0005204vhes6ff28b" data-title="MySql 小技巧" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-MySql_trasaction" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/19/MySql_trasaction/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T16:00:00.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/19/MySql_trasaction/">mysql事务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="事务的基本要素（ACID）"><a href="#事务的基本要素（ACID）" class="headerlink" title="事务的基本要素（ACID）"></a>事务的基本要素（ACID）</h2><ul>
+<li><p>原子性（Atomicity）：事务开始后所有操作，要么全部做完，要么全部不做，不可能停滞在中间环节。事务执行过程中出错，会回滚到事务开始前的状态，所有的操作就像没有发生一样。也就是说事务是一个不可分割的整体，就像化学中学过的原子，是物质构成的基本单位。</p>
+</li>
+<li><p>一致性（Consistency）：事务开始前和结束后，数据库的完整性约束没有被破坏 。比如A向B转账，不可能A扣了钱，B却没收到。</p>
+</li>
+<li><p>隔离性（Isolation）：同一时间，只允许一个事务请求同一数据，不同的事务之间彼此没有任何干扰。比如A正在从一张银行卡中取钱，在A取钱的过程结束前，B不能向这张卡转账。</p>
+</li>
+<li><p>持久性（Durability）：事务完成后，事务对数据库的所有更新将被保存到数据库，不能回滚。</p>
+</li>
+</ul>
+<h2 id="事务的并发问题"><a href="#事务的并发问题" class="headerlink" title="事务的并发问题"></a>事务的并发问题</h2><ul>
+<li><p>脏读：事务A读取了事务B更新的数据，然后B回滚操作，那么A读取到的数据是脏数据</p>
+</li>
+<li><p>不可重复读：事务 A 多次读取同一数据，事务 B 在事务A多次读取的过程中，对数据作了更新并提交，导致事务A多次读取同一数据时，结果 不一致。</p>
+</li>
+<li><p>幻读：系统管理员A将数据库中所有学生的成绩从具体分数改为ABCDE等级，但是系统管理员B就在这个时候插入了一条具体分数的记录，当系统管理员A改结束后发现还有一条记录没有改过来，就好像发生了幻觉一样，这就叫幻读。</p>
+</li>
+</ul>
+<p>小结：不可重复读的和幻读很容易混淆，不可重复读侧重于修改，幻读侧重于新增或删除。解决不可重复读的问题只需锁住满足条件的行，解决幻读需要锁表</p>
+<h2 id="MySQL事务隔离级别"><a href="#MySQL事务隔离级别" class="headerlink" title="MySQL事务隔离级别"></a>MySQL事务隔离级别</h2><table>
+<thead>
+<tr>
+<th>事务隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读未提交（read-uncommitted）</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>不可重复读（read-committed）</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>可重复读（repeatable-read）</td>
+<td>否</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>串行化（serializable）</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<p>mysql默认的事务隔离级别为repeatable-read</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@tx_isolation</span><br></pre></td></tr></table></figure>
+
+<h2 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h2><p>Spring @Transactional注解参数详解 ： <a target="_blank" rel="noopener" href="https://www.cnblogs.com/caoyc/p/5632963.html">https://www.cnblogs.com/caoyc/p/5632963.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/19/MySql_trasaction/" data-id="cl0j84jw1005504vhajctdlfs" data-title="mysql事务" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-IDEA import导入的类爆红【解决办法】" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/18/IDEA%20import%E5%AF%BC%E5%85%A5%E7%9A%84%E7%B1%BB%E7%88%86%E7%BA%A2%E3%80%90%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E3%80%91/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T07:27:07.000Z" itemprop="datePublished">2021-04-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/18/IDEA%20import%E5%AF%BC%E5%85%A5%E7%9A%84%E7%B1%BB%E7%88%86%E7%BA%A2%E3%80%90%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E3%80%91/">IDEA import导入的类爆红【解决办法】</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="一、本项目的包导入爆红："><a href="#一、本项目的包导入爆红：" class="headerlink" title="一、本项目的包导入爆红："></a><strong>一、本项目的包导入爆红：</strong></h1><p>项目一直好好的，在合并完版本后，出现无依赖的个别本地包，爆红，且包完全能找到。</p>
+<p><strong>解决办法：</strong></p>
+<p>更新index，清除缓存，注：（清楚缓存会使你导入的maven地址 以及 启动项配置等失效，清除后，需要重置）</p>
+<p>步骤如图所示。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200710171028570.png" alt="img"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200710171101477.png" alt="img"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/18/IDEA%20import%E5%AF%BC%E5%85%A5%E7%9A%84%E7%B1%BB%E7%88%86%E7%BA%A2%E3%80%90%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E3%80%91/" data-id="cl0j84jv6002904vhguqba5mt" data-title="IDEA import导入的类爆红【解决办法】" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Java—养成良好的编码习惯" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/18/Java%E2%80%94%E5%85%BB%E6%88%90%E8%89%AF%E5%A5%BD%E7%9A%84%E7%BC%96%E7%A0%81%E4%B9%A0%E6%83%AF/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T07:27:07.000Z" itemprop="datePublished">2021-04-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/18/Java%E2%80%94%E5%85%BB%E6%88%90%E8%89%AF%E5%A5%BD%E7%9A%84%E7%BC%96%E7%A0%81%E4%B9%A0%E6%83%AF/">Java</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>作为程序员，我们需要有严谨的代码逻辑，当然更少不了严格的代码规范，规范的代码常常给我们的开发带来很多好处，接下来大概总结一下非业务逻辑bug的常见注意点。</p>
+<h2 id="第一弹：参数校验"><a href="#第一弹：参数校验" class="headerlink" title="第一弹：参数校验"></a>第一弹：参数校验</h2><p>关于参数校验，应该是一个程序员的基本素养，首先我们需要排除入参是否允许为空，入参长度是否符合你的预期长度，最常见的应该是遇到不判断参数导致空指针异常的问题等等。</p>
+<blockquote>
+<p>注：不需要进行参数校验情况</p>
+<p>1.极有可能被循环调用的方法。但在方法说明里面必须注明外部参数检查要求。</p>
+<p>2.底层调用频率比较高的方法。参数错误极小可能性在dao层才会被发现，所以dao不需要做检验（service层及以上应该做参数的有效性检查即可）</p>
+<p>3.被声明private只会被自己代码所调用的话，在自己能确认传入参数的情况下无需进行参数的校验。</p>
+</blockquote>
+<h2 id="第二弹：自测"><a href="#第二弹：自测" class="headerlink" title="第二弹：自测"></a>第二弹：自测</h2><p>关于自测，应该是一个程序员的基本素养，我们在开发一个接口，我们需要写测试类或者接口测试工具如postman&#x2F;swagging等等，进行返回数据测试，是否满足需求，还有就我们在更改接口的时候加入了一个减少&#x2F;增加参数这种情况，减少&#x2F;增加时我们需要看是否此接口是否已经有在使用，是否对当前稳定版本有影响，尤其不要抱有这种侥幸心理：我只是改了一个变量或者我只改了一行配置代码，不用自测了。改完代码，尽量要求自己都去测试一下哈，可以规避很多不必要bug的。</p>
+<h2 id="第三弹：修改老接口时，需要思考兼容性"><a href="#第三弹：修改老接口时，需要思考兼容性" class="headerlink" title="第三弹：修改老接口时，需要思考兼容性"></a>第三弹：修改老接口时，需要思考兼容性</h2><p>很多bug都是因为修改了对外老接口，但是却不做兼容导致的。关键这个问题多数是比较严重的，可能直接导致系统发版失败的。新手程序员很容易犯这个错误所以，如果你的需求是在原来接口上修改，，尤其这个接口是对外提供服务的话，一定要考虑接口兼容。举个例子吧，比如下面两个接口，原本是只接收A，B参数，现在你加了一个参数C，就可以考虑这样处理。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5Ct5WBByKjuLwSaX3z1SW5TNyIR7ibsWy4ITWOnlkrY31IFh7ZCJxFnYT6FibwAYmQBPzVEGEmooXQew/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<h2 id="第四弹：主要逻辑代码添加注释"><a href="#第四弹：主要逻辑代码添加注释" class="headerlink" title="第四弹：主要逻辑代码添加注释"></a>第四弹：主要逻辑代码添加注释</h2><p>首先简单的实现接口逻辑不需要增加注释，好的方法变量命名就是最好的注释，如果实现复杂的业务逻辑，需要增加注释，不然在后期自己回过头看的时候也可能是举步维艰。更别提有人去阅读你代码，那就是步步为营。</p>
+<h2 id="第五弹：资源用完需关闭"><a href="#第五弹：资源用完需关闭" class="headerlink" title="第五弹：资源用完需关闭"></a>第五弹：资源用完需关闭</h2><p>平时我们连接数据库，IO资源流如果没关闭，文件打开没关闭都会造成电脑卡顿。</p>
+<p>所以使用完IO流，可以使用finally关闭</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5Ct5WBByKjuLwSaX3z1SW5TNxicD23aCenVuLx2quP4hSk2YuDzFNZ99KmfUvhcAoicS6lIJqib8SlPnA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p>数据库关流</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5Ct5WBByKjuLwSaX3z1SW5TNWic8lIQm1AXXRVAQ0MGZve7icbQUzkjJeo6PXJxM2FVFh8jZ8ea9DKQA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<h2 id="第六弹：避免运行时异常"><a href="#第六弹：避免运行时异常" class="headerlink" title="第六弹：避免运行时异常"></a>第六弹：避免运行时异常</h2><p>日常开发中，我们需要采取措施规避数组边界溢出（java.lang.ArrayIndexOutOfBoundsException ），被零整除，空指针等运行时错误（java.lang.NullPointerException ）。</p>
+<p>类似代码比较常见：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5Ct5WBByKjuLwSaX3z1SW5TNJJUb73YF6TXOLCISmWU3BBu7P58QyzhltguciamqCib5kWbfXQGtib0bA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p>所以，应该采取措施，预防一下数组边界溢出需要去判断数组的长度以及size&gt;1.</p>
+<h2 id="第七弹：上线时常遇问题"><a href="#第七弹：上线时常遇问题" class="headerlink" title="第七弹：上线时常遇问题"></a>第七弹：上线时常遇问题</h2><p>上线前需要配置的参数以及数据库脚本的执行，都需提前准备好，如需初始化redis缓存数据，也许提前做好准备，分析好服务的启动顺序，并排好序找测试发版，版本号升级</p>
+<h2 id="第八弹：数据库操作大量数据时、优先考虑批量查询"><a href="#第八弹：数据库操作大量数据时、优先考虑批量查询" class="headerlink" title="第八弹：数据库操作大量数据时、优先考虑批量查询"></a>第八弹：数据库操作大量数据时、优先考虑批量查询</h2><p>数据库操作都是比较耗网络、IO资源的，所以尽量不在循环里远程调用、不在循环里操作数据库，能批量一次性查回来尽量不要循环多次去查、分批最好每次500条左右。</p>
+<h2 id="第九弹：获取对象的属性时最好先判断对象是否为空"><a href="#第九弹：获取对象的属性时最好先判断对象是否为空" class="headerlink" title="第九弹：获取对象的属性时最好先判断对象是否为空"></a>第九弹：获取对象的属性时最好先判断对象是否为空</h2><p>经常我们遇到空指针异常、很有可能是没有进行一些对象是否为空的判断，并且在测试的时候我们没有注意到这一环节而导致空指针异常波及到线上运行，所以最好是获取对象属性的时先判断一下是否为空。</p>
+<h2 id="第十弹：有效沟通"><a href="#第十弹：有效沟通" class="headerlink" title="第十弹：有效沟通"></a>第十弹：有效沟通</h2><blockquote>
+<p>1.开产品会之前需要看自己负责的模块是否有疑问</p>
+<p>2.开会时尽可能把自己不懂得都敲定，有问题的地方增加备注并且确认之后留痕，以免之后造成不必要的麻烦</p>
+<p>3.与前端尽早沟通所需字段值以及相应修改的地方尽早同步到wiki等协作文档。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/18/Java%E2%80%94%E5%85%BB%E6%88%90%E8%89%AF%E5%A5%BD%E7%9A%84%E7%BC%96%E7%A0%81%E4%B9%A0%E6%83%AF/" data-id="cl0j84jvh003804vhbznlbsgj" data-title="Java" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Java反射" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/18/Java%E5%8F%8D%E5%B0%84/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T07:27:07.000Z" itemprop="datePublished">2021-04-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/18/Java%E5%8F%8D%E5%B0%84/">Java反射</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Java-反射"><a href="#Java-反射" class="headerlink" title="Java 反射"></a>Java 反射</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_38259539/article/details/71799078"> Java基础之—反射（非常重要）</a></p>
+<p>简介</p>
+<p>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法的功能称为java语言的反射机制。<br>要想解剖一个类,必须先要获取到该类的字节码文件对象。而解剖使用的就是Class类中的方法.所以先要获取到每一个字节码文件对应的Class类型的对象.</p>
+<p><strong>反射就是把java类中的各种成分映射成一个个的Java对象</strong></p>
+<p>例如：一个类有：成员变量、方法、构造方法、包等等信息，利用反射技术可以对一个类进行解剖，把个个组成部分映射成一个个对象</p>
+<p>知识点</p>
+<ul>
+<li>反射常用类</li>
+</ul>
+<p>什么是反射？</p>
+<p>反射是 Java 编程语言的一个特性，它提供了在运行时检查和动态调用类、方法、属性的能力。</p>
+<p>反射能做什么？</p>
+<p>反射可以在运行时检查类，接口，方法和变量。还可以实例化对象、调用方法、获取和设置变量值。比如当我们不知道一个类中是否拥有某个方法时，我们就可以使用反射来检查是否拥有这个方法。</p>
+<p>反射常用类？</p>
+<ul>
+<li>Class：Class 类表示正在运行的 Java 程序中的类和接口。</li>
+<li>Field：提供有关类或接口的单个域的信息和动态访问。如数据类型，访问修饰符，域的名称和值。</li>
+<li>Method：提供有关类或接口上的单个方法的信息和访问权限。如访问修饰符，返回类型，名称，参数类型和方法的异常类型。</li>
+<li>Constructor：提供有关类的单个构造函数的信息和访问权限。例如构造函数的访问修饰符，名称和参数类型。</li>
+<li>Modifier：提供了有关访问修饰符的信息。</li>
+</ul>
+<p>Class</p>
+<p>Class 类没有公共构造方法，可以通过以下方法获取 Class 实例。</p>
+<ul>
+<li>Object 提供的 getClass() 方法。</li>
+<li>类名.Class。</li>
+<li>Class.forName(String className) 方法，className 为类的全限定名。</li>
+</ul>
+<p>Class 类常用方法：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Field getField(String name)</td>
+<td>获取指定的域对象</td>
+</tr>
+<tr>
+<td>Field[] getFields()</td>
+<td>返回所有的公有域对象数组</td>
+</tr>
+<tr>
+<td>Method getDeclaredMethod(String name, Class&lt;?&gt;… parameterTypes)</td>
+<td>返回指定的方法对象</td>
+</tr>
+<tr>
+<td>Method[] getMethods()</td>
+<td>返回所有的公有方法对象数组</td>
+</tr>
+<tr>
+<td>Method[] getDeclaredMethods()</td>
+<td>返回所有方法对象数组</td>
+</tr>
+<tr>
+<td>String getName()</td>
+<td>获取全限定名</td>
+</tr>
+</tbody></table>
+<h2 id="java反射创建对象效率高还是通过new创建对象的效率高？"><a href="#java反射创建对象效率高还是通过new创建对象的效率高？" class="headerlink" title="java反射创建对象效率高还是通过new创建对象的效率高？"></a>java反射创建对象效率高还是通过new创建对象的效率高？</h2><p>答：通过new创建对象的效率高。通过反射时，先找出查找类资源，使用类加载器创建，过程比较繁琐，所以使用效率比较低</p>
+<h2 id="java反射的作用"><a href="#java反射的作用" class="headerlink" title="java反射的作用"></a>java反射的作用</h2><p>反射机制是在运行时，对于任意一个类 ，都能够知道这个类的所有属性和方法；对于任意个对象，都能调用他的任意一个方法。在java只要给定的名字，就可以通过反射机制来获取类的所有信息</p>
+<blockquote>
+<p>这种动态的获取信息和动态的调用对象的方法的功能称为java语言的反射机制。</p>
+</blockquote>
+<h2 id="哪里会有用到反射机制"><a href="#哪里会有用到反射机制" class="headerlink" title="哪里会有用到反射机制"></a>哪里会有用到反射机制</h2><p>jdbc就是典型的反射</p>
+<p>class.forname(‘com.mysql.jdbc.Driver.class’);&#x2F;&#x2F;记载mysql驱动类</p>
+<p>还有hibernate，struts等框架使用反射实现的</p>
+<h2 id="反射的实现方式"><a href="#反射的实现方式" class="headerlink" title="反射的实现方式"></a>反射的实现方式</h2><p>第一步：获取class对象，其中有4中方法：</p>
+<p>1）class.forName(‘类的路径名’)</p>
+<ol start="2">
+<li><p>类名.class</p>
+</li>
+<li><p>对象名.getClass()</p>
+</li>
+<li><p>基本类型的包装类，可以调用包装类的Type属性来获得该包装类的class对象</p>
+</li>
+</ol>
+<h2 id="实现Java反射的类"><a href="#实现Java反射的类" class="headerlink" title="实现Java反射的类"></a>实现Java反射的类</h2><p>1）class: 表示正在运行的java应用对象中的类和接口</p>
+<p>​                注意：所有获取对象的信息都需要class类来实现</p>
+<p>2）Field： 提供有关类和接口的属性信息，以及对它的动态访问权限</p>
+<p>3）Constructor:  提供关于类的单个构造方法的信息 以及他的访问权限</p>
+<p>4）Method：提供类或接口中某个方法的信息</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/18/Java%E5%8F%8D%E5%B0%84/" data-id="cl0j84jvp003z04vh8axqhnr3" data-title="Java反射" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-网络编程" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/18/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="article-date">
+  <time class="dt-published" datetime="2021-04-18T07:10:41.000Z" itemprop="datePublished">2021-04-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/18/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="网络编程"><a href="#网络编程" class="headerlink" title="网络编程"></a>网络编程</h1><p>简介</p>
+<p>网络编程是指编写运行在多个设备（计算机）的程序，这些设备都通过网络连接起来。java.net 包中 J2SE 的 API 包含有类和接口，它们提供低层次的通信细节。你可以直接使用这些类和接口，来专注于解决问题，而不用关注通信细节。本节重点讲解 Java 网络编程中的常用类，以及计算机网络的一些基础知识。</p>
+<p>知识点</p>
+<ul>
+<li>TCP</li>
+<li>UDP</li>
+<li>HttpURLConnection</li>
+<li>InetAddress 类</li>
+<li>Socket 类</li>
+<li>ServerSocket 类</li>
+</ul>
+<p>Socket 简介</p>
+<p>网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个 socket。</p>
+<p>建立网络通信连接至少要一对端口号 (socket)。socket 本质是编程接口 (API)，对 TCP&#x2F;IP 的封装，TCP&#x2F;IP 也要提供可供程序员做网络开发所用的接口，这就是 Socket 编程接口；HTTP 是轿车，提供了封装或者显示数据的具体形式；Socket 是发动机，提供了网络通信的能力。</p>
+<p>Socket 的英文原义是“孔”或“插座”。作为 BSD UNIX 的进程通信机制，取后一种意思。通常也称作”套接字”，用于描述 IP 地址和端口，是一个通信链的句柄，可以用来实现不同虚拟机或不同计算机之间的通信。在 Internet 上的主机一般运行了多个服务软件，同时提供几种服务。每种服务都打开一个 Socket，并绑定到一个端口上，不同的端口对应于不同的服务。Socket 正如其英文原义那样，像一个多孔插座。一台主机犹如布满各种插座的房间，每个插座有一个编号，有的插座提供 220 伏交流电， 有的提供 110 伏交流电，有的则提供有线电视节目。 客户软件将插头插到不同编号的插座，就可以得到不同的服务。</p>
+<h2 id="端口号"><a href="#端口号" class="headerlink" title="端口号"></a>端口号</h2><p><img src="/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B.png" alt="网络编程"></p>
+<p><img src="E:\MyBolg\source_posts\网络编程\网络编程.png" alt="网络编程"></p>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p>TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议，由 IETF 的 RFC 793 定义。在简化的计算机网络 OSI 模型中，它完成第四层传输层所指定的功能，用户数据报协议（UDP）是同一层内另一个重要的传输协议。在因特网协议族（Internet protocol suite）中，TCP 层是位于 IP 层之上，应用层之下的中间层。不同主机的应用层之间经常需要可靠的、像管道一样的连接，但是 IP 层不提供这样的流机制，而是提供不可靠的包交换。</p>
+<p>应用层向 TCP 层发送用于网间传输的、用 8 位字节表示的数据流，然后 TCP 把数据流分区成适当长度的报文段（通常受该计算机连接的网络的数据链路层的最大传输单元（MTU）的限制）。之后 TCP 把结果包传给 IP 层，由它来通过网络将包传送给接收端实体的 TCP 层。TCP 为了保证不发生丢包，就给每个包一个序号，同时序号也保证了传送到接收端实体的包的按序接收。然后接收端实体对已成功收到的包发回一个相应的确认（ACK）；如果发送端实体在合理的往返时延（RTT）内未收到确认，那么对应的数据包就被假设为已丢失将会被进行重传。TCP 用一个校验和函数来检验数据是否有错误；在发送和接收时都要计算校验和。</p>
+<p><img src="/TCP.png" alt="TCP"></p>
+<p><img src="E:\MyBolg\source_posts\网络编程\TCP.png" alt="TCP"></p>
+<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p>UDP 是 User Datagram Protocol 的简称， 中文名是用户数据报协议，是 OSI（Open System Interconnection，开放式系统互联） 参考模型中一种无连接的传输层协议，提供面向事务的简单不可靠信息传送服务，IETF RFC 768 是 UDP 的正式规范。UDP 在 IP 报文的协议号是 17。</p>
+<p>UDP 协议全称是用户数据报协议，在网络中它与 TCP 协议一样用于处理数据包，是一种无连接的协议。在 OSI 模型中，在第四层——传输层，处于 IP 协议的上一层。UDP 有不提供数据包分组、组装和不能对数据包进行排序的缺点，也就是说，当报文发送之后，是无法得知其是否安全完整到达的。UDP 用来支持那些需要在计算机之间传输数据的网络应用。包括网络视频会议系统在内的众多的客户 &#x2F; 服务器模式的网络应用都需要使用 UDP 协议。UDP 协议从问世至今已经被使用了很多年，虽然其最初的光彩已经被一些类似协议所掩盖，但是即使是在今天 UDP 仍然不失为一项非常实用和可行的网络传输层协议。</p>
+<p>与所熟知的 TCP（传输控制协议）协议一样，UDP 协议直接位于 IP（网际协议）协议的顶层。根据 OSI（开放系统互连）参考模型，UDP 和 TCP 都属于传输层协议。UDP 协议的主要作用是将网络数据流量压缩成数据包的形式。一个典型的数据包就是一个二进制数据的传输单位。每一个数据包的前 8 个字节用来包含报头信息，剩余字节则用来包含具体的传输数据。</p>
+<h2 id="HttpURLConnection"><a href="#HttpURLConnection" class="headerlink" title="HttpURLConnection"></a>HttpURLConnection</h2><p>HttpURLConnection 位于 java.net 包中，支持 HTTP 特定功能。我们可以使用它来发起网络请求，获取服务器的相关资源。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.net.HttpURLConnection;</span><br><span class="line"><span class="keyword">import</span> java.net.MalformedURLException;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HttpUrlTest</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">		<span class="comment">//设置url</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="type">URL</span> <span class="variable">shiyanlou</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;https://www.lanqiao.cn&quot;</span>);</span><br><span class="line">			<span class="comment">//打开连连接</span></span><br><span class="line">			<span class="type">HttpURLConnection</span> <span class="variable">urlConnection</span> <span class="operator">=</span> (HttpURLConnection)shiyanlou.openConnection();</span><br><span class="line">			<span class="comment">//设置请求方法</span></span><br><span class="line">			urlConnection.setRequestMethod(<span class="string">&quot;GET&quot;</span>);</span><br><span class="line">			<span class="comment">//设置连接超时时间</span></span><br><span class="line">			urlConnection.setConnectTimeout(<span class="number">1000</span>);</span><br><span class="line">			<span class="comment">//获取输入流</span></span><br><span class="line">			<span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> urlConnection.getInputStream();</span><br><span class="line">			<span class="type">BufferedReader</span> <span class="variable">bufferedReader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(inputStream));</span><br><span class="line">			<span class="comment">//打印结果			bufferedReader.lines().forEach(System.out::println);</span></span><br><span class="line">			<span class="comment">//关闭连接</span></span><br><span class="line">			inputStream.close();</span><br><span class="line">			bufferedReader.close();</span><br><span class="line">			urlConnection.disconnect();			</span><br><span class="line">		&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="InetAddress-类"><a href="#InetAddress-类" class="headerlink" title="InetAddress 类"></a>InetAddress 类</h2><p>InetAddress类用于表示 IP 地址，比如在进行 Socket 编程时，就会使用到该类。</p>
+<p>InetAddress没有公共构造方法，我们只能使用它提供的静态方法来构建一个 InetAddress 类实例</p>
+<ul>
+<li>getLocalHost()： 返回本地主机地址</li>
+<li>getAllByName（String host）：从指定的主机名返回 InetAddress 对象的数组，因为主机名可以与多个 IP 地址相关联。</li>
+<li>getByAddress（byte [] addr）：从原始 IP 地址的字节数组中返回一个 InetAddress 对象。</li>
+<li>getByName（String host）：根据提供的主机名创建一个 InetAddress 对象。</li>
+<li>getHostAddress()：返回文本表示的 IP 地址字符串。</li>
+<li>getHostname()：获取主机名。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.InetAddress;</span><br><span class="line"><span class="keyword">import</span> java.net.UnknownHostException;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InetAddressDemo</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="type">InetAddress</span> <span class="variable">shiyanlou</span> <span class="operator">=</span> InetAddress.getByName(<span class="string">&quot;www.lanqiao.cn&quot;</span>);</span><br><span class="line">			<span class="comment">//toString方法将输出主机名和ip地址</span></span><br><span class="line">			System.out.println(shiyanlou.toString());</span><br><span class="line">			<span class="comment">//获取ip地址</span></span><br><span class="line">			<span class="type">String</span> <span class="variable">ip</span> <span class="operator">=</span> shiyanlou.toString().split(<span class="string">&quot;/&quot;</span>)[<span class="number">1</span>];</span><br><span class="line">			<span class="comment">//根据IP地址获取主机名</span></span><br><span class="line">			<span class="type">InetAddress</span> <span class="variable">byAddress</span> <span class="operator">=</span> InetAddress.getByName(ip);</span><br><span class="line">			System.out.println(<span class="string">&quot;get hostname by IP address:&quot;</span> +byAddress.getHostName() );</span><br><span class="line">			System.out.println(<span class="string">&quot;localhost: &quot;</span>+InetAddress.getLocalHost());</span><br><span class="line">			</span><br><span class="line">		&#125; <span class="keyword">catch</span> (UnknownHostException e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h2><p>Socket 类代表一个客户端套接字，可以使用该类向服务器发送和接受数据。一般需要通过下面几个步骤：</p>
+<ol>
+<li>建立与服务器的连接；</li>
+<li>使用输出流将数据发送到服务器；</li>
+<li>使用输入流读取服务器返回的数据；</li>
+<li>关闭连接。</li>
+</ol>
+<p>构造方法</p>
+<p>Socket 常用构造方法：</p>
+<ul>
+<li>Socket(InetAddress address, int port)：创建一个套接字，连接到指定 IP 地址和端口的服务器</li>
+<li>Socket(String host, int port)：创建一个套接字，连接到指定的主机名和端口的服务器</li>
+<li>Socket(InetAddress address, int port, InetAddress localAddr, int localPort)：创建一个套接字连接到指定的 IP 地址和端口的服务器，并且显示的指定客户端地址和端口。</li>
+</ul>
+<p>在创建 Socket 时，需要捕获异常。</p>
+<p>getOutputStream()</p>
+<p>该方法可以获取输出流，在建立连接后，可以使用该方法获取输出流，发送数据到服务器。发送数据的方式和使用 IO 流是相同的，使用 write 方法发送指定的数据即可。</p>
+<p>getInputStream()</p>
+<p>用户获取输入流，通过该方法获取输入流之后可以读取服务器发送来的数据。使用方法和 IO 流相同，使用 read 方法即可。</p>
+<p>close()</p>
+<p>关闭 Socket，可能抛出 IO 异常，所以我们同样需要捕获异常。</p>
+<h2 id="ServerSocket"><a href="#ServerSocket" class="headerlink" title="ServerSocket"></a>ServerSocket</h2><p>ServerSocket类用于实现服务器套接字，服务器套接字会等待客户端网络连接，与客户端连接之后，会进行一系列操作，然后将结果返回给客户端。</p>
+<p>创建一个 ServerSocket 一般需要以下几个步骤：</p>
+<ol>
+<li>创建服务器套接字并将其绑定到特定的接口</li>
+<li>等待客户端连接</li>
+<li>通过客户端套接字获取输入流，从客户端读取数据</li>
+<li>通过客户端套接字获取输出流，发送数据到客户端</li>
+<li>关闭套接字</li>
+</ol>
+<p>构造方法</p>
+<p>常见构造方法：</p>
+<ul>
+<li>ServerSocket()：创建一个未绑定端口的服务器套接字。</li>
+<li>ServerSocket(int port)：创建绑定到指定端口号的服务器套接字。</li>
+<li>ServerSocket(int port,int backlog)：创建一个绑定到指定端口号的服务器套接字，并且backlog 参数指定了最大排队连接数。</li>
+<li>ServerSocket(int port,int backlog,InetAddress bindAddr)：创建服务器套接字并将其绑定到指定的端口号和本地 IP 地址。</li>
+</ul>
+<p>示例：</p>
+<p><code>ServerSocket serverSocket = new ServerSocket(8888);</code></p>
+<p>accept()</p>
+<p>用于监听客户端连接请求，当调用该方法时，会阻塞当前线程，直到有客户端发起请求与其建立连接，否则将一直等待。当连接成功后，将返回一个 Socket 对象。</p>
+<p>close()</p>
+<p>用于关闭服务器套接字，服务器停止后，将断开所有连接。</p>
+<p>其他方法</p>
+<p>可以查阅<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/net/ServerSocket.html">官方文档</a>。</p>
+<p><img src="/ServerSocket.png" alt="ServerSocket"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/18/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-id="cl0j84jxp00bf04vh8u4na0d3" data-title="网络编程" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-面试题-字节跳动-1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/17/%E9%9D%A2%E8%AF%95%E9%A2%98-%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-1/" class="article-date">
+  <time class="dt-published" datetime="2021-04-17T14:18:47.000Z" itemprop="datePublished">2021-04-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/17/%E9%9D%A2%E8%AF%95%E9%A2%98-%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-1/">面试题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>字节一面部分考题：</p>
+<ul>
+<li>进程和线程，区别，哪个效率高，为什么</li>
+<li>死锁的条件，如何解决</li>
+<li>java的基本数据类型和字节数</li>
+<li>mysqI索引结构,特点，为什么使用这个</li>
+<li>聚集索引和非聚集索引</li>
+<li>String，StringBuffer, StringBuilder区别</li>
+<li>HashMap，为什么使用红黑树</li>
+<li>垃圾回收机制GC, cms, G1,垃圾回收的算法</li>
+<li>TCP连接和释放</li>
+</ul>
+<p>字节二面部分考题：</p>
+<ul>
+<li>谈谈项目?</li>
+<li>子类和父类的实例变量和方法有什么区别</li>
+<li>重载和覆盖区别，返回值类型不同，可以重载吗，为什么</li>
+<li>java多线程,状态图，画出来,阻塞的状态有哪几种,运行顺序,多线程的一些方法</li>
+<li>java泛型</li>
+<li>悲观锁和乐观锁</li>
+<li>mysql底层原理，为什么效率高，主键能不能太大，为什么</li>
+<li>linux查询tcp连接处理CLOSE_ WAIT的状态的数目</li>
+<li>RabbitMQ, kafka, RocketMQ, ActiveMQ, 以及其他消息中间件</li>
+<li>redis为什么效率高，线程，数据结构,网络模型，aio, nio, bio, 为什么这么设计？如何处理高并发</li>
+</ul>
+<p>字节三面部分考题：</p>
+<ul>
+<li>数据仓库和数据湖的区别</li>
+<li>分布系统的设计，分布式系统CAP，分布式系统的模型</li>
+<li>linux环境下的线上业务管理有没有，如何管理</li>
+<li>redis的集合有没有限制，限制是多少</li>
+<li>redis的1w条的插入和更新有什么区别</li>
+<li>mysql join的底层原理是什么，有哪几种(不是左右连接这种)</li>
+<li>linux命令查询一个文件内出现重复最多的数字的</li>
+<li>linux命令查询一个文件的行数</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/17/%E9%9D%A2%E8%AF%95%E9%A2%98-%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-1/" data-id="cl0j84jyb00dg04vh64u312ju" data-title="面试题" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/14/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/16/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

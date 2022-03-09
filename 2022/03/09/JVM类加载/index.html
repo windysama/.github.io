@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>类加载 | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="概念：当JVM第一次使用一个类的时候，通过classPath(类路径)找到对应的 .class 文件，从 .class文件中读取该类的信息 （包、类名、父类、属性、成员方法、构造方法等），读取之后将信息存储在JVM内存中，一个类只进行一次类加载。  类的生命周期： 类加载过程 加载到初始化都是在程序的运行期间完成的。验证，准备，解析也叫连接过程，Java的特性是依赖在运行期动态加载和动态连接。 *">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类加载">
+<meta property="og:url" content="http://example.com/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="概念：当JVM第一次使用一个类的时候，通过classPath(类路径)找到对应的 .class 文件，从 .class文件中读取该类的信息 （包、类名、父类、属性、成员方法、构造方法等），读取之后将信息存储在JVM内存中，一个类只进行一次类加载。  类的生命周期： 类加载过程 加载到初始化都是在程序的运行期间完成的。验证，准备，解析也叫连接过程，Java的特性是依赖在运行期动态加载和动态连接。 *">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNRH9DsksGC2iaSs3DRz8SP2ws4jDzwcWmxzIcrESiczn8eY0AEzeFTLsQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNkzsCznLcXtCNFWKran6njOmWwuBJMoVAFC3v8ibrOBtpjblVSmgRdvA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNTX6kHnRo12duI7J8Wa5hLcSiaMcxH6iaAMjibsVlX6p4L3lDibg2oVjNAw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNichb13jzW13XicVZ2CO9xKTduXDrCvIia115oc9znWOnzNF8VW1zZtmLA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="article:published_time" content="2022-03-09T07:11:57.546Z">
+<meta property="article:modified_time" content="2021-05-15T02:25:16.456Z">
+<meta property="article:author" content="Lee yunbo">
+<meta property="article:tag" content="Java JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNRH9DsksGC2iaSs3DRz8SP2ws4jDzwcWmxzIcrESiczn8eY0AEzeFTLsQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-JVM类加载" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.546Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      类加载
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h2><p>当JVM第一次使用一个类的时候，通过classPath(类路径)找到对应的 .class 文件，从 .class文件中读取该类的信息</p>
+<p>（包、类名、父类、属性、成员方法、构造方法等），读取之后将信息存储在JVM内存中，一个类只进行一次类加载。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNRH9DsksGC2iaSs3DRz8SP2ws4jDzwcWmxzIcrESiczn8eY0AEzeFTLsQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<h2 id="类的生命周期："><a href="#类的生命周期：" class="headerlink" title="类的生命周期："></a>类的生命周期：</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNkzsCznLcXtCNFWKran6njOmWwuBJMoVAFC3v8ibrOBtpjblVSmgRdvA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<h2 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNTX6kHnRo12duI7J8Wa5hLcSiaMcxH6iaAMjibsVlX6p4L3lDibg2oVjNAw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p>加载到初始化都是在程序的运行期间完成的。验证，准备，解析也叫连接过程，Java的特性是依赖在运行期动态加载和动态连接。</p>
+<p>**类加载并不是顺序执行，“并发” 执行</p>
+<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><p>”加载“是”类加机制”的第一个过程，在加载阶段，虚拟机主要完成三件事：</p>
+<p>（1）通过一个类的全限定名来获取其定义的二进制字节流</p>
+<p>（2）将这个字节流所代表的的静态存储结构转化为方法区的运行时数据结构</p>
+<p>（3）在堆中生成一个代表这个类的java.lang.Class对象，作为方法区中这些数据的访问入口。</p>
+<h3 id="连接-验证"><a href="#连接-验证" class="headerlink" title="连接-验证"></a>连接-验证</h3><p>目的在于确保class文件的字节流中包含信息符合当前虚拟机要求，不会危害虚拟机自身的安全，</p>
+<p>根据2011年发布的&lt;java虚拟机规范&gt;的要求，验证阶段大致需要一下四个阶段来验证</p>
+<p>主要包括四种验证：文件格式的验证，元数据的验证，字节码验证，符号引用验证。</p>
+<ul>
+<li>文件格式验证，该阶段主要在字节流转化为方法区中的运行时数据时，负责检查字节流是否符合Class文件的规范，保证其可以正确的被解析并存储于方法区中。</li>
+<li>元数据验证，确保Class的语义描述符合Java的Class规范。如：该Class是否有父类、是否错误继承了final类、是否一个合法的抽象类等。</li>
+<li>字节码验证，通过分析数据流和控制流，确保程序语义符合逻辑。如：验证类型转换是合法的。</li>
+<li>符号引用验证，发生于符号引用转换为直接引用的时候（转换发生在解析阶段）。如：验证引用的类、成员变量、方法的是否可以被访问，当前类是否存在相应的方法、成员等。</li>
+</ul>
+<h3 id="连接-准备"><a href="#连接-准备" class="headerlink" title="连接-准备"></a>连接-准备</h3><p>在准备阶段，虚拟机会在方法区中为Class分配内存，并设置static成员变量的初始值为默认值。注意这里仅仅会为static变量分配内存（static变量在方法区中），并且初始化static变量的值为其所属类型的默认值。如：int类型初始化为0，引用类型初始化为null。即使声明了这样一个static变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static int a = 123;</span><br></pre></td></tr></table></figure>
+
+<p>在准备阶段后，a在内存中的值仍然是0, 赋值123这个操作会在中初始化阶段执行，因此在初始化阶段产生了对应的Class对象之后a的值才是123 。为类变量（static修饰的字段变量）分配内存并且设置该类变量的初始值，（如static int i &#x3D; 5 这里只是将 i 赋值为0，在初始化的阶段再把 i 赋值为5)，这里不包含final修饰的static ，因为final在编译的时候就已经分配了。这里不会为实例变量分配初始化，类变量会分配在方法区中，实例变量会随着对象分配到Java堆中。</p>
+<h3 id="连接-解析"><a href="#连接-解析" class="headerlink" title="连接-解析"></a>连接-解析</h3><p>常量（用<strong>final修饰</strong>的成员变量表示常量，值一旦给定就无法改变！）</p>
+<p>解析阶段，虚拟机会将常量池中的符号引用替换为直接引用，解析主要针对的是类、接口、方法、成员变量等符号引用。在转换成直接引用后，会触发校验阶段的符号引用验证，验证转换之后的直接引用是否能找到对应的类、方法、成员变量等。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化阶段，才真正开始执行类中定义的java程序代码</p>
+<p>这里是类加载的最后阶段，如果该类具有父类就进行对父类进行初始化，执行其静态初始化器（静态代码块）和静态初始化成员变量。（前面已经对static 初始化了默认值，这里我们对它进行赋值，成员变量也将被初始化）</p>
+<h2 id="类加载时机："><a href="#类加载时机：" class="headerlink" title="类加载时机："></a>类加载时机：</h2><p>①第一次创建该类对象：先进行类加载，在完成对象的创建</p>
+<p>②第一次使用该类的静态成员（静态属性和静态方法）</p>
+<p>③子类的类加载会导致其父类先进行类加载</p>
+<p>④使用java.lang.reflect包的方法对类进行反射调用的时候</p>
+<p>⑤当虚拟机启动时，用户指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类。</p>
+<h2 id="双亲委派机制："><a href="#双亲委派机制：" class="headerlink" title="双亲委派机制："></a>双亲委派机制：</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/D4ynMCmu5CvSWoBRpj0v6IF2QsmdzBWNichb13jzW13XicVZ2CO9xKTduXDrCvIia115oc9znWOnzNF8VW1zZtmLA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p>首先需要知道的是，java类加载遵循一个机制——<code>Parents Delegation Model</code>（双亲委派模型） 双亲委派机制：就是某个特定的类加载器在接收到加载类的请求时，除非显示的要求使用某一个类加载器，都会将加载任务委托给父类加载器，父类加载器又将加载任务继续向上委托，直到最终父类加载器，如果最终父类加载器可以完成此类的加载任务，就由其完成加载，如果不行就依次向下传递任务，由其子类加载器进行加载。</p>
+<h2 id="双亲委派机制有什么好处？"><a href="#双亲委派机制有什么好处？" class="headerlink" title="双亲委派机制有什么好处？"></a>双亲委派机制有什么好处？</h2><p>1、 出于安全考虑，这么做保证了java核心库的安全性，确保基础类永远都是由java提供的类加载器来加载。2、  可以避免重复加载，当父加载器已经加载了该类后，子类就没有必要再加载一次。从以上两点出发，如果有人恶意篡改了基础类的代码（例如：java.lang.string）那他自己定义的java.lang.string将永远不会被加载进来，因为原始的String类已经在启动的时候就被加载进来了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" data-id="cl0j84jvf002y04vhbvpnfxjj" data-title="类加载" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JVM类加载机制
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/03/09/JVM%E5%8A%A0%E8%BD%BDclass%E6%96%87%E4%BB%B6%E7%9A%84%E5%8E%9F%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">描述一下JVM加载class文件的原理机制?</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

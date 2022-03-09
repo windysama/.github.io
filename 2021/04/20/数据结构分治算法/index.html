@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>分治算法 | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="分治法文章摘自：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;72734354 分治法，字面意思是“分而治之”，就是把一个复杂的1问题分成两个或多个相同或相似的子问题，再把子问题分成更小的子问题直到最后子问题可以简单地直接求解，原问题的解即子问题的解的合并，这个思想是很多高效算法的基础，例如排序算法(快速排序，归并排序)，傅里叶变换(快速傅里叶变换)等。 分治法的基本思想：将一个难以直">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分治算法">
+<meta property="og:url" content="http://example.com/2021/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="分治法文章摘自：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;72734354 分治法，字面意思是“分而治之”，就是把一个复杂的1问题分成两个或多个相同或相似的子问题，再把子问题分成更小的子问题直到最后子问题可以简单地直接求解，原问题的解即子问题的解的合并，这个思想是很多高效算法的基础，例如排序算法(快速排序，归并排序)，傅里叶变换(快速傅里叶变换)等。 分治法的基本思想：将一个难以直">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=n_0=1">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=middle=(left+right)/2">
+<meta property="og:image" content="http://example.com/%E6%B1%89%E8%AF%BA%E5%A1%94.gif">
+<meta property="og:image" content="http://example.com/%E6%B1%89%E8%AF%BA%E5%A1%94.gif">
+<meta property="article:published_time" content="2021-04-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-04-20T14:24:59.442Z">
+<meta property="article:author" content="Lee yunbo">
+<meta property="article:tag" content="数据结构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.zhihu.com/equation?tex=n_0=1">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-数据结构分治算法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/" class="article-date">
+  <time class="dt-published" datetime="2021-04-19T16:00:00.000Z" itemprop="datePublished">2021-04-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      分治算法
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="分治法"><a href="#分治法" class="headerlink" title="分治法"></a>分治法</h1><p>文章摘自：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/72734354">https://zhuanlan.zhihu.com/p/72734354</a></p>
+<p>分治法，字面意思是“分而治之”，就是把一个复杂的1问题分成两个或多个相同或相似的子问题，再把子问题分成更小的子问题直到最后子问题可以简单地直接求解，原问题的解即子问题的解的合并，这个思想是很多高效算法的基础，例如排序算法(快速排序，归并排序)，傅里叶变换(快速傅里叶变换)等。</p>
+<p>分治法的基本思想：将一个难以直接解决的大问题，分割成一些规模较小的相同问题，以便各个击破，分而治之。</p>
+<p>分治策略：对于一个规模为n的问题，若该问题可以容易的解决(比如规模n较小)则直接解决，否则将其分解为k个规模较小的子问题，这些子问题互相独立且与原问题形式相同，递归地解决这些子问题，然后将各个子问题的解合并得到原问题的解。</p>
+<p>如果原问题可以分割成k个子问题，1&lt;k&lt;&#x3D;n，且这些子问题均可解并且利用这些子问题的解求出原问题的解，那么分治方法就是可行的。由分治法产生的子问题往往是原问题的较小模式，这就为使用递归技术提供了方便。反复应用分治手段，可以使子问题与原问题类型一致而其规模却不断缩小，最终使子问题缩小到很容易直接求出其解。这自然导致递归过程的产生。分治与递归经常同时应用在算法设计之中。</p>
+<h2 id="分治法使用场景"><a href="#分治法使用场景" class="headerlink" title="分治法使用场景"></a>分治法使用场景</h2><ol>
+<li>该问题的规模缩小到一定的程度就可以容易的解决。</li>
+<li>该问题可以分解为若干个规模较小的相同问题，即该问题具有最优子结构性质。</li>
+<li>利用该问题分解出的子问题的解可以合并为该问题的解。</li>
+<li>该问题所分解出的各个子问题是相互独立的，即子问题之间不包含公共的子问题。</li>
+</ol>
+<p>第一条特征是绝大多数问题可以满足的，问题的复杂性一般是随着问题规模的增加而增加；第二条特征是应用分治法的前提。它是大多数问题可以满足的，此特征反映了递归思想的应用。第三条特征是关键，能否利用分治法完全取决于问题是否具有第三条特征，如果具备了第一条和第二条，而不具备第三条特征，则可以考虑使用贪心法或者动态规划法。第四条关系到分治法的效率，如果各个子问题是不独立的则分治法要做寻多不必要的工作，重复的解决公共的子问题，此时虽然可用分治法，但一般使用动态规划法较好。</p>
+<h2 id="分治法的基本步骤"><a href="#分治法的基本步骤" class="headerlink" title="分治法的基本步骤"></a>分治法的基本步骤</h2><ul>
+<li>分解：将原问题分解为若干个规模较小，相互独立，与原问题形式相同的子问题</li>
+<li>解决：若子问题规模较小而容易被解决则直接解，否则递归地解各个子问题</li>
+<li>合并：将各个子问题的解合并为原问题的解</li>
+</ul>
+<h2 id="分治法的复杂性分析"><a href="#分治法的复杂性分析" class="headerlink" title="分治法的复杂性分析"></a>分治法的复杂性分析</h2><p>一个分治法将规模为n的问题分成k个规模为n&#x2F;m的子问题去解。设分解阈值 <img src="https://www.zhihu.com/equation?tex=n_0=1" alt="[公式]"> ，且最小子解规模为1的问题消耗一个单位时间。设将原问题分解为k个子问题以及用merge将K个子问题的解合并为原问题的解需用f(n)个单位时间，用T(n)表示该分治法解规模为|P|&#x3D;n的问题所需的计算时间：<br>$$<br>T(n)&#x3D;kT(n&#x2F;m)+f(n)<br>$$</p>
+<h2 id="可以使用分治法求解的一些经典问题"><a href="#可以使用分治法求解的一些经典问题" class="headerlink" title="可以使用分治法求解的一些经典问题"></a>可以使用分治法求解的一些经典问题</h2><ol>
+<li>二分搜索</li>
+<li>大整数乘法</li>
+<li>Strassen矩阵乘法</li>
+<li>棋盘覆盖</li>
+<li><a href="https://link.zhihu.com/?target=http://www.cnblogs.com/xsyfl/p/6905974.html">合并排序</a></li>
+<li><a href="https://link.zhihu.com/?target=http://www.cnblogs.com/xsyfl/p/6901315.html">快速排序</a></li>
+<li>线性时间选择</li>
+<li>最接近点对问题</li>
+<li>循环赛日程表</li>
+<li><strong>汉诺塔</strong></li>
+</ol>
+<p><strong>二分搜索法</strong></p>
+<p>又叫做二分查找，折半查找，它是一种效率较高的查找方法。</p>
+<p>线性表为有序表，先确定待查找记录所在的范围，然后逐步缩小范围直至找到或找不到该记录的位置。</p>
+<ul>
+<li>先确定中间位置： <img src="https://www.zhihu.com/equation?tex=middle=(left+right)/2" alt="[公式]"> ;</li>
+<li>将待查找的key值与data[middle].key的值比较，相等则查找成功并返回该位置，否则须确定新得查找区间，继续二分查找，</li>
+<li>如果data[middle].key大于key，由于data为有序线性表，可知data[middle…right].key均大于key，因此若表中存在关键字等于key的节点，则一定在位置middle左边的子表中。</li>
+<li>反之，data[middle].key小于key，若表中存在关键字等于key的节点，则一定在位置middle右边的子表中，下一次查找对新的区域进行查找。</li>
+</ul>
+<p>和动态规划一样，作为一种解决问题的算法思想，仅仅知道其概念是远远不够的，需要出培养这种思维方式，所以必须要有针对性的勤刷题，培养出一种解决问题的思维方式，这样以后遇到类似的问题才能迎刃而解。</p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h4 id="面试题-08-06-汉诺塔问题"><a href="#面试题-08-06-汉诺塔问题" class="headerlink" title="面试题 08.06. 汉诺塔问题"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/hanota-lcci/">面试题 08.06. 汉诺塔问题</a></h4><p>汉诺塔问题是一个经典的数学难题，由 3 个柱子和多个半径不等的圆盘构成，如下图所示：</p>
+<p><img src="/%E6%B1%89%E8%AF%BA%E5%A1%94.gif" alt="汉诺塔"></p>
+<p>​                                                                    图 1 汉诺塔问题</p>
+<p>汉诺塔问题指的是：将一个柱子中的所有圆盘移动到另一个柱子，移动过程需遵守以下规则：</p>
+<ul>
+<li>每次只能移动一个圆盘，而且只能移动某个柱子上最顶部的圆盘；</li>
+<li>移动过程中，必须保证每个柱子上的大圆盘都位于小圆盘的下面。</li>
+</ul>
+<p>如图 1 所示，第一个柱子上共有 3 个圆盘，上面的动画演示了汉诺塔问题的一种解决方案。</p>
+<p>可以看到，3 个圆盘需要移动 7 步，才能成功移动到另一个柱子上。</p>
+<blockquote>
+<p>汉诺塔问题中，n 个圆盘至少需要 2n-1 次移动操作。</p>
+</blockquote>
+<h2 id="汉诺塔问题的解决思路"><a href="#汉诺塔问题的解决思路" class="headerlink" title="汉诺塔问题的解决思路"></a>汉诺塔问题的解决思路</h2><p>我们可以很轻易的想到移动 1~3 个圆盘的解决方案，圆盘个数越多，解决起来就越棘手。这种情况下，我们可以借助<a target="_blank" rel="noopener" href="https://www.biancheng.net/algorithm/divide_and_conquer.html">分治</a>思想，将移动多个圆盘的大问题分割成多个移动少量圆盘的小问题。</p>
+<p>为了便于讲清楚问题的解决过程，我们将 3 个柱子依次命名为起始柱、辅助柱及目标柱。起始柱指的是初始状态下所有圆盘所在的柱子，目标柱指的是最终放置所有圆盘的柱子，剩下的一个称为辅助柱。</p>
+<p>首先，如果初始状态下的起始柱上仅有 1 个圆盘，我们可以很轻松地将圆盘从起始柱直接移到目标柱。如果初始状态下起始柱上有 2 个圆盘，则整个移动操作需执行如下几步：</p>
+<ol>
+<li>将起始柱顶部较小的圆盘移动到辅助柱；</li>
+<li>将起始柱上较大的圆盘移动到目标柱；</li>
+<li>最后，将辅助柱上较小的圆盘移动到目标柱。</li>
+</ol>
+<p>图 2 演示了以上 3 步操作的过程：</p>
+<p><img src="/%E6%B1%89%E8%AF%BA%E5%A1%94.gif" alt="汉诺塔"></p>
+<p>实际上，移动 2 个圆盘的过程也同样适用于移动更多的圆盘。对于初始状态下起始柱包含 2 个以上圆盘的情况（假设圆盘个数为 n），移动过程可以遵循以下步骤：</p>
+<ol>
+<li>将起始柱上的 n-1 个圆盘移动到辅助柱；</li>
+<li>将起始柱上最大的圆盘移动到目标柱；</li>
+<li>将辅助柱中的 n-1个圆盘移动到目标柱。</li>
+</ol>
+<p>对于移动 n-1 个圆盘的情况，仍可以遵循以上的移动过程。如此，我们就将移动 n 个圆盘的问题划分为移动 n-1 个圆盘的问题，此问题还可以进行更细致的划分。</p>
+<h2 id="汉诺塔问题的具体实现"><a href="#汉诺塔问题的具体实现" class="headerlink" title="汉诺塔问题的具体实现"></a>汉诺塔问题的具体实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line">    <span class="comment">// 统计移动次数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">hanoi</span><span class="params">(<span class="type">int</span> num, <span class="type">char</span> source, <span class="type">char</span> target, <span class="type">char</span> auxiliary)</span> &#123;</span><br><span class="line">        <span class="comment">// 如果圆盘数量仅有 1 个，则直接从起始柱移动到目标柱</span></span><br><span class="line">        <span class="keyword">if</span> (num == <span class="number">1</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;第&quot;</span> + i + <span class="string">&quot;次:从&quot;</span> + source + <span class="string">&quot;移动到&quot;</span> + target);</span><br><span class="line">            i++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 递归调用 hanoi() 函数，将 num-1 个圆盘从起始柱移动到辅助柱上</span></span><br><span class="line">            hanoi(num - <span class="number">1</span>, source, auxiliary, target);</span><br><span class="line">            <span class="comment">// 将起始柱上剩余的最后一个大圆盘移动到目标柱上</span></span><br><span class="line">            System.out.println(<span class="string">&quot;第&quot;</span> + i + <span class="string">&quot;次:从&quot;</span> + source + <span class="string">&quot;移动到&quot;</span> + target);</span><br><span class="line">            i++;</span><br><span class="line">            <span class="comment">// 递归调用 hanoi() 函数，将辅助柱上的 num-1 圆盘移动到目标柱上</span></span><br><span class="line">            hanoi(num - <span class="number">1</span>, auxiliary, target, source);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 以移动 3 个圆盘为例，起始柱、目标柱、辅助柱分别用 A、B、C 表示</span></span><br><span class="line">        hanoi(<span class="number">3</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">hanota</span><span class="params">(List&lt;Integer&gt; A, List&lt;Integer&gt; B, List&lt;Integer&gt; C)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> A.length;</span><br><span class="line">        Stack&lt;Integer&gt; a = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++) a.push(A[i]);</span><br><span class="line">        Stack&lt;Integer&gt; b = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        Stack&lt;Integer&gt; c = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        hanoi(n,a,b,c);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">hanoi</span><span class="params">(<span class="type">int</span> n;Stack&lt;Integer&gt; a;Stack&lt;Integer&gt; b;Stack&lt;Integer&gt; c)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>) &#123;</span><br><span class="line">            c.push(a.pop());</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line">        hanoi(n-<span class="number">1</span>,a,c,b);</span><br><span class="line">        c.push(a.pop());</span><br><span class="line">        hanoi(n-<span class="number">1</span>,b,a,c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/" data-id="cl0j84jxl00b204vhas9jbx6v" data-title="分治算法" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/04/21/%E9%9D%A2%E8%AF%95%E5%BF%85%E8%80%83%E9%A2%98%E8%A7%A3%E5%86%B3hash%E5%86%B2%E7%AA%81%E7%9A%84%E5%8A%9E%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          解决哈希冲突的三种方法（拉链法、开放地址法、再散列法、建立公共溢出栈）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/19/MySql%E9%94%81/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MySql锁</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

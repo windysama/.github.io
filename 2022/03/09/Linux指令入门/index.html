@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Linux指令入门 | MyHomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="tree命令描述：tree命令用于以树状图列出目录的内容。 tree命令没有内置在系统中，使用tree命令需要执行以下命令来安装： 1yum install -y tree  命令使用示例： 1tree &#x2F;usr&#x2F;share&#x2F;wallpapers&#x2F;  命令输出结果：  ls命令描述： ls命令用于显示指定工作目录下的内容。 命令格式：ls [参数] [目录名]。 参数说明：    参数 说明">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux指令入门">
+<meta property="og:url" content="http://example.com/2022/03/09/Linux%E6%8C%87%E4%BB%A4%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="MyHomePage">
+<meta property="og:description" content="tree命令描述：tree命令用于以树状图列出目录的内容。 tree命令没有内置在系统中，使用tree命令需要执行以下命令来安装： 1yum install -y tree  命令使用示例： 1tree &#x2F;usr&#x2F;share&#x2F;wallpapers&#x2F;  命令输出结果：  ls命令描述： ls命令用于显示指定工作目录下的内容。 命令格式：ls [参数] [目录名]。 参数说明：    参数 说明">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1FuM_Hvb2gK0jSZK9XXaEgFXa-533-237.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB10gRXHQP2gK0jSZPxXXacQpXa-546-381.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1UJhXHHr1gK0jSZR0XXbP8XXa-452-68.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB16qddHHH1gK0jSZFwXXc7aXXa-412-217.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1X_Z.HuT2gK0jSZFvXXXnFXXa-466-133.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1kdaraaNj0u4jSZFyXXXgMVXa-478-128.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1iMpXHUT1gK0jSZFrXXcNCXXa-499-132.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1s2vcjcKfxu4jSZPfXXb3dXXa-510-254.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1vLo8HqL7gK0jSZFBXXXZZpXa-522-213.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1asFeHQT2gK0jSZFkXXcIQFXa-415-85.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB10Ck3HuL2gK0jSZPhXXahvXXa-673-465.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1z1M_Hvb2gK0jSZK9XXaEgFXa-348-151.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1M9BiHRr0gK0jSZFnXXbRRXXa-387-276.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB164qEaepyVu4jSZFhXXbBpVXa-410-150.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1l3pXHUT1gK0jSZFrXXcNCXXa-386-84.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB12gXcHND1gK0jSZFKXXcJrVXa-869-420.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1XPRcHNv1gK0jSZFFXXb0sXXa-520-111.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1RX7nXSRLWu4jSZKPXXb6BpXa-469-110.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1.q8XHFP7gK0jSZFjXXc5aXXa-458-108.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1cq..HpT7gK0jSZFpXXaTkpXa-445-110.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1mIFeHQT2gK0jSZFkXXcIQFXa-448-67.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1Xq..HpT7gK0jSZFpXXaTkpXa-457-153.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1IHVfHHj1gK0jSZFuXXcrHpXa-477-106.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1KbVfHHj1gK0jSZFuXXcrHpXa-471-108.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1uLg.HxD1gK0jSZFsXXbldVXa-522-108.png">
+<meta property="article:published_time" content="2022-03-09T07:11:57.371Z">
+<meta property="article:modified_time" content="2021-06-13T03:07:42.992Z">
+<meta property="article:author" content="Lee yunbo">
+<meta property="article:tag" content="Java JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.alicdn.com/tfs/TB1FuM_Hvb2gK0jSZK9XXaEgFXa-533-237.png">
+  
+    <link rel="alternate" href="/atom.xml" title="MyHomePage" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">MyHomePage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Linux指令入门" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/03/09/Linux%E6%8C%87%E4%BB%A4%E5%85%A5%E9%97%A8/" class="article-date">
+  <time class="dt-published" datetime="2022-03-09T07:11:57.371Z" itemprop="datePublished">2022-03-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Linux指令入门
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="tree"><a href="#tree" class="headerlink" title="tree"></a>tree</h2><p>命令描述：tree命令用于以树状图列出目录的内容。</p>
+<p>tree命令没有内置在系统中，使用tree命令需要执行以下命令来安装：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y tree</span><br></pre></td></tr></table></figure>
+
+<p>命令使用示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tree /usr/share/wallpapers/</span><br></pre></td></tr></table></figure>
+
+<p>命令输出结果：</p>
+<p><img src="https://img.alicdn.com/tfs/TB1FuM_Hvb2gK0jSZK9XXaEgFXa-533-237.png" alt="img"></p>
+<h2 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h2><p>命令描述： ls命令用于显示指定工作目录下的内容。</p>
+<p>命令格式：<code>ls [参数] [目录名]</code>。</p>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-a</td>
+<td align="left">显示所有文件及目录（包括隐藏文件）</td>
+</tr>
+<tr>
+<td align="left">-l</td>
+<td align="left">将文件的权限、拥有者、文件大小等详细信息列出（<code>ll</code>等同于<code>ls -l</code>）</td>
+</tr>
+<tr>
+<td align="left">-r</td>
+<td align="left">将文件反序列出（默认按英文字母正序）</td>
+</tr>
+<tr>
+<td align="left">-t</td>
+<td align="left">将文件按创建时间正序列出</td>
+</tr>
+<tr>
+<td align="left">-R</td>
+<td align="left">递归遍历目录下文件</td>
+</tr>
+</tbody></table>
+<p>命令使用示例：</p>
+<p>查看当前目录下的所有文件（包括隐藏文件）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ll -a</span><br></pre></td></tr></table></figure>
+
+<p>命令输出结果：</p>
+<p><img src="https://img.alicdn.com/tfs/TB10gRXHQP2gK0jSZPxXXacQpXa-546-381.png" alt="img"></p>
+<h2 id="pwd"><a href="#pwd" class="headerlink" title="pwd"></a>pwd</h2><p>命令描述：获取当前工作目录的绝对路径。</p>
+<p>命令使用示例：</p>
+<p><img src="https://img.alicdn.com/tfs/TB1UJhXHHr1gK0jSZR0XXbP8XXa-452-68.png" alt="img"> </p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="cd"><a href="#cd" class="headerlink" title="cd"></a>cd</h2><p>命令描述：cd命令用于切换工作目录。</p>
+<p>命令使用示例：</p>
+<p><img src="https://img.alicdn.com/tfs/TB16qddHHH1gK0jSZFwXXc7aXXa-412-217.png" alt="img"></p>
+<p>在路径表示中：</p>
+<ul>
+<li>一个半角句号（<code>.</code>）表示当前目录，例如路径.&#x2F;app&#x2F;log等同于app&#x2F;log。</li>
+<li>两个半角句号（<code>..</code>）表示上级目录，例如路径&#x2F;usr&#x2F;local&#x2F;..&#x2F;src等同于&#x2F;usr&#x2F;src，其中local和src目录同级。</li>
+</ul>
+<p><code>cd</code>命令的默认参数为<code>~</code>，符号<code>~</code>表示当前用户的家目录，即在root用户登录时，命令<code>cd</code>、<code>cd ~</code>和<code>cd /root</code>执行效果相同。</p>
+<h2 id="touch"><a href="#touch" class="headerlink" title="touch"></a>touch</h2><p>命令描述：touch命令用于修改文件或者目录的时间属性，包括存取时间和更改时间。若文件不存在，系统会建立一个新的文件。</p>
+<p>命令格式：<code>touch [参数] [文件]</code>。</p>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-c</td>
+<td align="left">如果指定文件不存在，不会建立新文件</td>
+</tr>
+<tr>
+<td align="left">-r</td>
+<td align="left">使用参考文件的时间记录</td>
+</tr>
+<tr>
+<td align="left">-t</td>
+<td align="left">设置文件的时间记录</td>
+</tr>
+</tbody></table>
+<p>命令使用示例：</p>
+<ul>
+<li>创建两个空文件。</li>
+</ul>
+<p><img src="https://img.alicdn.com/tfs/TB1X_Z.HuT2gK0jSZFvXXXnFXXa-466-133.png" alt="img"></p>
+<ul>
+<li>修改demo1.txt的时间记录为当前系统时间。</li>
+</ul>
+<p><img src="https://img.alicdn.com/tfs/TB1kdaraaNj0u4jSZFyXXXgMVXa-478-128.png" alt="img"></p>
+<ul>
+<li>更新demo2.txt的时间记录，使其和demo1.txt的时间记录相同。</li>
+</ul>
+<p><img src="https://img.alicdn.com/tfs/TB1iMpXHUT1gK0jSZFrXXcNCXXa-499-132.png" alt="img"></p>
+<h2 id="mkdir"><a href="#mkdir" class="headerlink" title="mkdir"></a>mkdir</h2><p>命令描述：mkdir命令用于新建子目录。<code>-p</code>参数确保目录名称存在，不存在的就新建一个。</p>
+<p>命令使用示例：</p>
+<p>新建目录a&#x2F;b&#x2F;c&#x2F;d，并使用tree命令查看创建后的目录结构。</p>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a><img src="https://img.alicdn.com/tfs/TB1s2vcjcKfxu4jSZPfXXb3dXXa-510-254.png" alt="img"></h2><h2 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h2><p>命令描述：rm命令用于删除一个文件或者目录。</p>
+<p>命令格式：<code>rm [参数] [文件]</code>。</p>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-i</td>
+<td align="left">删除前逐一询问确认</td>
+</tr>
+<tr>
+<td align="left">-f</td>
+<td align="left">无需确认，直接删除</td>
+</tr>
+<tr>
+<td align="left">-r</td>
+<td align="left">删除目录下所有文件</td>
+</tr>
+</tbody></table>
+<p>命令使用示例：</p>
+<p>无需确认直接删除文件。</p>
+<p><img src="https://img.alicdn.com/tfs/TB1vLo8HqL7gK0jSZFBXXXZZpXa-522-213.png" alt="img"></p>
+<p>无需确认直接删除目录a及其目录下所有子目录和文件。</p>
+<h2 id="-2"><a href="#-2" class="headerlink" title=""></a><img src="https://img.alicdn.com/tfs/TB1asFeHQT2gK0jSZFkXXcIQFXa-415-85.png" alt="img"></h2><h2 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h2><p>命令描述： cp命令主要用于复制文件或目录。</p>
+<p>命令格式：<code>cp [参数] [源文件] [目标文件]</code>。</p>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-d</td>
+<td align="left">复制时保留链接</td>
+</tr>
+<tr>
+<td align="left">-f</td>
+<td align="left">覆盖已经存在的目标文件而不给出提示</td>
+</tr>
+<tr>
+<td align="left">-i</td>
+<td align="left">覆盖前询问</td>
+</tr>
+<tr>
+<td align="left">-p</td>
+<td align="left">除复制文件的内容外，还把修改时间和访问权限也复制到新文件中</td>
+</tr>
+<tr>
+<td align="left">-r</td>
+<td align="left">复制目录及目录内的所有项目</td>
+</tr>
+</tbody></table>
+<p>命令使用示例：</p>
+<p>将目录c&#x2F;d中的所有内容复制到目录a&#x2F;b下。</p>
+<h2 id="-3"><a href="#-3" class="headerlink" title=""></a><img src="https://img.alicdn.com/tfs/TB10Ck3HuL2gK0jSZPhXXahvXXa-673-465.png" alt="img"></h2><h2 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h2><p>命令描述： mv命令用来为文件或目录改名、或将文件或目录移入其它位置。</p>
+<p>命令格式：<code>mv [参数] [源文件] [目标文件]</code></p>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-i</td>
+<td align="left">若指定目录已有同名文件，则先询问是否覆盖旧文件</td>
+</tr>
+<tr>
+<td align="left">-f</td>
+<td align="left">如果目标文件已经存在，不会询问而直接覆盖</td>
+</tr>
+</tbody></table>
+<p>命令使用示例：</p>
+<ul>
+<li><p>将文件名a.txt改为b.txt。<br><img src="https://img.alicdn.com/tfs/TB1z1M_Hvb2gK0jSZK9XXaEgFXa-348-151.png" alt="img"></p>
+</li>
+<li><p>将c目录移动到a&#x2F;b&#x2F;c&#x2F;d&#x2F;下。<br><img src="https://img.alicdn.com/tfs/TB1M9BiHRr0gK0jSZFnXXbRRXXa-387-276.png" alt="img"></p>
+</li>
+<li><p>将当前目录内容全部移动到&#x2F;tmp目录中。</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv ./* /tmp</span><br></pre></td></tr></table></figure>
+
+<h2 id="rename"><a href="#rename" class="headerlink" title="rename"></a>rename</h2><p>命令描述：rename命令用字符串替换的方式批量改变文件名。rename命令有C语言和Perl语言两个版本，这里介绍C语言版本的rename命令，不支持正则表达式。</p>
+<p>命令使用示例：</p>
+<ul>
+<li><p>将当前目录下所有文件名中的字符串demo改为大写的字符串DEMO。<br><img src="https://img.alicdn.com/tfs/TB164qEaepyVu4jSZFhXXbBpVXa-410-150.png" alt="img"></p>
+</li>
+<li><p>将当前目录下所有<code>.txt</code>文件后缀都改为<code>text</code>。<br><img src="https://img.alicdn.com/tfs/TB1l3pXHUT1gK0jSZFrXXcNCXXa-386-84.png" alt="img"></p>
+</li>
+</ul>
+<h2 id="文件权限管理"><a href="#文件权限管理" class="headerlink" title="文件权限管理"></a>文件权限管理</h2><p>ls命令可以查看Linux系统上的文件、目录和设备的权限。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l /boot/</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.alicdn.com/tfs/TB12gXcHND1gK0jSZFKXXcJrVXa-869-420.png" alt="img"></p>
+<p>上述<code>ls -l</code>命令中显示的第一列就是文件权限信息，共11位字符，分5部分。</p>
+<ul>
+<li>第1位表示存档类型，<code>d</code>表示目录，<code>-</code>表示一般文件。</li>
+<li>第2~4位表示当前用户的权限（属主权限）。</li>
+<li>第5~7位表示同用户组的用户权限（属组权限）。</li>
+<li>第8~10位表示不同用户组的用户权限（其他用户权限）。</li>
+<li>第11位是一个半角句号<code>.</code>，表示SELinux安全标签。</li>
+</ul>
+<p>用户权限每组三位，rwx分别表示读、写、执行权限，对应八进制表示为4、2、1。</p>
+<p>例如efi目录的root用户权限为<code>drwxr-xr-x.</code>。</p>
+<ul>
+<li>该目录对root用户具有读写和执行所有权限。</li>
+<li>该目录对root组其他用户有读和执行权限。</li>
+<li>该目录对其他用户有读和执行权限。</li>
+</ul>
+<p>所以该权限表示对应八进制权限表示为：</p>
+<ul>
+<li>属主权限：<code>4+2+1=7</code>。</li>
+<li>属组权限：<code>4+1=5</code>。</li>
+<li>其他用户权限：4+1&#x3D;5。</li>
+</ul>
+<p>即755。</p>
+<h2 id="chmod"><a href="#chmod" class="headerlink" title="chmod"></a>chmod</h2><p>chmod命令用于修改文件权限mode，<code>-R</code>参数以递归方式对子目录和文件进行修改。</p>
+<p>命令使用示例：</p>
+<p>\1. 新建名为hello.sh的Shell脚本，该脚本将会输出<code>Hello World</code>。用<code>ll</code>命令可以看到新建的脚本没有执行权限，其权限用八进制表示为644。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;echo &#x27;Hello World&#x27;&quot; &gt; hello.sh</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.alicdn.com/tfs/TB1XPRcHNv1gK0jSZFFXXb0sXXa-520-111.png" alt="img"></p>
+<p>\2. 将hello.sh文件增加属主的执行权限。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod u+x hello.sh</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.alicdn.com/tfs/TB1RX7nXSRLWu4jSZKPXXb6BpXa-469-110.png" alt="img"></p>
+<p>\3. 将hello.sh文件撤销属主的执行权限。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod u-x hello.sh</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.alicdn.com/tfs/TB1.q8XHFP7gK0jSZFjXXc5aXXa-458-108.png" alt="img"></p>
+<p>\4. 将hello.sh文件权限修改为八进制表示的744权限。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod 744 hello.sh</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.alicdn.com/tfs/TB1cq..HpT7gK0jSZFpXXaTkpXa-445-110.png" alt="img"></p>
+<p>\5. 使用bash命令解释器执行hello.sh脚本文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/bash hello.sh</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.alicdn.com/tfs/TB1mIFeHQT2gK0jSZFkXXcIQFXa-448-67.png" alt="img"></p>
+<p>其中，<code>u+x</code>表示增加属主的执行权限，u表示属主，g表示属组，o表示其他，a表示所有用户。</p>
+<h2 id="chown"><a href="#chown" class="headerlink" title="chown"></a>chown</h2><p>chown命令修改文件的属主和属组；<code>-R</code>参数以递归方式对子目录和文件进行修改；<code>ls -l</code>命令显示的第三列和第四列就是文件的属主和属组信息。</p>
+<p>命令使用示例：</p>
+<p>\1. 新建一个文本文件test.txt，用<code>ll</code>命令可以看到该文件的属主和属组是root。<code>whoami</code>命令可以查看当前Shell环境登录的用户名。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br><span class="line">touch test.txt</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.alicdn.com/tfs/TB1Xq..HpT7gK0jSZFpXXaTkpXa-457-153.png" alt="img"></p>
+<p>\2. 创建两个用户。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">useradd test</span><br><span class="line">useradd admin</span><br></pre></td></tr></table></figure>
+
+<p>\3. 修改test.txt文件的属主用户为test。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown test test.txt</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+
+<h3 id="-4"><a href="#-4" class="headerlink" title=""></a><img src="https://img.alicdn.com/tfs/TB1IHVfHHj1gK0jSZFuXXcrHpXa-477-106.png" alt="img"></h3><p>\4. 修改test.txt文件的属主和属组为admin。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown admin:admin test.txt</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.alicdn.com/tfs/TB1KbVfHHj1gK0jSZFuXXcrHpXa-471-108.png" alt="img"></p>
+<h2 id="chgrp"><a href="#chgrp" class="headerlink" title="chgrp"></a>chgrp</h2><p>chgrp命令用于修改文件的属组。</p>
+<p>命令使用示例：</p>
+<p>将test.txt文件的属组改为root。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chgrp root test.txt</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.alicdn.com/tfs/TB1uLg.HxD1gK0jSZFsXXbldVXa-522-108.png" alt="img"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/09/Linux%E6%8C%87%E4%BB%A4%E5%85%A5%E9%97%A8/" data-id="cl0j84jvt004f04vhfihr7hyf" data-title="Linux指令入门" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/03/09/JVM%E6%B2%99%E7%AE%B1%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java沙箱安全机制
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/03/09/JAVA%E5%BF%85%E8%83%8C%E9%9D%A2%E8%AF%95%E9%A2%98%E5%92%8C%E9%A1%B9%E7%9B%AE%E9%9D%A2%E8%AF%95%E9%80%9A%E5%85%B3%E8%A6%81%E7%82%B9/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JAVA必背面试题和项目面试通关要点</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Springboot/">Springboot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/concurrency/">concurrency</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/design-pattern/">design pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/open-source/">open-source</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AF%95%E9%A2%98/">笔试题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-JVM/" rel="tag">Java JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-Spring/" rel="tag">Java Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">Java、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">Java数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E9%A1%B9%E7%9B%AE/" rel="tag">Java项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">MySql、面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" rel="tag">Redis、面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Java/" rel="tag">Spring Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo%E3%80%81blog/" rel="tag">hexo、blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm-memory-management/" rel="tag">jvm-memory-management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty-source/" rel="tag">netty-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-intro/" rel="tag">spring-aop-intro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-aop-source/" rel="tag">spring-aop-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag">循环依赖</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 12.22px;">JVM</a> <a href="/tags/Java/" style="font-size: 15.56px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 18.89px;">Java JVM</a> <a href="/tags/Java-Spring/" style="font-size: 13.33px;">Java Spring</a> <a href="/tags/Java%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.78px;">Java、面试题</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">Java基础</a> <a href="/tags/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Java数据结构</a> <a href="/tags/Java%E9%A1%B9%E7%9B%AE/" style="font-size: 10px;">Java项目</a> <a href="/tags/MySql/" style="font-size: 20px;">MySql</a> <a href="/tags/MySql%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 11.11px;">MySql、面试题</a> <a href="/tags/Redis/" style="font-size: 14.44px;">Redis</a> <a href="/tags/Redis%E3%80%81%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">Redis、面试</a> <a href="/tags/Spring-Java/" style="font-size: 13.33px;">Spring Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/hexo%E3%80%81blog/" style="font-size: 10px;">hexo、blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jvm-memory-management/" style="font-size: 10px;">jvm-memory-management</a> <a href="/tags/netty-source/" style="font-size: 11.11px;">netty-source</a> <a href="/tags/redis/" style="font-size: 17.78px;">redis</a> <a href="/tags/spring-aop-intro/" style="font-size: 10px;">spring-aop-intro</a> <a href="/tags/spring-aop-source/" style="font-size: 10px;">spring-aop-source</a> <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" style="font-size: 10px;">内存管理</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 16.67px;">数据结构</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 10px;">问题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/09/update%E4%BC%9A%E9%94%81%E8%A1%A8%E5%90%97%EF%BC%9F/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/Redis_hot/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">JVM类加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/09/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/">类加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Lee yunbo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
